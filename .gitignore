@@ -1,5 +1,4 @@
-# Project exclude paths
-/out/
+out/
 .idea/
 .idea_modules/
 *.iml
