@@ -1,8 +1,8 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 abstract class Warehouse {
 
@@ -10,13 +10,14 @@ abstract class Warehouse {
     public double powierzchnia;
     public static int idPomieszczenia = 1;
     private double kosztNajmu;
-    public double sumaKosztowMagazynu=0;
-    public HashMap<Warehouse, Person> Najemcy = new HashMap<>();
+    public static HashMap<Warehouse, Person> osobyUprawnione = new HashMap<>();
     protected double objetosc;
     protected boolean czyZajety=false;
     private LocalDate dataRozpoczeciaNajmu;
-    private static LocalDate dataZakonczeniaNajmu;
-
+    private LocalDate dataZakonczeniaNajmu;
+    public static List<Warehouse> wszystkieMagazyny = new LinkedList<>();
+    public static Map<Person, List<Warehouse>> osobyWynajmujace = new HashMap<>();
+    public boolean czyKonsumecki;
 
     public Warehouse(String nazwa, double objetosc, double kosztNajmu, LocalDate dataRozpoczeciaNajmu, LocalDate dataZakonczeniaNajmu){
 
@@ -39,12 +40,17 @@ abstract class Warehouse {
 
     }
 
+    public static List<Warehouse> getWszystkieMagazyny() {
+        return wszystkieMagazyny;
+    }
 
     public double getKosztNajmu(){
         return this.kosztNajmu;
     }
 
-    public abstract void wynajmijMagazyn(Person p);
+    public abstract void dodajMagazyn();
+
+    public abstract void wynajmijMagazyn(Person p, ParkingSpace ps);
 
     public abstract void odbierzUprawnienie(Person p);
 
@@ -53,7 +59,7 @@ abstract class Warehouse {
     public abstract int getId();
 
     public LocalDate getDataZakonczenia(){
-        return this.dataZakonczeniaNajmu;
+        return dataZakonczeniaNajmu;
     }
 
     public abstract void osobyUprawnione();
@@ -62,8 +68,16 @@ abstract class Warehouse {
 
     public abstract HashMap<Warehouse, Person> Najemcy();
 
+    public static HashMap<Warehouse, Person> getOsobyUprawnione() {
+        return osobyUprawnione;
+    }
+
     public double getObjetosc(){
         return this.objetosc;
+    }
+
+    public static Map<Person, List<Warehouse>> getOsobyWynajmujace() {
+        return osobyWynajmujace;
     }
 
     public boolean isCzyZajety() {

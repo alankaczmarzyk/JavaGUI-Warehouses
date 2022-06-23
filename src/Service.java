@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Service {
 
     private int serwisID;
@@ -8,11 +5,11 @@ public class Service {
     private int liczbaPowierzchni;
     private int procentMagazynu;
     public static int liczbaMiejscNaprawczych;
-    private static int iloscMiejscSerwisowych=1;
-    public ConsumerWarehouse[] pomieszczeniaMagazynowe;
-    public ServiceWarehouse[] pomieszczeniaSerwisowowe;
-    public IndependentCarServiceSpot[] miejscaNaprawcze;
-    public IndependentCarServiceSpot[] miejscaSerwisowe;
+    public static int iloscMiejscSerwisowych;
+    private static int iloscPomieszczenMagazynowych;
+    private static int iloscPomieszczenSerwisowych;
+    public CarServiceSpot[] miejscaNaprawcze;
+    public CarServiceSpot[] miejscaSerwisowe;
 
     public Service(String nazwa, int serwisID, int liczbaPowierzchni, int procentMagazynu, int liczbaMiejscNaprawczych, int iloscMiejscSerwisowych){
 
@@ -23,27 +20,28 @@ public class Service {
         this.iloscMiejscSerwisowych=iloscMiejscSerwisowych;
         this.liczbaMiejscNaprawczych=liczbaMiejscNaprawczych;
 
-        pomieszczeniaMagazynowe = new ConsumerWarehouse[liczbaPowierzchni*procentMagazynu/100];
-        pomieszczeniaSerwisowowe = new ServiceWarehouse[liczbaPowierzchni-(liczbaPowierzchni*procentMagazynu/100)];
-        miejscaNaprawcze = new IndependentCarServiceSpot[liczbaMiejscNaprawczych];
-        miejscaSerwisowe = new IndependentCarServiceSpot[iloscMiejscSerwisowych];
+
+        iloscPomieszczenMagazynowych = liczbaPowierzchni*procentMagazynu/100;
+        iloscPomieszczenSerwisowych = liczbaPowierzchni-(liczbaPowierzchni*procentMagazynu/100);
+        miejscaNaprawcze = new CarServiceSpot[liczbaMiejscNaprawczych];
+        miejscaSerwisowe = new CarServiceSpot[iloscMiejscSerwisowych];
 
     }
 
 
-    public ConsumerWarehouse[] getPomieszczeniaMagazynowe(){
-        return pomieszczeniaMagazynowe;
+    public static int getPomieszczeniaMagazynowe(){
+        return iloscPomieszczenMagazynowych;
     }
 
-    public  ServiceWarehouse[] getPomieszczeniaSerwisowowe() {
-        return pomieszczeniaSerwisowowe;
+    public static int getPomieszczeniaSerwisowowe() {
+        return iloscPomieszczenSerwisowych;
     }
 
-    public IndependentCarServiceSpot[] getMiejscaNaprawcze(){
+    public CarServiceSpot[] getMiejscaNaprawcze(){
         return miejscaNaprawcze;
    }
 
-    public IndependentCarServiceSpot[] getMiejscaSerwisowe(){
+    public CarServiceSpot[] getMiejscaSerwisowe(){
         return miejscaSerwisowe;
     }
 
@@ -51,8 +49,10 @@ public class Service {
         return liczbaMiejscNaprawczych;
     }
 
+    public static int getIloscMiejscSerwisowych(){return iloscMiejscSerwisowych;}
+
     public String toString(){
-        return "Serwis:'" + this.nazwa +"', ID: " + this.serwisID + ", Liczba powierzchni: " + this.liczbaPowierzchni + ", Magazyn: " + this.procentMagazynu +"%";
+        return "Serwis:'" + this.nazwa +"', ID: " + this.serwisID + ", Liczba powierzchni: " + this.liczbaPowierzchni + ", Magazyn stanowi: " + this.procentMagazynu +"% serwisu";
     }
 
 }
