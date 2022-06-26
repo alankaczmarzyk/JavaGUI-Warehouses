@@ -1,17 +1,15 @@
 public class Motorcycle extends Vehicle{
-
-    private int iloscKoniMechanicznych;
+    private int horseower;
     private int ID;
 
-    public Motorcycle(String marka, String typPojazdu, double pojemnoscSilnika, int iloscKoniMechanicznych) {
-        super(marka, typPojazdu, pojemnoscSilnika);
-        this.iloscKoniMechanicznych = iloscKoniMechanicznych;
-
-        ID=IDpojazdu++;
+    public Motorcycle(String brand, String type, double engine, int horseower) {
+        super(brand, type, engine);
+        this.horseower = horseower;
+        ID= vehicleID++;
     }
 
     @Override
-    int getIDpojazdu() {
+    int getVehicleID() {
         return this.ID;
     }
 

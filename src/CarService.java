@@ -1,37 +1,36 @@
 import java.util.*;
 
 abstract class CarService {
-    private String nazwa;
-    private double powierzchnia;
-    public static int IDspot=1;
-    private static HashMap<CarService,Set<Vehicle>> listaWszystkichPojazdowWNaprawie = new HashMap<>();
-    protected static LinkedHashMap<CarService, Set<Vehicle>> historiaNapraw= new LinkedHashMap<>();
-    public static List<CarService> wszystkieMiejsca = new LinkedList<>();
+    private String name;
+    private double space;
+    public static int spotID =1;
+    protected static LinkedHashMap<CarService, Set<Vehicle>> repairHistory = new LinkedHashMap<>();
+    public static List<CarService> carServiceList = new LinkedList<>();
     public boolean czyZajete=false;
 
-    public CarService(String nazwa, double powierzchnia){
-        this.nazwa = nazwa;
-        this.powierzchnia = powierzchnia;
+    public CarService(String name, double space){
+        this.name = name;
+        this.space = space;
 
     }
 
-    public static HashMap<CarService, Set<Vehicle>> getHistoriaNapraw() {
-        return historiaNapraw;
+    public static HashMap<CarService, Set<Vehicle>> getRepairHistory() {
+        return repairHistory;
     }
 
-    public static List<CarService> getWszystkieMiejsca() {
-        return wszystkieMiejsca;
+    public static List<CarService> getCarServiceList() {
+        return carServiceList;
     }
 
-    abstract public void dodajMiejsce();
+    abstract public void addSpot();
 
-    abstract void wynajmijMiejsce(Person p,Vehicle vec);
+    abstract void rentSpot(Person p, Vehicle vec);
 
     public abstract int getId();
 
     @Override
     public String toString() {
-        return  "nazwa='" + nazwa + '\'' + " powierzchnia= " +powierzchnia;
+        return  "nazwa='" + name + '\'' + " powierzchnia= " + space;
     }
 }
 

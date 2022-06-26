@@ -3,47 +3,47 @@ import java.util.*;
 public class CarServiceSpot extends CarService {
     private int id;
     private static int counter = 0;
-    private Person[] wlasciciel = new Person[1];
-    private HashMap<Person, Vehicle> osobyWynajmujace = new HashMap<>();
-    private Set<Vehicle> listaPojazdowNaprawianych = new HashSet<>();
-    private static Map<CarServiceSpot, Vehicle> listaWszystkichPojazdowNaprawianych = new HashMap<>();
-    private int czasNaprawy;
-    private boolean czyObecnieNaprawiany = false;
-    private Vehicle obecnyPojazd;
-    public static CarServiceSpot[] listaMiejscNaprawczych;
-    private Queue<Vehicle> kolejkaOczekujacych = new LinkedList<>();
-    int count = Service.getLiczbaMiejscNaprawczych();
-    private String nowaNazwa;
-    boolean czyWynajmuje =false;
+    private Person[] owner = new Person[1];
+    private HashMap<Person, Vehicle> tenantsList = new HashMap<>();
+    private Set<Vehicle> currentlyRepairedVehicles = new HashSet<>();
+    private static Map<CarServiceSpot, Vehicle> allRepairedVehicles = new HashMap<>();
+    private int repairTime;
+    private boolean ifCurrentlyRepairs = false;
+    private Vehicle thatVehicle;
+    public static CarServiceSpot[] carServiceSpots;
+    private Queue<Vehicle> vehicleQueue = new LinkedList<>();
+    int count = Service.getRepairPlacesNumber();
+    private String newName;
+    boolean ifRented =false;
 
     public CarServiceSpot(String nazwa, double powierzchnia) {
         super(nazwa, powierzchnia);
-        nowaNazwa=nazwa;
-        id = IDspot++;
-        dodajMiejsce();
+        newName =nazwa;
+        id = spotID++;
+        addSpot();
     }
 
-    public Queue<Vehicle> getKolejkaOczekujacych() {
-        return kolejkaOczekujacych;
+    public Queue<Vehicle> getVehicleQueue() {
+        return vehicleQueue;
     }
 
-    public void rozpocznijNaprawe(Vehicle v) {
+    public void startRepair(Vehicle v) {
 
-        if (osobyWynajmujace.containsValue(v)) {
-            if (!czyObecnieNaprawiany) {
-                obecnyPojazd = v;
+        if (tenantsList.containsValue(v)) {
+            if (!ifCurrentlyRepairs) {
+                thatVehicle = v;
                 int iloscDni = (int) (Math.random() * 5) + 1;
                 int cena = (int) (Math.random() * 2000) + 250;
                 System.out.println("Naprawa rozpoczeta. Czas trwania: " + iloscDni + " dni, " + "koszt " + cena);
-                czasNaprawy = iloscDni;
-                listaPojazdowNaprawianych.add(v);
-                listaWszystkichPojazdowNaprawianych.put(this,v);
-                historiaNapraw.put(this, listaPojazdowNaprawianych);
-                czyObecnieNaprawiany = true;
+                repairTime = iloscDni;
+                currentlyRepairedVehicles.add(v);
+                allRepairedVehicles.put(this,v);
+                repairHistory.put(this, currentlyRepairedVehicles);
+                ifCurrentlyRepairs = true;
             } else {
-                if (kolejkaOczekujacych.contains(v)) {
+                if (vehicleQueue.contains(v)) {
                     System.out.println("Ten pojazd znajduje sie w kolejce oczekujacych na naprawe.");
-                } else if (obecnyPojazd == v) {
+                } else if (thatVehicle == v) {
                     System.out.println("Ten pojazd jest juz w naprawie.");
                 }
             }
@@ -54,23 +54,23 @@ public class CarServiceSpot extends CarService {
     }
 
 
-    public static Map<CarServiceSpot, Vehicle> getListaWszystkichPojazdowNaprawianych() {
-        return listaWszystkichPojazdowNaprawianych;
+    public static Map<CarServiceSpot, Vehicle> getAllRepairedVehicles() {
+        return allRepairedVehicles;
     }
 
-    public void zakonczNaprawe() {
-        if (listaPojazdowNaprawianych.contains(obecnyPojazd)) {
-            listaPojazdowNaprawianych.remove(obecnyPojazd);
-            listaWszystkichPojazdowNaprawianych.remove(this);
-            if (!kolejkaOczekujacych.isEmpty()) {
-                System.out.println("Zakonczono naprawe: " + obecnyPojazd + " oraz rozpoczeto naprawe: " + kolejkaOczekujacych.element());
-                Vehicle thisVehicle = kolejkaOczekujacych.poll();
-                listaPojazdowNaprawianych.add(thisVehicle);
-                listaWszystkichPojazdowNaprawianych.put(this,thisVehicle);
+    public void finishRepair() {
+        if (currentlyRepairedVehicles.contains(thatVehicle)) {
+            currentlyRepairedVehicles.remove(thatVehicle);
+            allRepairedVehicles.remove(this);
+            if (!vehicleQueue.isEmpty()) {
+                System.out.println("Zakonczono naprawe: " + thatVehicle + " oraz rozpoczeto naprawe: " + vehicleQueue.element());
+                Vehicle thisVehicle = vehicleQueue.poll();
+                currentlyRepairedVehicles.add(thisVehicle);
+                allRepairedVehicles.put(this,thisVehicle);
             } else {
                 System.out.println("Zakonczono naprawe.");
                 czyZajete = false;
-                czyObecnieNaprawiany = false;
+                ifCurrentlyRepairs = false;
             }
         } else {
             System.out.println("Nie ma takiego pojazdu w naprawie");
@@ -79,16 +79,16 @@ public class CarServiceSpot extends CarService {
     }
 
     @Override
-    public void dodajMiejsce() {
+    public void addSpot() {
 
-        if (listaMiejscNaprawczych == null) {
-            listaMiejscNaprawczych = new CarServiceSpot[count];
-            listaMiejscNaprawczych[counter++] = this;
-            wszystkieMiejsca.add(this);
+        if (carServiceSpots == null) {
+            carServiceSpots = new CarServiceSpot[count];
+            carServiceSpots[counter++] = this;
+            carServiceList.add(this);
         } else {
             try {
-                listaMiejscNaprawczych[counter++] = this;
-                wszystkieMiejsca.add(this);
+                carServiceSpots[counter++] = this;
+                carServiceList.add(this);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new IndexOutOfBoundsException("Przekroczono maksymalna ilosc miejsc naprawczych.");
 
@@ -96,22 +96,22 @@ public class CarServiceSpot extends CarService {
         }
     }
 
-    public static CarServiceSpot[] getListaMiejscNaprawczych() {
-        return listaMiejscNaprawczych;
+    public static CarServiceSpot[] getCarServiceSpots() {
+        return carServiceSpots;
     }
 
     @Override
-    void wynajmijMiejsce(Person p, Vehicle vec) {
+    void rentSpot(Person p, Vehicle vec) {
 
         if (!czyZajete) {
-            wlasciciel[0] = p;
-            osobyWynajmujace.put(p, vec);
+            owner[0] = p;
+            tenantsList.put(p, vec);
             czyZajete = true;
-            System.out.println("Miejsce naprawcze " +nowaNazwa+ " zostalo wynajete.");
+            System.out.println("Miejsce naprawcze " + newName + " zostalo wynajete.");
         } else {
             System.out.println("Miejsce naprawcze jest juz zarezerwowane. Zostales dodany do kolejki.");
-            kolejkaOczekujacych.add(vec);
-            osobyWynajmujace.put(p, vec);
+            vehicleQueue.add(vec);
+            tenantsList.put(p, vec);
         }
 
     }
@@ -122,18 +122,18 @@ public class CarServiceSpot extends CarService {
     }
 
     public boolean czyWlasnieWynajmuje(Person p){
-        if(p==wlasciciel[0]){
-            czyWynajmuje =true;
+        if(p== owner[0]){
+            ifRented =true;
         }else {
-            czyWynajmuje =false;
+            ifRented =false;
         }
-        return czyWynajmuje;
+        return ifRented;
     }
 
 
     @Override
     public String toString() {
-        return super.toString() + " ID:" + id + " [Miejsce Naprawcze]" + " stan: " + (czyWlasnieWynajmuje(Main.getOsoba())? "Zajety przez Ciebie" :  czyZajete ? "Zajete" : "Wolne");
+        return super.toString() + " ID:" + id + " [Miejsce Naprawcze]" + " stan: " + (czyWlasnieWynajmuje(Main.getPerson())? "Zajety przez Ciebie" :  czyZajete ? "Zajete" : "Wolne");
     }
 
 

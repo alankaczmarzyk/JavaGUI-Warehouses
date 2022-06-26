@@ -4,101 +4,84 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ConsumerWarehouse extends Warehouse {
-
     private int ID;
     private int counter = 0;
     private static int counter2 = 0;
-    private Person[] wlasciciel = new Person[1];
-    public List<Person> osobyCW = new ArrayList<>();
-    public List<Object> obiektyCW = new ArrayList<>();
-    private double kosztMagazynu;
-    private double kosztParkingu;
-    public HashMap<Warehouse, List<Person>> NajemcyPomieszczenMagazynowych = new HashMap<>();
-    private HashMap<Warehouse, List<Object>> listaPrzedmiotowCW = new HashMap<>();
-    private static double sumaObjetosciPrzedmiotow = 0;
-    private static ConsumerWarehouse[] listaPomieszczenieMagazynowych;
+    private Person[] owner = new Person[1];
+    public List<Person> peopleList = new ArrayList<>();
+    public List<Object> objectsList = new ArrayList<>();
+    private double warehouseCost;
+    private double parkingCost;
+    public HashMap<Warehouse, List<Person>> consumerWarehouseTenants = new HashMap<>();
+    private HashMap<Warehouse, List<Object>> objectsInWarehouses = new HashMap<>();
+    private static double volumeSumOfItems = 0;
+    private static ConsumerWarehouse[] consumerWarehouseList;
 
 
-    public ConsumerWarehouse(String nazwa, double objetosc, double kosztNajmu, LocalDate dataRozpoczeciaNajmu, LocalDate dataZakonczeniaNajmu) {
-
-        super(nazwa, objetosc, kosztNajmu, dataRozpoczeciaNajmu, dataZakonczeniaNajmu);
-        ID = idPomieszczenia++;
-
-        kosztMagazynu = kosztNajmu;
-        dodajMagazyn();
+    public ConsumerWarehouse(String name, double volume, double rentalCost, LocalDate startDateOfLease, LocalDate finishDateOfLease) {
+        super(name, volume, rentalCost, startDateOfLease, finishDateOfLease);
+        ID = warehouseID++;
+        warehouseCost = rentalCost;
+        addWarehouse();
     }
 
-    public ConsumerWarehouse(String nazwa, double dlugosc, double szerokosc, double wysokosc, double kosztNajmu, LocalDate dataRozpoczeciaNajmu, LocalDate dataZakonczeniaNajmu) {
-
-        super(nazwa, dlugosc, szerokosc, wysokosc, kosztNajmu, dataRozpoczeciaNajmu, dataZakonczeniaNajmu);
-        ID = idPomieszczenia++;
-
-        kosztMagazynu = kosztNajmu;
-        dodajMagazyn();
-        czyKonsumecki = true;
+    public ConsumerWarehouse(String name, double length, double szerokosc, double width, double rentalCost, LocalDate startDateOfLease, LocalDate finishDateOfLease) {
+        super(name, length, szerokosc, width, rentalCost, startDateOfLease, finishDateOfLease);
+        ID = warehouseID++;
+        warehouseCost = rentalCost;
+        addWarehouse();
+        ifConsumer = true;
     }
 
     @Override
-    public void dodajMagazyn() {
+    public void addWarehouse() {
+        int count = Service.getRepairPlaces();
 
-        int count = Service.getPomieszczeniaMagazynowe();
-
-        if (listaPomieszczenieMagazynowych == null) {
-            listaPomieszczenieMagazynowych = new ConsumerWarehouse[count];
-            listaPomieszczenieMagazynowych[counter2++] = this;
-            Warehouse.wszystkieMagazyny.add(this);
+        if (consumerWarehouseList == null) {
+            consumerWarehouseList = new ConsumerWarehouse[count];
+            consumerWarehouseList[counter2++] = this;
+            Warehouse.warehousesList.add(this);
         } else {
             try {
-                listaPomieszczenieMagazynowych[counter2++] = this;
-                Warehouse.wszystkieMagazyny.add(this);
+                consumerWarehouseList[counter2++] = this;
+                Warehouse.warehousesList.add(this);
             } catch (IndexOutOfBoundsException e) {
                 throw new IndexOutOfBoundsException("Przekroczono maksymalna ilosc magazynow konsumenckich.");
 
             }
-
         }
     }
 
-
-    public static ConsumerWarehouse[] zwrocListe() {
-        return listaPomieszczenieMagazynowych;
+    public static ConsumerWarehouse[] getConsumerWarehouseList() {
+        return consumerWarehouseList;
     }
-
 
     @Override
     public int getId() {
         return ID;
     }
 
-
     @Override
-    public String toString() {
-
-        return super.toString() + "Id:" + this.ID + " [Konsumecki]";
-
-    }
-
-    @Override
-    public void wynajmijMagazyn(Person wl, ParkingSpace ps) {
+    public void rentWarehouse(Person wl, ParkingSpace ps) {
 
         try {
-            wlasciciel[counter++] = wl;
+            owner[counter++] = wl;
             System.out.println(wl + " wynajmuje " + toString());
-            osobyCW.add(wl);
-            osobyUprawnione.put(this, wl);
-            osobyWynajmujace.computeIfAbsent(wl, k -> new ArrayList<>()).add(this);
-            NajemcyPomieszczenMagazynowych.put(this, osobyCW);
-            czyZajety = true;
-            wl.dodajPomieszczenie(this);
+            peopleList.add(wl);
+            authorizedPeople.put(this, wl);
+            tenantsList.computeIfAbsent(wl, k -> new ArrayList<>()).add(this);
+            consumerWarehouseTenants.put(this, peopleList);
+            ifBusy = true;
+            wl.addWarehouse(this);
 
             if (ps == null) {
-                kosztParkingu = 0;
+                parkingCost = 0;
             } else {
-                kosztParkingu = ps.getKosztNajmuMiejscaP();
-                if (kosztParkingu + kosztMagazynu > 1250) {
+                parkingCost = ps.getRentalCost();
+                if (parkingCost + warehouseCost > 1250) {
                     System.out.println("Suma kosztow najmu przekracza 1250 zl.");
                 } else {
-                    ps.wynajmijMiejsceParkingowe(wl, this, 14);
+                    ps.rentParkingSpace(wl, this, 14);
                 }
             }
 
@@ -108,14 +91,14 @@ public class ConsumerWarehouse extends Warehouse {
     }
 
     @Override
-    public void dodajUprawnienie(Person p) {
+    public void addPermission(Person p) {
 
-        if (osobyCW.contains(p)) {
+        if (peopleList.contains(p)) {
             System.out.println("Ta osoba ma juz uprawnienie!");
         } else {
-            osobyCW.add(p);
-            NajemcyPomieszczenMagazynowych.put(this, osobyCW);
-            osobyUprawnione.put(this, p);
+            peopleList.add(p);
+            consumerWarehouseTenants.put(this, peopleList);
+            authorizedPeople.put(this, p);
             System.out.println("Dodano uprawnienie.");
         }
 
@@ -124,27 +107,27 @@ public class ConsumerWarehouse extends Warehouse {
 
 
     @Override
-    public void odbierzUprawnienie(Person p) {
+    public void removePermission(Person p) {
 
-        if (p == osobyCW.get(0)) {
+        if (p == peopleList.get(0)) {
             System.out.println("Nie mozesz zabrac uprawnienia wlascicielowi!");
         } else {
-            osobyCW.remove(p);
-            NajemcyPomieszczenMagazynowych.put(this, osobyCW);
-            osobyUprawnione.remove(this);
+            peopleList.remove(p);
+            consumerWarehouseTenants.put(this, peopleList);
+            authorizedPeople.remove(this);
             System.out.println("Zabrano uprawnienie");
         }
     }
 
 
     @Override
-    public void wlozPrzedmiot(Person p, Object o) throws TooManyThingsException {
+    public void addItem(Person p, Object o) throws TooManyThingsException {
 
-        sumaObjetosciPrzedmiotow += o.getPolePowierzchni();
-        if (this.getObjetosc() >= sumaObjetosciPrzedmiotow) {
-            if (osobyCW.contains(p)) {
-                obiektyCW.add(o);
-                listaPrzedmiotowCW.put(this, obiektyCW);
+        volumeSumOfItems += o.getArea();
+        if (this.getVolume() >= volumeSumOfItems) {
+            if (peopleList.contains(p)) {
+                objectsList.add(o);
+                objectsInWarehouses.put(this, objectsList);
                 System.out.println("Dodales przedmiot do magazynu.");
             } else {
                 System.out.println("Nie masz uprawnien do wlozenia przedmiotu.");
@@ -156,12 +139,12 @@ public class ConsumerWarehouse extends Warehouse {
     }
 
     @Override
-    public void wyjmijPrzedmiot(Person p, Object o) {
+    public void takeOutItem(Person p, Object o) {
 
-        if (osobyCW.contains(p)) {
-            if (obiektyCW.contains(o)) {
-                obiektyCW.remove(o);
-                listaPrzedmiotowCW.put(this, obiektyCW);
+        if (peopleList.contains(p)) {
+            if (objectsList.contains(o)) {
+                objectsList.remove(o);
+                objectsInWarehouses.put(this, objectsList);
                 System.out.println("Wyjales przedmiot z magazynu.");
             } else {
                 System.out.println("Nie ma takiego obiektu w magazynie.");
@@ -171,21 +154,21 @@ public class ConsumerWarehouse extends Warehouse {
         }
     }
 
-
     @Override
-    public void osobyUprawnione() {
-        System.out.println(NajemcyPomieszczenMagazynowych);
+    public HashMap<Warehouse, List<Object>> getWarehouseItems() {
+        return objectsInWarehouses;
     }
 
     @Override
-    public HashMap<Warehouse, List<Object>> przedmiotyMagazynu() {
-        return listaPrzedmiotowCW;
+    public HashMap<Warehouse, Person> getTenants() {
+        return authorizedPeople;
     }
 
     @Override
-    public HashMap<Warehouse, Person> Najemcy() {
-        return osobyUprawnione;
-    }
+    public String toString() {
 
+        return super.toString() + "Id:" + this.ID + " [Konsumecki]";
+
+    }
 
 }

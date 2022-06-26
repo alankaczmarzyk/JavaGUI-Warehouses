@@ -1,75 +1,67 @@
 import java.util.*;
 
 public class ParkingSpace {
-
-    private String nazwa;
-    private double powierzchnia;
-    public double kosztNajmuMiejscaP;
+    private String name;
+    private double space;
+    public double rentalCost;
     private static int parkingID=100;
     private int ID;
-    private ParkingSpace miejsce;
-    public static List<ParkingSpace> miejscaParkingowe;
-    public static HashMap<Person,ParkingSpace> NajemcyMiejscParkingowych = new HashMap<>();
-    private Vehicle[] pojazd = new Vehicle[1];
+    private ParkingSpace parkingSpace;
+    public static List<ParkingSpace> parkingSpaceList;
+    public static HashMap<Person,ParkingSpace> parkingTenants = new HashMap<>();
+    private Vehicle[] vehicle = new Vehicle[1];
     private int counter=0;
-    private int ktoryPojazd=0;
-    public boolean czyWynajety=false;
-    private boolean czyJestPojazd;
-    private boolean czyMaWynajetyMagazyn=false;
-    private Person wlasciciel;
-    private boolean czyWlasciciel;
-    public static HashMap<Warehouse, Person> najemcyMagazynow = Warehouse.getOsobyUprawnione();
+    private int whichVehicle =0;
+    public boolean ifRented =false;
+    private boolean isThereVehicle;
+    private boolean hasRentedWarehouse =false;
+    private Person owner;
+    private boolean ifOwner;
+    public static HashMap<Warehouse, Person> warehouseTenants = Warehouse.getAuthorizedPeople();
 
-    public ParkingSpace(String nazwa, double powierzchnia, double kosztNajmuMiejscaP){
-
-        this.nazwa = nazwa;
-        this.powierzchnia = powierzchnia;
-        this.kosztNajmuMiejscaP = kosztNajmuMiejscaP;
-
+    public ParkingSpace(String name, double space, double rentalCost){
+        this.name = name;
+        this.space = space;
+        this.rentalCost = rentalCost;
         ID=parkingID++;
-
-        dodajMiejsca();
+        addSpot();
     }
 
-    public double getKosztNajmuMiejscaP() {
-        return kosztNajmuMiejscaP;
+    public double getRentalCost() {
+        return rentalCost;
     }
 
-    public void dodajMiejsca(){
-
-        if(miejscaParkingowe ==null){
-            miejscaParkingowe = new ArrayList<>();
-            miejscaParkingowe.add(this);
+    public void addSpot(){
+        if(parkingSpaceList ==null){
+            parkingSpaceList = new ArrayList<>();
+            parkingSpaceList.add(this);
         }else {
-            miejscaParkingowe.add(this);
+            parkingSpaceList.add(this);
         }
 
     }
 
-    public static List<ParkingSpace> getMiejscaParkingowe() {
-        return miejscaParkingowe;
+    public static List<ParkingSpace> getParkingSpaceList() {
+        return parkingSpaceList;
     }
 
-
-    public void wynajmijMiejsceParkingowe(Person p, Warehouse w, int iloscDni){
-
-
-        for(Map.Entry<Warehouse, Person> osoba : najemcyMagazynow.entrySet()) {
+    public void rentParkingSpace(Person p, Warehouse w, int iloscDni){
+        for(Map.Entry<Warehouse, Person> osoba : warehouseTenants.entrySet()) {
             Warehouse key = osoba.getKey();
             Person value = osoba.getValue();
 
             if(key.equals(w) && value.equals(p)){
-                czyMaWynajetyMagazyn=true;
+                hasRentedWarehouse =true;
             }
         }
-        if(czyMaWynajetyMagazyn) {
+        if(hasRentedWarehouse) {
             if (iloscDni <= 14) {
-                if (!czyWynajety) {
-                    miejsce = this;
-                    NajemcyMiejscParkingowych.put(p, this);
-                    czyWynajety = true;
-                    wlasciciel = p;
-                    System.out.println(wlasciciel+ " wynajal miejsce parkingowe: "+ this.nazwa + this.ID +" w ramach magazynu: " + w.toString() + " na " + iloscDni + " dni");
+                if (!ifRented) {
+                    parkingSpace = this;
+                    parkingTenants.put(p, this);
+                    ifRented = true;
+                    owner = p;
+                    System.out.println(owner + " wynajal miejsce parkingowe: "+ this.name + this.ID +" w ramach magazynu: " + w.toString() + " na " + iloscDni + " dni");
                 } else {
                     System.out.println("To miejsce parkingowe jest juz wynajete.");
                 }
@@ -82,14 +74,14 @@ public class ParkingSpace {
 
     }
 
-    public void dodajPojazd(Person p,Vehicle v){
-        if(!czyWynajety){
+    public void addVehicle(Person p, Vehicle v){
+        if(!ifRented){
             System.out.println("Najpierw wynajmij miejsce zeby dodac pojazd");
         }else {
-            if (p == wlasciciel) {
+            if (p == owner) {
                 try {
-                    pojazd[ktoryPojazd++] = v;
-                    czyJestPojazd = true;
+                    vehicle[whichVehicle++] = v;
+                    isThereVehicle = true;
                     System.out.println("Pojazd zostal dodany na miejsce parkingowe.");
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("Moze byc tylko jeden pojazd na miejscu parkingowym");
@@ -101,15 +93,15 @@ public class ParkingSpace {
 
     }
 
-    public void usunPojazd(Person p){
+    public void removeVehicle(Person p){
 
-        if(pojazd[0]==null){
+        if(vehicle[0]==null){
             System.out.println("Nic nie ma na tym miejscu.");
         }else {
-            if (wlasciciel == p) {
-                czyJestPojazd = false;
-                System.out.println("Pojazd " + pojazd[0] +" zostal usuniety.");
-                pojazd[0] = null;
+            if (owner == p) {
+                isThereVehicle = false;
+                System.out.println("Pojazd " + vehicle[0] +" zostal usuniety.");
+                vehicle[0] = null;
             }else {
                 System.out.println("Tylko wlasciciel moze usunac pojazd ze swojego miejsca parkingowego.");
             }
@@ -120,24 +112,21 @@ public class ParkingSpace {
         return ID;
     }
 
-    public boolean czyJestWlascicielemMagazynu(Person p){
-        if(p==wlasciciel){
-        czyWlasciciel=true;
+    public boolean IfOwnerOfWarehouse(Person p){
+        if(p== owner){
+        ifOwner =true;
         }else {
-            czyWlasciciel=false;
+            ifOwner =false;
         }
-        return czyWlasciciel;
+        return ifOwner;
     }
 
-    public void osobaWynajmujaca(){
-        System.out.println(NajemcyMiejscParkingowych);
-    }
     @Override
     public String toString() {
         return "Miejsce Parkingowe{" +
-                "nazwa='" + nazwa + '\'' +
-                ",Stan=" +(czyJestWlascicielemMagazynu(Main.getOsoba())? "wynajety przez Ciebie ": (!czyWynajety? "dostepny do wynajecia, ":"zajety, "))+
-                (czyJestPojazd?"zaparkowano: "+ pojazd[0] : "puste miejsce ")+
+                "nazwa='" + name + '\'' +
+                ",Stan=" +(IfOwnerOfWarehouse(Main.getPerson())? "wynajety przez Ciebie ": (!ifRented ? "dostepny do wynajecia, ":"zajety, "))+
+                (isThereVehicle ?"zaparkowano: "+ vehicle[0] : "puste miejsce ")+
                 ", Parking ID:=" + ID +
                 '}';
     }

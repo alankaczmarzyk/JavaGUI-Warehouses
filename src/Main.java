@@ -1,46 +1,51 @@
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
+
 import static java.util.stream.Collectors.toList;
 
-public class Main {
-    public static List<ConsumerWarehouse> pomieszczeniaMagazynow;
-    public static List<ServiceWarehouse> pomieszczeniaSerwisow;
-    public static List<CarServiceSpot> miejscaNaprawcze;
-    public static List<IndependentCarServiceSpot> miejscaSerwisowe;
-    public static Person osoba;
-    public static Object obiekt;
-    public static Vehicle pojazd;
-    public static CarService serwisNaprawczy;
-    public static ParkingSpace miejsceParkingowe;
-    public static Warehouse magazyn;
-    public static List<Person> listaOsob = new ArrayList<>();
-    public static List<Warehouse> listaMagazynow = new ArrayList<>();
-    public static List<Warehouse> listaWolnychMagazynow = new ArrayList<>();
-    public static List<Warehouse> listaZajetychMagazynow = new ArrayList<>();
-    public static Set<Object> listaObiektow = new HashSet<>();
-    public static Set<Vehicle> listaPojazdow = new HashSet<>();
-    public static List<ParkingSpace> listaMiejscParkingowych = new LinkedList<>();
-    public static List<CarService> listaMiejscNaprawczychiSerwisowych = new LinkedList<>();
-    public static List<ParkingSpace> listaWolnychMiejscParkingowych = new LinkedList<>();
-    public static HashMap<Warehouse, Person> osobyUprawnione = new HashMap<>();
-    public static List<Warehouse> listaMagazynowUprawnionych = new ArrayList<>();
-    public static int numer;
+public class Main extends JFrame{
+    public static List<ConsumerWarehouse> warehousePremises;
+    public static List<ServiceWarehouse> servicePremises;
+    public static List<CarServiceSpot> repairPlaces;
+    public static List<IndependentCarServiceSpot> serviceSpots;
+    public static Person person;
+    public static Object object;
+    public static Vehicle vehicle;
+    public static CarService carService;
+    public static ParkingSpace parkingSpace;
+    public static Warehouse warehouse;
+    public static List<Person> peopleList = new ArrayList<>();
+    public static List<Warehouse> warehouseList = new ArrayList<>();
+    public static List<Warehouse> freeWarehouseList = new ArrayList<>();
+    public static List<Warehouse> occupiedWarehouseList = new ArrayList<>();
+    public static Set<Object> objectsList = new HashSet<>();
+    public static Set<Vehicle> vehiclesList = new HashSet<>();
+    public static List<ParkingSpace> parkingSpaceList = new LinkedList<>();
+    public static List<CarService> carServiceList = new LinkedList<>();
+    public static List<ParkingSpace> freeParkingSpaceList = new LinkedList<>();
+    public static List<Warehouse> authorizedWarehouses = new ArrayList<>();
+    public static int number;
     public static String text;
-    public static CarServiceSpot miejsceNaprawcze;
-    public static IndependentCarServiceSpot miejsceSerwisowe;
-    public static boolean wpiszDobrze = false;
-    public static boolean czyChceParking;
-    public static Service serwis;
+    public static CarServiceSpot carServiceSpot;
+    public static IndependentCarServiceSpot independentCarServiceSpot;
+    public static boolean typeRight = false;
+    public static boolean needParking;
+    public static Service service;
+    public static boolean exit=false;
+
+
 
     public static void main(String[] args) throws Exception {
         int select;
-        boolean exit = false;
-
+        Homepage homepage = new Homepage();
         // TWORZENIE OBIEKTY
-        serwis = new Service("U Zbycha", 1, 10, 50, 3, 1);
+        service = new Service("U Zbycha", 1, 10, 50, 3, 1);
 
         ConsumerWarehouse cw1 = new ConsumerWarehouse("ABC", 2000, 500, LocalDate.of(2021, 2, 26), LocalDate.of(2022, 6, 24));
         ConsumerWarehouse cw2 = new ConsumerWarehouse("BCD", 300, 200, LocalDate.of(2021, 11, 28), LocalDate.of(2022, 6, 24));
@@ -82,16 +87,16 @@ public class Main {
 
 
         // DODAWANIE POMIESZCZEN, MIEJSC NAPRAWCZYCH
-        pomieszczeniaMagazynow = List.of(ConsumerWarehouse.zwrocListe());
-        pomieszczeniaSerwisow = List.of(ServiceWarehouse.zwrocListe());
-        miejscaNaprawcze = List.of(CarServiceSpot.getListaMiejscNaprawczych());
-        miejscaSerwisowe = List.of(IndependentCarServiceSpot.getListaMiejscSerwisowych());
-        listaOsob = Person.getListaOsob();
-        listaMagazynow = Warehouse.getWszystkieMagazyny();
-        listaObiektow = Object.getListaObiektow();
-        listaPojazdow = Vehicle.getListaPojazdow();
-        listaMiejscParkingowych = ParkingSpace.getMiejscaParkingowe();
-        listaMiejscNaprawczychiSerwisowych = CarService.getWszystkieMiejsca();
+        warehousePremises = List.of(ConsumerWarehouse.getConsumerWarehouseList());
+        servicePremises = List.of(ServiceWarehouse.getServicePremisesList());
+        repairPlaces = List.of(CarServiceSpot.getCarServiceSpots());
+        serviceSpots = List.of(IndependentCarServiceSpot.getIndependentCarServiceSpots());
+        peopleList = Person.getPersonList();
+        warehouseList = Warehouse.getWarehousesList();
+        objectsList = Object.getObjectList();
+        vehiclesList = Vehicle.getVehiclesList();
+        parkingSpaceList = ParkingSpace.getParkingSpaceList();
+        carServiceList = CarService.getCarServiceList();
 
         // FUNKCJONALNOSC
             //your examples
@@ -128,143 +133,143 @@ public class Main {
             switch (select) {
 
                 case 1:
-                    exit = true;
+                    exit();
                     break;
                 case 2:
-                    wybierzOsobe(sc);
+                    choosePerson(sc);
                     break;
                 case 3:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Najpierw wybierz Osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
-                    wyswietlInformacje();
+                    displayPersonDetails();
                     break;
                 case 4:
                     System.out.println("Lista wolnych magazynow");
-                    listaWolnychMagazynow = getlistaWolnychMagazynow();
-                    System.out.println(listaWolnychMagazynow);
+                    freeWarehouseList = getFreeWarehouseList();
+                    System.out.println(freeWarehouseList);
                     break;
                 case 5:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Najpierw wybierz Osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz magazyn:");
-                    wybierzWolnyMagazyn(sc);
-                    wynajmijParking(sc);
+                    chooseFreeWarehouse(sc);
+                    rentParking(sc);
                     break;
                 case 6:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Najpierw wybierz Osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
-                    if (osoba.listaPomieszczenWynajetych().isEmpty()) {
+                    if (person.getRentedWarehousesList().isEmpty()) {
                         System.out.println("Osoba nic nie wynajmuje.");
                     } else {
-                        wyswietlInformacje();
+                        displayPersonDetails();
                         System.out.println("Wybierz id magazynu by zobaczyc jego zawartosc:");
-                        wyswietlListePomieszczenWynajetych(sc);
+                        displayListOfRentedPremises(sc);
                     }
                     break;
                 case 7:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
-                    dodajPrzedmiotDoMagazynu(sc);
+                    addItemToWarehouse(sc);
                     break;
                 case 8:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe ktorej chcesz nadac uprawnienia:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz magazyn do ktorego nadasz uprawnienia:");
-                    wybierzMagazyn(sc);
-                    magazyn.dodajUprawnienie(osoba);
+                    chooseWarehouse(sc);
+                    warehouse.addPermission(person);
                     break;
                 case 9:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz Miejsce parkingowe:");
-                    wyswietlMiejscaParkingowe(sc);
+                    displayParkingSpace(sc);
                     System.out.println("Wybierz pojazd:");
-                    wybierzPojazd(sc);
-                    miejsceParkingowe.dodajPojazd(osoba, pojazd);
+                    chooseVehicle(sc);
+                    parkingSpace.addVehicle(person, vehicle);
                     break;
                 case 10:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz magazyn:");
-                    wybierzMagazyn(sc);
+                    chooseWarehouse(sc);
                     System.out.println("Wybierz przedmiot:");
-                    System.out.println(magazyn.przedmiotyMagazynu());
-                    if (magazyn.przedmiotyMagazynu().isEmpty()) {
+                    System.out.println(warehouse.getWarehouseItems());
+                    if (warehouse.getWarehouseItems().isEmpty()) {
                         System.out.println("Brak przedmiotow w magazynie.");
                         break;
                     }
-                    numer = sc.nextInt();
-                    listaObiektow.forEach(
+                    number = sc.nextInt();
+                    objectsList.forEach(
                             O -> {
-                                if (O.getID() == numer)
-                                    obiekt = O;
+                                if (O.getID() == number)
+                                    object = O;
 
                             }
                     );
-                    magazyn.wyjmijPrzedmiot(osoba, obiekt);
+                    warehouse.takeOutItem(person, object);
                     break;
                 case 11:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz miejsce parkingowe:");
-                    wyswietlMiejscaParkingowe(sc);
+                    displayParkingSpace(sc);
 
-                    miejsceParkingowe.usunPojazd(osoba);
+                    parkingSpace.removeVehicle(person);
                     break;
                 case 12:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz pojazd:");
-                    wybierzPojazd(sc);
-                    wybierzSerwisSamochodowy(sc);
-                    serwisNaprawczy.wynajmijMiejsce(osoba, pojazd);
+                    chooseVehicle(sc);
+                    chooseCarService(sc);
+                    carService.rentSpot(person, vehicle);
                     break;
                 case 13:
-                    if (osoba == null) {
+                    if (person == null) {
                         System.out.println("Wybierz osobe:");
-                        wybierzOsobe(sc);
+                        choosePerson(sc);
                     }
                     System.out.println("Wybierz pojazd:");
-                    wybierzPojazd(sc);
+                    chooseVehicle(sc);
                     System.out.println("Czy chcesz samodzielnie serwisowac pojazd? Wpisz: T jesli TAK. Wpisz dowolny znak jesli ma byc naprawiany przez mechaników:");
                     text = sc.next();
                     if (text.equals("T") || text.equals("t") || text.equals("TAK") || text.equals("tak")) {
                         System.out.println("Wybrano samodzielna naprawe.");
                         System.out.println("Wybierz miejsce serwisowe:");
-                        wybierzMiejsceSerwisowe(sc);
-                        miejsceSerwisowe.ropozcznijSamodzielnaNaprawe(osoba, pojazd);
+                        chooseServiceSpot(sc);
+                        independentCarServiceSpot.startSelfRepair(person, vehicle);
                     } else {
                         System.out.println("Wybrano naprawe przez mechaników.");
                         System.out.println("Wybierz miejsce naprawcze:");
-                        wybierzMiejsceNaprawcze(sc);
-                        miejsceNaprawcze.rozpocznijNaprawe(pojazd);
+                        chooseRepairPlace(sc);
+                        carServiceSpot.startRepair(vehicle);
                     }
                     break;
                 case 14:
                     System.out.println("Jaki rodzaj naprawy chcesz zakonczyc? Wpisz: TAK jesli Samodzielna lub wpisz dowolny znak jesli NIE.");
                     text = sc.next();
                     if (text.equals("t") || text.equals("T") || text.equals("TAK") || text.equals("tak") || text.equals("Tak")) {
-                        zakonczNapraweSerwisowego(sc);
+                        finishRepairOfICSS(sc);
                     } else {
-                        zakonczNapraweMiejscaNaprawczego(sc);
+                        finishRepairOfCSS(sc);
                     }
                     break;
                 case 15:
@@ -282,28 +287,31 @@ public class Main {
         }
     }
 
-    private static void wybierzOsobe(Scanner sc) {
-        System.out.println(listaOsob);
-        numer = sc.nextInt();
+    public static void exit(){
+        exit=true;
+    }
 
-        listaOsob.forEach(
+    private static void choosePerson(Scanner sc) {
+        System.out.println(peopleList);
+        number = sc.nextInt();
+        peopleList.forEach(
                 P -> {
-                    if (P.getId() == numer)
-                        osoba = P;
+                    if (P.getId() == number)
+                        person = P;
                 }
         );
 
-        System.out.println("Wybrano: " + osoba.imie + " " + osoba.nazwisko);
+        System.out.println("Wybrano: " + person.firstName + " " + person.lastName);
         System.out.println();
     }
 
-    private static void wybierzMagazyn(Scanner sc) {
-        System.out.println(listaMagazynow);
-        numer = sc.nextInt();
-        listaMagazynow.forEach(
+    private static void chooseWarehouse(Scanner sc) {
+        System.out.println(warehouseList);
+        number = sc.nextInt();
+        warehouseList.forEach(
                 W -> {
-                    if (W.getId() == numer) {
-                        magazyn = W;
+                    if (W.getId() == number) {
+                        warehouse = W;
                     }
                 }
 
@@ -311,300 +319,282 @@ public class Main {
 
     }
 
-    public static void zakonczNapraweSerwisowego(Scanner sc) {
+    public static void finishRepairOfICSS(Scanner sc) {
 
-        Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getListaSerwisowanychPojazdow();
+        Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
         if (!lista.isEmpty()) {
-            if(osoba==null) {
+            if(person ==null) {
                 System.out.println("Wybierz osobe:");
-                wybierzOsobe(sc);
+                choosePerson(sc);
             }
             System.out.println("Wybierz miejsce serwisowe:");
             System.out.println(lista);
-            numer = sc.nextInt();
+            number = sc.nextInt();
             for (Map.Entry<IndependentCarServiceSpot, Vehicle> entry : lista.entrySet()) {
-                if (entry.getKey().getId() == numer)
-                    miejsceSerwisowe = entry.getKey();
+                if (entry.getKey().getId() == number)
+                    independentCarServiceSpot = entry.getKey();
 
             }
-            miejsceSerwisowe.zakonczSamodzielnaNaprawe(osoba);
+            independentCarServiceSpot.finishSelfRepair(person);
         } else
             System.out.println("Nie ma obecnie zadnych napraw.");
 
 
     }
 
-    private static void zakonczNapraweMiejscaNaprawczego(Scanner sc) {
-        Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getListaWszystkichPojazdowNaprawianych();
+    private static void finishRepairOfCSS(Scanner sc) {
+        Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getAllRepairedVehicles();
         if (!lista.isEmpty()) {
             System.out.println("Wybierz miejsce Naprawcze:");
             System.out.println(lista);
-            numer = sc.nextInt();
+            number = sc.nextInt();
             for (Map.Entry<CarServiceSpot, Vehicle> entry : lista.entrySet()) {
-                if (entry.getKey().getId() == numer)
-                    miejsceNaprawcze = entry.getKey();
+                if (entry.getKey().getId() == number)
+                    carServiceSpot = entry.getKey();
 
             }
-            miejsceNaprawcze.zakonczNaprawe();
+            carServiceSpot.finishRepair();
         } else
             System.out.println("Nie ma obecnie zadnych napraw.");
     }
 
-    private static void wybierzWolnyMagazyn(Scanner sc) {
-        listaWolnychMagazynow = getlistaWolnychMagazynow();
-        System.out.println(listaWolnychMagazynow);
-        numer = sc.nextInt();
-
-        listaWolnychMagazynow.forEach(
+    private static void chooseFreeWarehouse(Scanner sc) {
+        freeWarehouseList = getFreeWarehouseList();
+        System.out.println(freeWarehouseList);
+        number = sc.nextInt();
+        freeWarehouseList.forEach(
                 W -> {
-                    if (W.getId() == numer) {
-                        magazyn = W;
+                    if (W.getId() == number) {
+                        warehouse = W;
                     }
                 }
 
         );
     }
 
-    private static void wynajmijParking(Scanner sc) {
+    private static void rentParking(Scanner sc) {
 
-        while (!wpiszDobrze) {
+        while (!typeRight) {
             System.out.println("Czy chcesz wynajac miejsce parkingowe? Wpisz:  T  jeśli tak, wpisz:  N  jeśli nie:");
             text = sc.next();
             if (text.equals("T") || text.equals("t") || text.equals("tak") || text.equals("TAK") || text.equals("Tak")) {
-                wpiszDobrze = true;
-                czyChceParking = true;
+                typeRight = true;
+                needParking = true;
             } else if (text.equals("N") || text.equals("n") || text.equals("nie") || text.equals("NIE")) {
-                wpiszDobrze = true;
-                czyChceParking = false;
+                typeRight = true;
+                needParking = false;
             } else {
                 System.out.println("Nie wpisales dobrego znaku.");
             }
         }
 
-        if (czyChceParking) {
+        if (needParking) {
             System.out.println("Wybierz miejsce parkingowe ktore chcesz wynajac.");
-            wybierzMiejsceParkingowe(sc);
-            magazyn.wynajmijMagazyn(osoba, miejsceParkingowe);
+            chooseParkingSpace(sc);
+            warehouse.rentWarehouse(person, parkingSpace);
         } else {
-            magazyn.wynajmijMagazyn(osoba, null);
+            warehouse.rentWarehouse(person, null);
         }
-        wpiszDobrze=false;
+        typeRight =false;
     }
 
-    private static void wyswietlListePomieszczenWynajetych(Scanner sc) {
-        numer = sc.nextInt();
-        osoba.listaPomieszczenWynajetych().forEach(
+    private static void displayListOfRentedPremises(Scanner sc) {
+        number = sc.nextInt();
+        person.getRentedWarehousesList().forEach(
                 M -> {
-                    if (M.getId() == numer) {
-                        magazyn = M;
+                    if (M.getId() == number) {
+                        warehouse = M;
                     }
                 }
         );
-        System.out.print(magazyn.przedmiotyMagazynu());
+        System.out.print(warehouse.getWarehouseItems());
 
     }
 
-    private static void dodajPrzedmiotDoMagazynu(Scanner sc) throws TooManyThingsException {
+    private static void addItemToWarehouse(Scanner sc) throws TooManyThingsException {
 
-        for (Map.Entry<Warehouse, Person> entry : Warehouse.osobyUprawnione.entrySet()) {
+        for (Map.Entry<Warehouse, Person> entry : Warehouse.authorizedPeople.entrySet()) {
             Warehouse key = entry.getKey();
             Person value = entry.getValue();
-            if (value.equals(osoba) && !listaMagazynowUprawnionych.contains(key)) {
-                listaMagazynowUprawnionych.add(key);
+            if (value.equals(person) && !authorizedWarehouses.contains(key)) {
+                authorizedWarehouses.add(key);
             }
         }
-        if (!listaMagazynowUprawnionych.isEmpty()) {
+        if (!authorizedWarehouses.isEmpty()) {
             System.out.println("Wybierz magazyn do ktorego chcesz wlozyc przedmiot:");
-            System.out.println(listaMagazynowUprawnionych);
-            numer = sc.nextInt();
-            listaMagazynowUprawnionych.forEach(
+            System.out.println(authorizedWarehouses);
+            number = sc.nextInt();
+            authorizedWarehouses.forEach(
                     W -> {
-                        if (W.getId() == numer) {
-                            magazyn = W;
+                        if (W.getId() == number) {
+                            warehouse = W;
                         }
                     });
             System.out.println("Wybierz przedmiot:");
-            magazyn.przedmiotyMagazynu();
-            wybierzPrzedmiot(sc);
-            magazyn.wlozPrzedmiot(osoba, obiekt);
+            warehouse.getWarehouseItems();
+            chooseItem(sc);
+            warehouse.addItem(person, object);
         } else {
             System.out.println("Nie masz uprawnien do zadnego magazynu.");
         }
     }
 
-    private static void wybierzMiejsceParkingowe(Scanner sc) {
-        wyswietlWolneMiejscaParkingowe();
-        numer = sc.nextInt();
-
-        listaWolnychMiejscParkingowych.forEach(
+    private static void chooseParkingSpace(Scanner sc) {
+        displayFreeWarehouseList();
+        number = sc.nextInt();
+        freeParkingSpaceList.forEach(
                 L -> {
-                    if (L.getID() == numer)
-                        miejsceParkingowe = L;
+                    if (L.getID() == number)
+                        parkingSpace = L;
                 }
         );
     }
 
-    private static void wyswietlMiejscaParkingowe(Scanner sc) {
-
-        System.out.println(listaMiejscParkingowych);
-
-        numer = sc.nextInt();
-
-        listaMiejscParkingowych.forEach(
+    private static void displayParkingSpace(Scanner sc) {
+        System.out.println(parkingSpaceList);
+        number = sc.nextInt();
+        parkingSpaceList.forEach(
                 L -> {
-                    if (L.getID() == numer)
-                        miejsceParkingowe = L;
+                    if (L.getID() == number)
+                        parkingSpace = L;
 
                 }
 
         );
     }
 
-    private static void wybierzPrzedmiot(Scanner sc) {
-        System.out.println(listaObiektow);
-        numer = sc.nextInt();
-        listaObiektow.forEach(
+    private static void chooseItem(Scanner sc) {
+        System.out.println(objectsList);
+        number = sc.nextInt();
+        objectsList.forEach(
                 O -> {
-                    if (O.getID() == numer)
-                        obiekt = O;
+                    if (O.getID() == number)
+                        object = O;
                 }
         );
     }
 
-    private static void wybierzPojazd(Scanner sc) {
-        System.out.println(listaPojazdow);
-        numer = sc.nextInt();
-        listaPojazdow.forEach(
+    private static void chooseVehicle(Scanner sc) {
+        System.out.println(vehiclesList);
+        number = sc.nextInt();
+        vehiclesList.forEach(
                 V -> {
-                    if (V.getIDpojazdu() == numer)
-                        pojazd = V;
+                    if (V.getVehicleID() == number)
+                        vehicle = V;
                 }
         );
-        System.out.println("Wybrano: "+pojazd);
+        System.out.println("Wybrano: "+ vehicle);
         System.out.println();
     }
 
-    private static void wybierzMiejsceNaprawcze(Scanner sc) {
-        System.out.println(miejscaNaprawcze);
-        numer = sc.nextInt();
-        miejscaNaprawcze.forEach(
+    private static void chooseRepairPlace(Scanner sc) {
+        System.out.println(repairPlaces);
+        number = sc.nextInt();
+        repairPlaces.forEach(
                 V -> {
-                    if (V.getId() == numer)
-                        miejsceNaprawcze = V;
-
+                    if (V.getId() == number)
+                        carServiceSpot = V;
                 }
-
         );
-
-
     }
 
-    private static void wybierzMiejsceSerwisowe(Scanner sc) {
-        System.out.println(miejscaSerwisowe);
-        numer = sc.nextInt();
-        miejscaSerwisowe.forEach(
+    private static void chooseServiceSpot(Scanner sc) {
+        System.out.println(serviceSpots);
+        number = sc.nextInt();
+        serviceSpots.forEach(
                 V -> {
-                    if (V.getId() == numer)
-                        miejsceSerwisowe = V;
-
+                    if (V.getId() == number)
+                        independentCarServiceSpot = V;
                 }
-
         );
-
     }
 
-    private static void wybierzSerwisSamochodowy(Scanner sc) {
+    private static void chooseCarService(Scanner sc) {
         System.out.println("Wybierz miejsce ktore chcesz wynajac");
-        System.out.println(listaMiejscNaprawczychiSerwisowych);
-        numer = sc.nextInt();
-        listaMiejscNaprawczychiSerwisowych.forEach(
+        System.out.println(carServiceList);
+        number = sc.nextInt();
+        carServiceList.forEach(
                 LMP -> {
-                    if (LMP.getId() == numer)
-                        serwisNaprawczy = LMP;
+                    if (LMP.getId() == number)
+                        carService = LMP;
                 }
         );
     }
 
-    public static List<Warehouse> getlistaWolnychMagazynow() {
-        listaWolnychMagazynow = listaMagazynow.stream()
-                .filter(e -> !e.czyZajety)
+    public static List<Warehouse> getFreeWarehouseList() {
+        freeWarehouseList = warehouseList.stream()
+                .filter(e -> !e.ifBusy)
                 .collect(toList());
-
-        return listaWolnychMagazynow;
-
+        return freeWarehouseList;
     }
 
-    public static List<Warehouse> getListaZajetychMagazynow() {
-        listaZajetychMagazynow = listaMagazynow.stream()
-                .filter(e -> e.czyZajety)
+    public static List<Warehouse> getOccupiedWarehouseList() {
+        occupiedWarehouseList = warehouseList.stream()
+                .filter(e -> e.ifBusy)
                 .collect(toList());
-
-        return listaZajetychMagazynow;
-
+        return occupiedWarehouseList;
     }
 
-    public static void wyswietlWolneMiejscaParkingowe() {
-        listaWolnychMiejscParkingowych = listaMiejscParkingowych.stream()
-                .filter(e -> !e.czyWynajety)
+    public static void displayFreeWarehouseList() {
+        freeParkingSpaceList = parkingSpaceList.stream()
+                .filter(e -> !e.ifRented)
                 .collect(toList());
-
-        System.out.println(listaWolnychMiejscParkingowych);
+        System.out.println(freeParkingSpaceList);
     }
 
-    public static void wyswietlInformacje() {
-        System.out.println(osoba.toString());
+    public static void displayPersonDetails() {
+        System.out.println(person.toString());
         System.out.print("Wynajete miejsca: ");
-        osoba.listaPomieszczenWynajetych().forEach(info -> {
+        person.getRentedWarehousesList().forEach(info -> {
             System.out.println(info);
         });
-        if (osoba.listaPomieszczenWynajetych().isEmpty()) {
+        if (person.getRentedWarehousesList().isEmpty()) {
             System.out.print("brak. ");
         }
 
         List<Warehouse> magazyny = new LinkedList<>();
-        for (Map.Entry<Warehouse, Person> os : Warehouse.osobyUprawnione.entrySet()) {
+        for (Map.Entry<Warehouse, Person> os : Warehouse.authorizedPeople.entrySet()) {
             Warehouse key = os.getKey();
             Person value = os.getValue();
-
-            if (value.equals(osoba)) {
+            if (value.equals(person)) {
                 magazyny.add(key);
             }
         }
         System.out.println("Posiadane uprawnienia:" + magazyny);
     }
 
-    public static void getPrzedmiotyMagazyznu(PrintWriter writer) {
+    public static void getWarehouseItems(PrintWriter writer) {
         writer.println("Przedmioty w magazynach: ");
-        for (Warehouse l : listaMagazynow) {
-            if(!l.przedmiotyMagazynu().isEmpty()) writer.println(l.przedmiotyMagazynu());
+        for (Warehouse l : warehouseList) {
+            if(!l.getWarehouseItems().isEmpty()) writer.println(l.getWarehouseItems());
         }
         writer.println();
     }
 
-    public static Person getOsoba() {
-        return osoba;
+    public static Person getPerson() {
+        return person;
     }
 
-    public static Map<CarServiceSpot,Queue<Vehicle>> getKolejkaOczekujacychNaNaprawe(){
+    public static Map<CarServiceSpot,Queue<Vehicle>> getQueueWaitingForRepairCSS(){
         Map<CarServiceSpot,Queue<Vehicle>> map = new HashMap<>();
-        for (CarServiceSpot c : miejscaNaprawcze) {
-            if(!c.getKolejkaOczekujacych().isEmpty())
-            map.put(c,c.getKolejkaOczekujacych());
+        for (CarServiceSpot c : repairPlaces) {
+            if(!c.getVehicleQueue().isEmpty())
+            map.put(c,c.getVehicleQueue());
         }
         return map;
     }
 
-    public static Map<IndependentCarServiceSpot,Queue<Vehicle>> getKolejkaOczekujacychNaSerwis(){
+    public static Map<IndependentCarServiceSpot,Queue<Vehicle>> getQueueWaitingForRepairICSS(){
         Map<IndependentCarServiceSpot,Queue<Vehicle>> map = new HashMap<>();
-        for (IndependentCarServiceSpot c : miejscaSerwisowe) {
-            if(!c.getKolejkaOczekujacychPojazdow().isEmpty())
-                map.put(c,c.getKolejkaOczekujacychPojazdow());
+        for (IndependentCarServiceSpot c : serviceSpots) {
+            if(!c.getQueueOfWaitingVehicles().isEmpty())
+                map.put(c,c.getQueueOfWaitingVehicles());
         }
         return map;
     }
 
-    public static Map<CarService, Set<Vehicle>> getHistoriaNapraw(){
-        Map<CarService, Set<Vehicle>> map = CarService.getHistoriaNapraw();
+    public static Map<CarService, Set<Vehicle>> getHistoryOfRepairs(){
+        Map<CarService, Set<Vehicle>> map = CarService.getRepairHistory();
         return map;
     }
 
@@ -617,16 +607,16 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        writer.println(serwis);
+        writer.println(service);
         writer.println();
-        voidCollection("Lista pomieszczen: ", writer, listaMagazynow);
-        voidCollection("Wolne magazyny: ", writer, getlistaWolnychMagazynow());
-        voidCollection("Zajete magazyny: ", writer, getListaZajetychMagazynow());
-        voidCollection("Lista osob: ", writer, listaOsob);
-        voidCollection("Lista przedmiotow: ", writer, listaObiektow);
-        voidCollection("Lista osob wynajmujacych: ", writer, Warehouse.getOsobyWynajmujace());
+        voidCollection("Lista pomieszczen: ", writer, warehouseList);
+        voidCollection("Wolne magazyny: ", writer, getFreeWarehouseList());
+        voidCollection("Zajete magazyny: ", writer, getOccupiedWarehouseList());
+        voidCollection("Lista osob: ", writer, peopleList);
+        voidCollection("Lista przedmiotow: ", writer, objectsList);
+        voidCollection("Lista osob wynajmujacych: ", writer, Warehouse.getTenantsList());
         writer.println();
-        getPrzedmiotyMagazyznu(writer);
+        getWarehouseItems(writer);
         writer.println();
         writer.close();
 
@@ -639,29 +629,26 @@ public class Main {
             e.printStackTrace();
         }
 
-        writer2.println(serwis);
+        writer2.println(service);
         writer2.println();
-        voidCollection("Miejsca parkingowe: ",writer2,listaMiejscParkingowych);
-        voidCollection("Miejsca serwisowe: ",writer2, miejscaSerwisowe);
-        voidCollection("Miejsca naprawcze:",writer2,miejscaNaprawcze);
-        voidCollection("Lista pojazdow: " ,writer2,listaPojazdow);
-        voidCollection2("Lista pojazdow naprawianych: ",writer2, CarServiceSpot.getListaWszystkichPojazdowNaprawianych());
-        voidCollection4("Lista oczekujacych na naprawe: ",writer2, getKolejkaOczekujacychNaNaprawe());
-        voidCollection3("Lista pojazdow serwisowanych",writer2, IndependentCarServiceSpot.getListaWszystkichPojazdowSerwisowanych());
-        voidCollection5("Lista oczekujacych na serwis: ",writer2, getKolejkaOczekujacychNaSerwis());
-        voidCollection6("Historia napraw: ",writer2, getHistoriaNapraw());
+        voidCollection("Miejsca parkingowe: ",writer2, parkingSpaceList);
+        voidCollection("Miejsca serwisowe: ",writer2, serviceSpots);
+        voidCollection("Miejsca naprawcze:",writer2, repairPlaces);
+        voidCollection("Lista pojazdow: " ,writer2, vehiclesList);
+        voidCollection2("Lista pojazdow naprawianych: ",writer2, CarServiceSpot.getAllRepairedVehicles());
+        voidCollection4("Lista oczekujacych na naprawe: ",writer2, getQueueWaitingForRepairCSS());
+        voidCollection3("Lista pojazdow serwisowanych",writer2, IndependentCarServiceSpot.getAllServicedVehiclesList());
+        voidCollection5("Lista oczekujacych na serwis: ",writer2, getQueueWaitingForRepairICSS());
+        voidCollection6("Historia napraw: ",writer2, getHistoryOfRepairs());
 
         writer2.println();
         writer2.close();
-
-
     }
 
     public static <T> void voidCollection(String message, PrintWriter wr, Collection<T> collection) {
         wr.println(message);
         collection.forEach(wr::println);
         wr.println();
-
     }
 
     public static void voidCollection(String message, PrintWriter wr, Map<Person, List<Warehouse>> collection) {

@@ -1,18 +1,15 @@
 public class CityCar extends Vehicle{
-
-    private String skrzyniaBiegow;
+    private String transmission;
     private int ID;
 
-    public CityCar(String marka, String typPojazdu, double pojemnoscSilnika, String skrzyniaBiegow) {
-        super(marka, typPojazdu, pojemnoscSilnika);
-        this.skrzyniaBiegow = skrzyniaBiegow;
-
-        ID = IDpojazdu++;
+    public CityCar(String brand, String type, double engine, String transmission) {
+        super(brand, type, engine);
+        this.transmission = transmission;
+        ID = vehicleID++;
     }
 
-
     @Override
-    int getIDpojazdu() {
+    int getVehicleID() {
         return this.ID;
     }
 

@@ -4,61 +4,55 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Person {
-
-    public String imie;
-    public String nazwisko;
+    public String firstName;
+    public String lastName;
     private int PESEL;
-    private String adresZamieszkania;
-    private LocalDate pierwszyNajem;
+    private String address;
+    private LocalDate firstLease;
     private int id;
-    private static int IDosoby =1;
-    private List<Warehouse> listaPomieszczenWynajetych = new ArrayList<>();
-    private static List<Person> listaOsob;
+    private static int personID =1;
+    private List<Warehouse> rentedWarehouses = new ArrayList<>();
+    private static List<Person> personList;
 
-
-    public Person(String imie, String nazwisko, int PESEL, String adresZamieszkania, LocalDate pierwszyNajem) throws NeverRentException {
-        this.imie=imie;
-        this.nazwisko=nazwisko;
+    public Person(String firstName, String lastName, int PESEL, String address, LocalDate firstLease) throws NeverRentException {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.PESEL=PESEL;
-        this.adresZamieszkania=adresZamieszkania;
-        this.pierwszyNajem=pierwszyNajem;
-
-       id = IDosoby++;
-
-       dodajosoby();
-
+        this.address = address;
+        this.firstLease = firstLease;
+        id = personID++;
+        addPeople();
     }
 
-    public void dodajosoby(){
-
-        if(listaOsob==null){
-            listaOsob = new LinkedList<>();
-            listaOsob.add(this);
+    public void addPeople(){
+        if(personList ==null){
+            personList = new LinkedList<>();
+            personList.add(this);
         }else {
-            listaOsob.add(this);
+            personList.add(this);
         }
 
     }
 
-    public static List<Person> getListaOsob(){
-        return listaOsob;
+    public static List<Person> getPersonList(){
+        return personList;
     }
 
-    public List<Warehouse> listaPomieszczenWynajetych() {
-        return listaPomieszczenWynajetych;
+    public List<Warehouse> getRentedWarehousesList() {
+        return rentedWarehouses;
     }
 
     public int getId() {
         return id;
     }
 
-    public void dodajPomieszczenie(Warehouse w){
-        listaPomieszczenWynajetych.add(w);
+    public void addWarehouse(Warehouse w){
+        rentedWarehouses.add(w);
     }
 
     public String toString(){
 
-        return "Osoba: "+this.imie + " " + this.nazwisko + " ID: " + this.id;
+        return "Osoba: "+this.firstName + " " + this.lastName + " ID: " + this.id;
     }
 
 

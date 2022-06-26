@@ -3,86 +3,84 @@ import java.util.*;
 public class IndependentCarServiceSpot extends CarService{
     private int id;
     private static int counter=0;
-    private Person[] wlasciciel = new Person[1];
-    private Vehicle[] miejscaSerwisowe= new Vehicle[1];
-    private static IndependentCarServiceSpot[] listaMiejscSerwisowych;
-    private Set<Vehicle> listaPojazdowSerwisowanych = new HashSet<>();
-    private  HashMap<Person, Vehicle> osobyiPojazdy = new HashMap<>();
-    private static Map<IndependentCarServiceSpot, Vehicle> listaWszystkichPojazdowSerwisowanych = new HashMap<>();
-    private  Queue<Vehicle> kolejkaOczekujacychPojazdow = new LinkedList<>();;
-    private Queue<Person> kolejkaWlascicieli = new LinkedList<>();
-    private boolean czyObecnieNaprawiany =false;
-    private Vehicle obecnyPojazd;
-    private boolean czyWlasciciel=false;
-    private boolean czyMoznaZaczacNaprawe=false;
-    private String nowaNazwa;
-    private boolean czyWynajmuje=false;
+    private Person[] owner = new Person[1];
+    private static IndependentCarServiceSpot[] independentCarServiceSpots;
+    private Set<Vehicle> servicedVehiclesList = new HashSet<>();
+    private  HashMap<Person, Vehicle> peopleAndVehicles = new HashMap<>();
+    private static Map<IndependentCarServiceSpot, Vehicle> allServicedVehiclesList = new HashMap<>();
+    private  Queue<Vehicle> queueOfWaitingVehicles = new LinkedList<>();;
+    private Queue<Person> ownersQueue = new LinkedList<>();
+    private boolean ifCurrentlyServiced=false;
+    private Vehicle thatVehicle;
+    private boolean ifOwner=false;
+    private boolean canStartService =false;
+    private String newName;
+    private boolean ifRented =false;
 
     public IndependentCarServiceSpot(String nazwa, double powierzchnia) {
         super(nazwa, powierzchnia);
-        nowaNazwa=nazwa;
-        id = IDspot++;
-        dodajMiejsce();
+        newName =nazwa;
+        id = spotID++;
+        addSpot();
     }
 
-    public Queue<Vehicle> getKolejkaOczekujacychPojazdow() {
-        return kolejkaOczekujacychPojazdow;
+    public Queue<Vehicle> getQueueOfWaitingVehicles() {
+        return queueOfWaitingVehicles;
     }
 
-    public void ropozcznijSamodzielnaNaprawe(Person p,Vehicle v) {
-
-            if(osobyiPojazdy.containsValue(v)) {
+    public void startSelfRepair(Person p, Vehicle v) {
+            if(peopleAndVehicles.containsValue(v)) {
                 Person osoba = p;
                 Vehicle pojazd = v;
-                for(Map.Entry<Person, Vehicle> os : osobyiPojazdy.entrySet()){
+                for(Map.Entry<Person, Vehicle> os : peopleAndVehicles.entrySet()){
                     if(os.getKey().equals(p) && os.getValue().equals(v)){
-                        czyWlasciciel=true;
+                        ifOwner =true;
                     }
                 }
-                if(!czyWlasciciel){
+                if(!ifOwner){
                     System.out.println("Tylko wlasciciel moze rozpoczac prace serwisowa przy pojezdzie.");
                 }else {
-                    if (!czyObecnieNaprawiany) {
-                        obecnyPojazd = v;
-                        listaPojazdowSerwisowanych.add(v);
-                        listaWszystkichPojazdowSerwisowanych.put(this, v);
-                        historiaNapraw.put(this, listaPojazdowSerwisowanych);
+                    if (!ifCurrentlyServiced) {
+                        thatVehicle = v;
+                        servicedVehiclesList.add(v);
+                        allServicedVehiclesList.put(this, v);
+                        repairHistory.put(this, servicedVehiclesList);
                         System.out.println("Wlasciciel pojazdu rozpoczal serwisowanie.");
-                        czyObecnieNaprawiany = true;
+                        ifCurrentlyServiced = true;
                     } else {
-                        if (kolejkaOczekujacychPojazdow.contains(v)) {
-                            czyMoznaZaczacNaprawe=true;
+                        if (queueOfWaitingVehicles.contains(v)) {
+                            canStartService =true;
                             System.out.println("Ten pojazd znajduje sie w kolejce oczekujacych na serwis.");
 
-                        } else if (obecnyPojazd == v) {
+                        } else if (thatVehicle == v) {
                             System.out.println("Ten pojazd jest juz w serwisie.");
                         } else {
                         }
 
                     }
-                    czyWlasciciel=false;
+                    ifOwner =false;
                 }
             }else {
                 System.out.println("Najpierw wynajmij miejsce dla tego pojazdu.");
             }
     }
 
-    public void zakonczSamodzielnaNaprawe(Person p) {
+    public void finishSelfRepair(Person p) {
 
-        if(p==wlasciciel[0]) {
-            if (listaPojazdowSerwisowanych.contains(obecnyPojazd)) {
-                listaPojazdowSerwisowanych.remove(obecnyPojazd);
-               listaWszystkichPojazdowSerwisowanych.remove(this);
-                if(czyMoznaZaczacNaprawe) {
-                    System.out.println("Wlasciciel zakonczyl naprawe serwisowa: " +obecnyPojazd + " Jego miejsce zastapil: " + kolejkaOczekujacychPojazdow.element());
-                    Vehicle thisVehicle = kolejkaOczekujacychPojazdow.poll();
-                    listaPojazdowSerwisowanych.add(thisVehicle);
-                    listaWszystkichPojazdowSerwisowanych.put(this,thisVehicle);
-                    wlasciciel[0] = kolejkaWlascicieli.poll();
+        if(p== owner[0]) {
+            if (servicedVehiclesList.contains(thatVehicle)) {
+                servicedVehiclesList.remove(thatVehicle);
+               allServicedVehiclesList.remove(this);
+                if(canStartService) {
+                    System.out.println("Wlasciciel zakonczyl naprawe serwisowa: " + thatVehicle + " Jego miejsce zastapil: " + queueOfWaitingVehicles.element());
+                    Vehicle thisVehicle = queueOfWaitingVehicles.poll();
+                    servicedVehiclesList.add(thisVehicle);
+                    allServicedVehiclesList.put(this,thisVehicle);
+                    owner[0] = ownersQueue.poll();
                 }else {
                     System.out.println("Wlasciciel zakonczyl naprawe serwisowa.");
                     czyZajete=false;
-                    czyObecnieNaprawiany=false;
+                    ifCurrentlyServiced =false;
                 }
             }
         }else {
@@ -93,18 +91,18 @@ public class IndependentCarServiceSpot extends CarService{
 
 
     @Override
-    public void dodajMiejsce() {
+    public void addSpot() {
 
-        int count = Service.getIloscMiejscSerwisowych();
+        int count = Service.getServiceLocationsNumber();
 
-        if (listaMiejscSerwisowych == null) {
-            listaMiejscSerwisowych = new IndependentCarServiceSpot[count];
-            listaMiejscSerwisowych[counter++] = this;
-            wszystkieMiejsca.add(this);
+        if (independentCarServiceSpots == null) {
+            independentCarServiceSpots = new IndependentCarServiceSpot[count];
+            independentCarServiceSpots[counter++] = this;
+            carServiceList.add(this);
         } else {
             try {
-                listaMiejscSerwisowych[counter++] = this;
-                wszystkieMiejsca.add(this);
+                independentCarServiceSpots[counter++] = this;
+                carServiceList.add(this);
             }catch (ArrayIndexOutOfBoundsException e) {
                 throw new IndexOutOfBoundsException("Przekroczono maksymalna ilosc miejsc serwisowych.");
 
@@ -113,32 +111,32 @@ public class IndependentCarServiceSpot extends CarService{
 
     }
 
-    public static IndependentCarServiceSpot[] getListaMiejscSerwisowych() {
-        return listaMiejscSerwisowych;
+    public static IndependentCarServiceSpot[] getIndependentCarServiceSpots() {
+        return independentCarServiceSpots;
     }
 
     @Override
-    void wynajmijMiejsce(Person p, Vehicle vec) {
+    void rentSpot(Person p, Vehicle vec) {
 
         if(!czyZajete){
-            wlasciciel[0] = p;
-            osobyiPojazdy.put(p, vec);
+            owner[0] = p;
+            peopleAndVehicles.put(p, vec);
             czyZajete = true;
-            System.out.println("Miejsce serwisowe "+nowaNazwa+" zostalo wynajete.");
+            System.out.println("Miejsce serwisowe "+ newName +" zostalo wynajete.");
         } else{
             System.out.println("Miejsce serwisowe jest juz zarezerwowane. Czekasz w kolejce.");
-            kolejkaOczekujacychPojazdow.add(vec);
-            osobyiPojazdy.put(p,vec);
+            queueOfWaitingVehicles.add(vec);
+            peopleAndVehicles.put(p,vec);
         }
     }
 
-    public boolean czyWlasnieWynajmuje(Person p){
-        if(p==wlasciciel[0]){
-            czyWynajmuje =true;
+    public boolean ifCurrentlyRentsSpot(Person p){
+        if(p== owner[0]){
+            ifRented =true;
         }else {
-            czyWynajmuje =false;
+            ifRented =false;
         }
-        return czyWynajmuje;
+        return ifRented;
     }
 
     @Override
@@ -146,17 +144,14 @@ public class IndependentCarServiceSpot extends CarService{
         return id;
     }
 
-    public static Map<IndependentCarServiceSpot, Vehicle> getListaSerwisowanychPojazdow() {
-        return listaWszystkichPojazdowSerwisowanych;
+    public static Map<IndependentCarServiceSpot, Vehicle> getAllServicedVehiclesList() {
+        return allServicedVehiclesList;
     }
 
-    public static Map<IndependentCarServiceSpot, Vehicle> getListaWszystkichPojazdowSerwisowanych() {
-        return listaWszystkichPojazdowSerwisowanych;
-    }
 
     @Override
     public String toString(){
-        return super.toString()+ " [Miejsce Serwisowe]" + " ID:"+ id + " stan: "+(czyWlasnieWynajmuje(Main.getOsoba())? "Wynajety przez Ciebie": czyZajete? "Zajete": "Wolne");
+        return super.toString()+ " [Miejsce Serwisowe]" + " ID:"+ id + " stan: "+(ifCurrentlyRentsSpot(Main.getPerson())? "Wynajety przez Ciebie": czyZajete? "Zajete": "Wolne");
     }
 
 }

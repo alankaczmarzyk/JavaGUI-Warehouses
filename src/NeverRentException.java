@@ -1,5 +1,5 @@
 public class NeverRentException extends  Exception{
-    public NeverRentException(String komunikat){
-        super(komunikat);
+    public NeverRentException(String announcement){
+        super(announcement);
     }
 }

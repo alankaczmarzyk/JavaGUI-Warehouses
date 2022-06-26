@@ -5,88 +5,83 @@ import java.util.List;
 import java.util.Map;
 
 abstract class Warehouse {
+    private String name;
+    private double space;
+    public static int warehouseID = 1;
+    private double rentalCost;
+    public static HashMap<Warehouse, Person> authorizedPeople = new HashMap<>();
+    protected double volume;
+    protected boolean ifBusy =false;
+    private LocalDate startDateOfLease;
+    private LocalDate finishDateOfLease;
+    public static List<Warehouse> warehousesList = new LinkedList<>();
+    public static Map<Person, List<Warehouse>> tenantsList = new HashMap<>();
+    public boolean ifConsumer;
 
-    public String nazwa;
-    public double powierzchnia;
-    public static int idPomieszczenia = 1;
-    private double kosztNajmu;
-    public static HashMap<Warehouse, Person> osobyUprawnione = new HashMap<>();
-    protected double objetosc;
-    protected boolean czyZajety=false;
-    private LocalDate dataRozpoczeciaNajmu;
-    private LocalDate dataZakonczeniaNajmu;
-    public static List<Warehouse> wszystkieMagazyny = new LinkedList<>();
-    public static Map<Person, List<Warehouse>> osobyWynajmujace = new HashMap<>();
-    public boolean czyKonsumecki;
-
-    public Warehouse(String nazwa, double objetosc, double kosztNajmu, LocalDate dataRozpoczeciaNajmu, LocalDate dataZakonczeniaNajmu){
-
-        this.nazwa = nazwa;
-        this.kosztNajmu = kosztNajmu;
-        this.objetosc=objetosc;
-        this.dataRozpoczeciaNajmu=dataRozpoczeciaNajmu;
-        this.dataZakonczeniaNajmu=dataZakonczeniaNajmu;
+    public Warehouse(String name, double volume, double rentalCost, LocalDate startDateOfLease, LocalDate finishDateOfLease){
+        this.name = name;
+        this.rentalCost = rentalCost;
+        this.volume = volume;
+        this.startDateOfLease = startDateOfLease;
+        this.finishDateOfLease = finishDateOfLease;
     }
-    public abstract void wlozPrzedmiot(Person p,Object o) throws TooManyThingsException;
 
-    public abstract void wyjmijPrzedmiot(Person p,Object o);
-
-    public Warehouse(String nazwa, double dlugosc, double szerokosc, double wysokosc, double kosztNajmu, LocalDate dataRozpoczeciaNajmu, LocalDate dataZakonczeniaNajmu){
-
-        this.nazwa = nazwa;
-        this.kosztNajmu = kosztNajmu;
-        this.objetosc=dlugosc*szerokosc*wysokosc;
-
+    public Warehouse(String name, double dlugosc, double szerokosc, double wysokosc, double rentalCost, LocalDate startDateOfLease, LocalDate finishDateOfLease){
+        this.name = name;
+        this.rentalCost = rentalCost;
+        this.volume =dlugosc*szerokosc*wysokosc;
 
     }
 
-    public static List<Warehouse> getWszystkieMagazyny() {
-        return wszystkieMagazyny;
+    public abstract void addItem(Person p, Object o) throws TooManyThingsException;
+
+    public abstract void takeOutItem(Person p, Object o);
+
+    public static List<Warehouse> getWarehousesList() {
+        return warehousesList;
     }
 
-    public double getKosztNajmu(){
-        return this.kosztNajmu;
+    public double getRentalCost(){
+        return this.rentalCost;
     }
 
-    public abstract void dodajMagazyn();
+    public abstract void addWarehouse();
 
-    public abstract void wynajmijMagazyn(Person p, ParkingSpace ps);
+    public abstract void rentWarehouse(Person p, ParkingSpace ps);
 
-    public abstract void odbierzUprawnienie(Person p);
+    public abstract void removePermission(Person p);
 
-    public abstract void dodajUprawnienie(Person p);
+    public abstract void addPermission(Person p);
 
     public abstract int getId();
 
-    public LocalDate getDataZakonczenia(){
-        return dataZakonczeniaNajmu;
+    public LocalDate getFinishDateOfLease(){
+        return finishDateOfLease;
     }
 
-    public abstract void osobyUprawnione();
+    public abstract HashMap<Warehouse, List<Object>> getWarehouseItems();
 
-    public abstract HashMap<Warehouse, List<Object>> przedmiotyMagazynu();
+    public abstract HashMap<Warehouse, Person> getTenants();
 
-    public abstract HashMap<Warehouse, Person> Najemcy();
-
-    public static HashMap<Warehouse, Person> getOsobyUprawnione() {
-        return osobyUprawnione;
+    public static HashMap<Warehouse, Person> getAuthorizedPeople() {
+        return authorizedPeople;
     }
 
-    public double getObjetosc(){
-        return this.objetosc;
+    public double getVolume(){
+        return this.volume;
     }
 
-    public static Map<Person, List<Warehouse>> getOsobyWynajmujace() {
-        return osobyWynajmujace;
+    public static Map<Person, List<Warehouse>> getTenantsList() {
+        return tenantsList;
     }
 
-    public boolean isCzyZajety() {
-        return czyZajety;
+    public boolean isIfBusy() {
+        return ifBusy;
     }
 
     public String toString(){
 
-        return "Magazyn:'"+this.nazwa+"' " + "Powierzchnia: "+this.objetosc+"m^2"+" " ;
+        return "Magazyn:'"+this.name +"' " + "Powierzchnia: "+this.volume +"m^2"+" " ;
     }
 
 

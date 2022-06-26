@@ -1,5 +1,5 @@
 public class TooManyThingsException extends Exception{
-    public TooManyThingsException(String komunikat){
-        super(komunikat);
+    public TooManyThingsException(String announcement){
+        super(announcement);
     }
 }

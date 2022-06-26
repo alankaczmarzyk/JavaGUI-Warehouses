@@ -1,52 +1,43 @@
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class Object {
-
-    private String nazwa;
-    private double polePowierzchni;
-    private static int IDObiektu = 1;
+    private String name;
+    private double area;
+    private static int objectID = 1;
     private int ID;
-    private static Set<Object> listaObiektow;
+    private static Set<Object> objectsList;
 
-    public Object(String nazwa, double polePowierzchni){
-        this.nazwa=nazwa;
-        this.polePowierzchni=polePowierzchni;
-
-        ID=IDObiektu++;
-
-        dodajObiekty();
+    public Object(String name, double area){
+        this.name = name;
+        this.area = area;
+        ID= objectID++;
+        addObject();
     }
 
-    public Object(String nazwa, double dlugosc, double szerokosc, double wysokosc){
-        this.nazwa=nazwa;
-        this.polePowierzchni=(2*dlugosc*szerokosc)+(2*wysokosc*szerokosc)+(2*dlugosc*wysokosc);
-
-        ID=IDObiektu++;
-
-        dodajObiekty();
+    public Object(String name, double length, double width, double height){
+        this.name = name;
+        this.area =(2*length*width)+(2*height*width)+(2*length*height);
+        ID= objectID++;
+        addObject();
     }
 
-
-    public void dodajObiekty(){
-
-        if(listaObiektow==null){
-            listaObiektow = new HashSet<>();
-            listaObiektow.add(this);
+    public void addObject(){
+        if(objectsList==null){
+            objectsList = new HashSet<>();
+            objectsList.add(this);
         }else {
-            listaObiektow.add(this);
+            objectsList.add(this);
         }
 
     }
 
-    public static Set<Object> getListaObiektow() {
-        return listaObiektow;
+    public static Set<Object> getObjectList() {
+        return objectsList;
     }
 
-    public double getPolePowierzchni() {
-        return polePowierzchni;
+    public double getArea() {
+        return area;
     }
 
     public int getID() {
@@ -55,6 +46,6 @@ public class Object {
 
     @Override
     public String toString() {
-        return "[Obiekt: "+this.nazwa + ", ID:"+ this.ID + ", rozmiar: "+this.polePowierzchni +"] ";
+        return "[Obiekt: "+this.name + ", ID:"+ this.ID + ", rozmiar: "+this.area +"] ";
     }
 }

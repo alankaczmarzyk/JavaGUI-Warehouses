@@ -1,17 +1,15 @@
 public class OffRoadCar extends Vehicle{
-
-    private String naped;
+    private String drive;
     private int ID;
 
-    public OffRoadCar(String marka, String typPojazdu, double pojemnoscSilnika, String naped) {
-        super(marka, typPojazdu, pojemnoscSilnika);
-        this.naped = naped;
-
-        ID = IDpojazdu++;
+    public OffRoadCar(String brand, String type, double engine, String drive) {
+        super(brand, type, engine);
+        this.drive = drive;
+        ID = vehicleID++;
     }
 
     @Override
-    int getIDpojazdu() {
+    int getVehicleID() {
         return this.ID;
     }
 

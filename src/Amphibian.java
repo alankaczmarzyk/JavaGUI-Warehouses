@@ -1,17 +1,15 @@
 public class Amphibian extends Vehicle{
-
-    private int iloscGasienic;
+    private int caterpillarsNumber;
     private int ID;
 
-    public Amphibian(String marka, String typPojazdu, double pojemnoscSilnika, int iloscGasienic) {
-        super(marka, typPojazdu, pojemnoscSilnika);
-        this.iloscGasienic = iloscGasienic;
-
-        ID=IDpojazdu++;
+    public Amphibian(String brand, String type, double engine, int caterpillarsNumber) {
+        super(brand, type, engine);
+        this.caterpillarsNumber = caterpillarsNumber;
+        ID= vehicleID++;
     }
 
     @Override
-    int getIDpojazdu() {
+    int getVehicleID() {
         return this.ID;
     }
 
