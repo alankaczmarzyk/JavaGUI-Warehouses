@@ -1,11 +1,11 @@
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.stream.Collectors.toList;
 
@@ -39,14 +39,12 @@ public class Main extends JFrame{
     public static Service service;
     public static boolean exit=false;
 
-
-
     public static void main(String[] args) throws Exception {
         int select;
         Homepage homepage = new Homepage();
-        // TWORZENIE OBIEKTY
-        service = new Service("U Zbycha", 1, 10, 50, 3, 1);
 
+        //Objects
+        service = new Service("U Zbycha", 1, 10, 50, 3, 1);
         ConsumerWarehouse cw1 = new ConsumerWarehouse("ABC", 2000, 500, LocalDate.of(2021, 2, 26), LocalDate.of(2022, 6, 24));
         ConsumerWarehouse cw2 = new ConsumerWarehouse("BCD", 300, 200, LocalDate.of(2021, 11, 28), LocalDate.of(2022, 6, 24));
         ConsumerWarehouse cw3 = new ConsumerWarehouse("DEF", 300, 10, LocalDate.of(2021, 7, 11), LocalDate.of(2022, 7, 1));
@@ -57,36 +55,30 @@ public class Main extends JFrame{
         ServiceWarehouse sw3 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 3, 26), LocalDate.of(2022, 7, 17));
         ServiceWarehouse sw4 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 9, 8), LocalDate.of(2022, 7, 15));
         ServiceWarehouse sw5 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 12, 26), LocalDate.of(2022, 7, 7));
-
         Person p1 = new Person("Adam", "Kowalski", 132323222, "Warszawa, Gorecka 5", LocalDate.of(2020, 6, 28));
         Person p2 = new Person("Paweł", "Jarosz", 232321232, "Czestochowa, Warynskiego 5", LocalDate.of(2019, 4, 6));
         Person p3 = new Person("Marek", "Wilusz", 023021202, "Warszawa, Mokotowska 5", LocalDate.of(2020, 11, 11));
         Person p4 = new Person("Adam", "Ozga", 1232320202, "Warszawa, Kielecka 25a", LocalDate.of(2021, 1, 26));
         Person p5 = new Person("Michał", "Browar", 523302102, "Raszyn, Warszawska 135", LocalDate.of(2021, 3, 7));
-
         ParkingSpace ps1 = new ParkingSpace("Miejsce A", 10, 200);
         ParkingSpace ps2 = new ParkingSpace("Miejsce B", 10, 200);
         ParkingSpace ps3 = new ParkingSpace("Miejsce C", 7, 150);
-
         Object o1 = new Object("rower", 20);
         Object o2 = new Object("pralka", 10, 5, 3);
         Object o3 = new Object("telewizor", 179);
         Object o4 = new Object("obraz", 2);
         Object o5 = new Object("wiadro", 2, 2, 2);
-
         CarServiceSpot Ics1 = new CarServiceSpot("XYZ", 100);
         CarServiceSpot Ics2 = new CarServiceSpot("ZYX", 20);
         CarServiceSpot Ics3 = new CarServiceSpot("YZX", 100);
-
         IndependentCarServiceSpot icss1 = new IndependentCarServiceSpot("ZZZ", 30);
-
         Motorcycle m1 = new Motorcycle("Ducati", "scigacz", 1000, 234);
         Amphibian a1 = new Amphibian("ISUZU", "wojskowy", 7000, 2);
         CityCar c1 = new CityCar("Toyota", "miejskie", 1200, "automatyczna");
         OffRoadCar of1 = new OffRoadCar("Nissan", "Offroadowy", 4200, "4x4");
 
 
-        // DODAWANIE POMIESZCZEN, MIEJSC NAPRAWCZYCH
+        //Premises
         warehousePremises = List.of(ConsumerWarehouse.getConsumerWarehouseList());
         servicePremises = List.of(ServiceWarehouse.getServicePremisesList());
         repairPlaces = List.of(CarServiceSpot.getCarServiceSpots());
@@ -98,8 +90,6 @@ public class Main extends JFrame{
         parkingSpaceList = ParkingSpace.getParkingSpaceList();
         carServiceList = CarService.getCarServiceList();
 
-        // FUNKCJONALNOSC
-            //your examples
 
 
         // MENU
@@ -146,9 +136,7 @@ public class Main extends JFrame{
                     displayPersonDetails();
                     break;
                 case 4:
-                    System.out.println("Lista wolnych magazynow");
-                    freeWarehouseList = getFreeWarehouseList();
-                    System.out.println(freeWarehouseList);
+                    displayFreeWarehouse();
                     break;
                 case 5:
                     if (person == null) {
@@ -287,40 +275,50 @@ public class Main extends JFrame{
         }
     }
 
+    //Functions
     public static void exit(){
         exit=true;
     }
 
-    private static void choosePerson(Scanner sc) {
+    //STARA
+    public static void choosePerson(Scanner sc) {
         System.out.println(peopleList);
         number = sc.nextInt();
         peopleList.forEach(
                 P -> {
                     if (P.getId() == number)
                         person = P;
-                }
-        );
-
+                });
         System.out.println("Wybrano: " + person.firstName + " " + person.lastName);
         System.out.println();
     }
 
-    private static void chooseWarehouse(Scanner sc) {
+//NOWA
+    public static void choosePerson(String sc) {
+        AtomicBoolean find = new AtomicBoolean(false);
+        number = Integer.parseInt(sc);
+        peopleList.forEach(
+                P -> {
+                    if (P.getId() == number) {
+                        person = P;
+                        find.set(true);
+                    }
+                });
+        if(!find.get()) MainMenu.getTextArea().setText("Wybrano bledny identyfikator osoby." + "\n");
+        else MainMenu.getTextArea().setText("Wybrano: " + person.firstName + " " + person.lastName + "\n");
+    }
+
+    public static void chooseWarehouse(Scanner sc) {
         System.out.println(warehouseList);
         number = sc.nextInt();
         warehouseList.forEach(
                 W -> {
-                    if (W.getId() == number) {
+                    if (W.getId() == number)
                         warehouse = W;
-                    }
-                }
-
-        );
-
+                });
     }
 
     public static void finishRepairOfICSS(Scanner sc) {
-
         Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
         if (!lista.isEmpty()) {
             if(person ==null) {
@@ -342,7 +340,7 @@ public class Main extends JFrame{
 
     }
 
-    private static void finishRepairOfCSS(Scanner sc) {
+    public static void finishRepairOfCSS(Scanner sc) {
         Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getAllRepairedVehicles();
         if (!lista.isEmpty()) {
             System.out.println("Wybierz miejsce Naprawcze:");
@@ -358,7 +356,7 @@ public class Main extends JFrame{
             System.out.println("Nie ma obecnie zadnych napraw.");
     }
 
-    private static void chooseFreeWarehouse(Scanner sc) {
+    public static void chooseFreeWarehouse(Scanner sc) {
         freeWarehouseList = getFreeWarehouseList();
         System.out.println(freeWarehouseList);
         number = sc.nextInt();
@@ -372,7 +370,7 @@ public class Main extends JFrame{
         );
     }
 
-    private static void rentParking(Scanner sc) {
+    public static void rentParking(Scanner sc) {
 
         while (!typeRight) {
             System.out.println("Czy chcesz wynajac miejsce parkingowe? Wpisz:  T  jeśli tak, wpisz:  N  jeśli nie:");
@@ -398,7 +396,7 @@ public class Main extends JFrame{
         typeRight =false;
     }
 
-    private static void displayListOfRentedPremises(Scanner sc) {
+    public static void displayListOfRentedPremises(Scanner sc) {
         number = sc.nextInt();
         person.getRentedWarehousesList().forEach(
                 M -> {
@@ -411,7 +409,7 @@ public class Main extends JFrame{
 
     }
 
-    private static void addItemToWarehouse(Scanner sc) throws TooManyThingsException {
+    public static void addItemToWarehouse(Scanner sc) throws TooManyThingsException {
 
         for (Map.Entry<Warehouse, Person> entry : Warehouse.authorizedPeople.entrySet()) {
             Warehouse key = entry.getKey();
@@ -439,7 +437,7 @@ public class Main extends JFrame{
         }
     }
 
-    private static void chooseParkingSpace(Scanner sc) {
+    public static void chooseParkingSpace(Scanner sc) {
         displayFreeWarehouseList();
         number = sc.nextInt();
         freeParkingSpaceList.forEach(
@@ -450,7 +448,14 @@ public class Main extends JFrame{
         );
     }
 
-    private static void displayParkingSpace(Scanner sc) {
+    public static List<Warehouse> displayFreeWarehouse(){
+        System.out.println("Lista wolnych magazynow");
+        freeWarehouseList = getFreeWarehouseList();
+        return freeWarehouseList;
+    }
+
+
+    public static void displayParkingSpace(Scanner sc) {
         System.out.println(parkingSpaceList);
         number = sc.nextInt();
         parkingSpaceList.forEach(
@@ -463,7 +468,7 @@ public class Main extends JFrame{
         );
     }
 
-    private static void chooseItem(Scanner sc) {
+    public static void chooseItem(Scanner sc) {
         System.out.println(objectsList);
         number = sc.nextInt();
         objectsList.forEach(
@@ -474,7 +479,7 @@ public class Main extends JFrame{
         );
     }
 
-    private static void chooseVehicle(Scanner sc) {
+    public static void chooseVehicle(Scanner sc) {
         System.out.println(vehiclesList);
         number = sc.nextInt();
         vehiclesList.forEach(
@@ -487,7 +492,7 @@ public class Main extends JFrame{
         System.out.println();
     }
 
-    private static void chooseRepairPlace(Scanner sc) {
+    public static void chooseRepairPlace(Scanner sc) {
         System.out.println(repairPlaces);
         number = sc.nextInt();
         repairPlaces.forEach(
@@ -498,7 +503,7 @@ public class Main extends JFrame{
         );
     }
 
-    private static void chooseServiceSpot(Scanner sc) {
+    public static void chooseServiceSpot(Scanner sc) {
         System.out.println(serviceSpots);
         number = sc.nextInt();
         serviceSpots.forEach(
@@ -509,7 +514,7 @@ public class Main extends JFrame{
         );
     }
 
-    private static void chooseCarService(Scanner sc) {
+    public static void chooseCarService(Scanner sc) {
         System.out.println("Wybierz miejsce ktore chcesz wynajac");
         System.out.println(carServiceList);
         number = sc.nextInt();
@@ -542,6 +547,7 @@ public class Main extends JFrame{
         System.out.println(freeParkingSpaceList);
     }
 
+    //STARA
     public static void displayPersonDetails() {
         System.out.println(person.toString());
         System.out.print("Wynajete miejsca: ");
@@ -561,6 +567,30 @@ public class Main extends JFrame{
             }
         }
         System.out.println("Posiadane uprawnienia:" + magazyny);
+    }
+
+    //NOWA
+    public static void displayPersonDetails2() {
+        if (person == null) {
+            MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
+        } else {
+            MainMenu.getTextArea().setText(person.toString());
+            MainMenu.getTextArea().setText("Wynajete miejsca: ");
+            person.getRentedWarehousesList().forEach(System.out::println);
+            if (person.getRentedWarehousesList().isEmpty()) {
+                MainMenu.getTextArea().append("brak." +"\n");
+            }
+
+            List<Warehouse> magazyny = new LinkedList<>();
+            for (Map.Entry<Warehouse, Person> os : Warehouse.authorizedPeople.entrySet()) {
+                Warehouse key = os.getKey();
+                Person value = os.getValue();
+                if (value.equals(person)) {
+                    magazyny.add(key);
+                }
+            }
+            MainMenu.getTextArea().append("Posiadane uprawnienia:" + magazyny);
+        }
     }
 
     public static void getWarehouseItems(PrintWriter writer) {

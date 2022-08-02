@@ -2,129 +2,171 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.List;
 
 public class MainMenu extends JFrame {
+    static JTextArea jTextArea;
+    public static boolean choosePerson=false;
+    public static boolean showInfo=false;
+
     public MainMenu() {
         JFrame frame = new JFrame("Warehouse.app");
         frame.setContentPane(new JLabel(new ImageIcon("images\\photo1.jpg")));
         ImageIcon img = new ImageIcon("images\\photo2.png");
         frame.setIconImage(img.getImage());
         frame.setLayout(null);
-        frame.setMinimumSize(new Dimension(1380, 890));
+        frame.setVisible(true);
+        frame.setSize(1380,890);
+        frame.setLocationRelativeTo(null);
 
-        JButton jb1 = new JButton("Wybierz osobe");
-        jb1.setFocusPainted(false);
-        JButton jb2 = new JButton("Wyświetl informacje");
-        jb2.setFocusPainted(false);
-        JButton jb3 = new JButton("Wyświetl wolne pomieszczenia");
-        jb2.setFocusPainted(false);
-        JButton jb4 = new JButton("Wynajmij pomieszczenie");
-        jb2.setFocusPainted(false);
-        JButton jb5 = new JButton("Sprawdz zawartosc pomieszczenia");
-        jb2.setFocusPainted(false);
-        JButton jb6 = new JButton("Dodaj uprawnienia do magazynu");
-        jb2.setFocusPainted(false);
-        JButton jb7 = new JButton("Wloz przedmiot do magazynu");
-        jb2.setFocusPainted(false);
-        JButton jb8 = new JButton("Zaparkuj pojazd na miejscu parkingowym");
-        jb2.setFocusPainted(false);
-        JButton jb9 = new JButton("Zabierz przedmiot z magazynu");
-        jb2.setFocusPainted(false);
-        JButton jb10 = new JButton("Zabierz auto z parkingu");
-        jb2.setFocusPainted(false);
-        JButton jb11 = new JButton("Wynajmij miejsce serwisowe lub naprawcze");
-        jb2.setFocusPainted(false);
-        JButton jb12 = new JButton("Zglos potrzebe naprawy lub rozpocznij serwisowanie pojazdu");
-        jb2.setFocusPainted(false);
-        JButton jb13 = new JButton("Zakoncz naprawe pojazdu");
-        jb2.setFocusPainted(false);
-        JButton jb14 = new JButton("Zapisz aktualny stan");
-        jb2.setFocusPainted(false);
-        JButton jb15 = new JButton("Uruchom upływ czasu");
-        jb2.setFocusPainted(false);
-        JButton jb16 = new JButton("Wyjście z programu");
-        jb2.setFocusPainted(false);
+        JButton choosePersonButton = new JButton("Wybierz osobe");
+        JButton showInfoButton = new JButton("Wyświetl informacje");
+        JButton freeWarehouseButton = new JButton("Wyświetl wolne pomieszczenia");
+        JButton rentWarehouseButton = new JButton("Wynajmij pomieszczenie");
+        JButton checkContentButton = new JButton("Sprawdz zawartosc pomieszczenia");
+        JButton addPermissionButton = new JButton("Dodaj uprawnienia do magazynu");
+        JButton addItemButton = new JButton("Wloz przedmiot do magazynu");
+        JButton parkTheCarButton = new JButton("Zaparkuj pojazd na miejscu parkingowym");
+        JButton removeItemButton = new JButton("Zabierz przedmiot z magazynu");
+        JButton takeOutTheCarButton = new JButton("Zabierz auto z parkingu");
+        JButton rentCarServiceSpotButton = new JButton("Wynajmij miejsce serwisowe lub naprawcze");
+        JButton needServiceButton = new JButton("Zglos potrzebe naprawy lub rozpocznij serwisowanie");
+        JButton stopServiceButton = new JButton("Zakoncz naprawe pojazdu");
+        JButton writeToFileButton = new JButton("Zapisz aktualny stan");
+        JButton startThreadButton = new JButton("Uruchom upływ czasu");
+        JButton exitButton = new JButton("Wyjście z programu");
 
-        jb1.setVisible(true);
-        jb2.setVisible(true);
-        jb3.setVisible(true);
-        jb4.setVisible(true);
-        jb5.setVisible(true);
-        jb6.setVisible(true);
-        jb7.setVisible(true);
-        jb8.setVisible(true);
-        jb9.setVisible(true);
-        jb10.setVisible(true);
-        jb11.setVisible(true);
-        jb12.setVisible(true);
-        jb13.setVisible(true);
-        jb14.setVisible(true);
-        jb15.setVisible(true);
-        jb16.setVisible(true);
+        jTextArea = new JTextArea();
+        jTextArea.setBounds(415,100,550,550);
+        jTextArea.setText("Wybierz opcje z MENU aby rozpoczac...");
+        jTextArea.setEditable(false);
+        Font font = new Font("Franklin Gothic Heavy", Font.ITALIC, 20);
+        jTextArea.setFont(font);
+        jTextArea.setForeground(Color.BLACK);
+        jTextArea.setLineWrap(true);
+        jTextArea.setWrapStyleWord(true);
+        JScrollPane scroll = new JScrollPane(jTextArea);
+        scroll.setBounds(415,100,550,550);
+        frame.add(scroll);
 
-        jb1.setOpaque(true);
-        jb2.setOpaque(true);
-        jb3.setOpaque(true);
-        jb4.setOpaque(true);
-        jb5.setOpaque(true);
-        jb6.setOpaque(true);
-        jb7.setOpaque(true);
-        jb8.setOpaque(true);
-        jb9.setOpaque(true);
-        jb10.setOpaque(true);
-        jb11.setOpaque(true);
-        jb12.setOpaque(true);
-        jb13.setOpaque(true);
-        jb14.setOpaque(true);
-        jb15.setOpaque(true);
-        jb16.setOpaque(true);
+        JTextField jTextField = new JTextField();
+        jTextField.setBounds(415,650,450,50);
+        frame.add(jTextField);
+        JButton buttonOK = new JButton("OK");
+        buttonOK.setBounds(865,650,100,50);
+        buttonOK.setFocusPainted(false);
+        frame.add(buttonOK);
+        jTextField.setEnabled(false);
+        buttonOK.setEnabled(false);
 
-        frame.add(jb1);
-        frame.add(jb2);
-        frame.add(jb3);
-        frame.add(jb4);
-        frame.add(jb5);
-        frame.add(jb6);
-        frame.add(jb7);
-        frame.add(jb8);
-        frame.add(jb9);
-        frame.add(jb10);
-        frame.add(jb11);
-        frame.add(jb12);
-        frame.add(jb13);
-        frame.add(jb14);
-        frame.add(jb15);
-        frame.add(jb16);
+        ButtonOptions choosePersonButtonOptions = new ButtonOptions(choosePersonButton,frame);
+        choosePersonButtonOptions.setSize(choosePersonButton,25,100,350,60);
 
-        jb1.setBounds(200,100,500,60);
-        jb2.setBounds(200,180,500,60);
-        jb3.setBounds(200,260,500,60);
-        jb4.setBounds(200,340,500,60);
-        jb5.setBounds(200,420,500,60);
-        jb6.setBounds(200,500,500,60);
-        jb7.setBounds(200,580,500,60);
-        jb8.setBounds(200,660,500,60);
+        ButtonOptions showInfoButtonOptions = new ButtonOptions(showInfoButton,frame);
+        showInfoButtonOptions.setSize(showInfoButton,25,180,350,60);
 
-        jb9.setBounds(740,100,500,60);
-        jb10.setBounds(740,180,500,60);
-        jb11.setBounds(740,260,500,60);
-        jb12.setBounds(740,340,500,60);
-        jb13.setBounds(740,420,500,60);
-        jb14.setBounds(740,500,500,60);
-        jb15.setBounds(740,580,500,60);
-        jb16.setBounds(740,660,500,60);
+        ButtonOptions freeWarehouseButtonOptions = new ButtonOptions(freeWarehouseButton,frame);
+        freeWarehouseButtonOptions.setSize(freeWarehouseButton,25,260,350,60);
 
-        jb16.addActionListener(new ActionListener() {
+        ButtonOptions rentWarehouseButtonOptions = new ButtonOptions(rentWarehouseButton,frame);
+        rentWarehouseButtonOptions.setSize(rentWarehouseButton,25,340,350,60);
+
+        ButtonOptions checkContentButtonOptions = new ButtonOptions(checkContentButton,frame);
+        checkContentButtonOptions.setSize(checkContentButton,25,420,350,60);
+
+        ButtonOptions addPermissionButtonOptions = new ButtonOptions(addPermissionButton,frame);
+        addPermissionButtonOptions.setSize(addPermissionButton,25,500,350,60);
+
+        ButtonOptions addItemButtonOptions = new ButtonOptions(addItemButton,frame);
+        addItemButtonOptions.setSize(addItemButton,25,580,350,60);
+
+        ButtonOptions parkTheCarButtonOptions = new ButtonOptions(parkTheCarButton,frame);
+        parkTheCarButtonOptions.setSize(parkTheCarButton,25,660,350,60);
+
+        ButtonOptions removeItemButtonOptions = new ButtonOptions(removeItemButton,frame);
+        removeItemButtonOptions.setSize(removeItemButton,1000,100,350,60);
+
+        ButtonOptions takeOutTheCarButtonOptions = new ButtonOptions(takeOutTheCarButton,frame);
+        takeOutTheCarButtonOptions.setSize(takeOutTheCarButton,1000,180,350,60);
+
+        ButtonOptions rentCarServiceSpotButtonOptions = new ButtonOptions(rentCarServiceSpotButton,frame);
+        rentCarServiceSpotButtonOptions.setSize(rentCarServiceSpotButton,1000,260,350,60);
+
+        ButtonOptions needServiceButtonOptions = new ButtonOptions(needServiceButton,frame);
+        needServiceButtonOptions.setSize(needServiceButton,1000,340,350,60);
+
+        ButtonOptions stopServiceButtonOptions = new ButtonOptions(stopServiceButton,frame);
+        stopServiceButtonOptions.setSize(stopServiceButton,1000,420,350,60);
+
+        ButtonOptions writeToFileButtonOptions = new ButtonOptions(writeToFileButton,frame);
+        writeToFileButtonOptions.setSize(writeToFileButton,1000,500,350,60);
+
+        ButtonOptions startThreadButtonOptions = new ButtonOptions(startThreadButton,frame);
+        startThreadButtonOptions.setSize(startThreadButton,1000,580,350,60);
+
+        ButtonOptions exitButtonOptions = new ButtonOptions(exitButton,frame);
+        exitButtonOptions.setSize(exitButton,1000,660,350,60);
+
+        //Actions
+        choosePersonButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                choosePerson=true;
+                jTextField.setEnabled(true);
+                buttonOK.setEnabled(true);
+                jTextArea.setText(""+Main.peopleList);
+            }
+        });
+
+        showInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showInfo=true;
+                jTextField.setEnabled(false);
+                buttonOK.setEnabled(false);
+                Main.displayPersonDetails2();
+            }
+        });
+
+        freeWarehouseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showInfo=true;
+                jTextField.setEnabled(false);
+                buttonOK.setEnabled(false);
+                List<Warehouse> freeWarehouseList = Main.displayFreeWarehouse();
+                jTextArea.setText("AAAAAAAAAAA");
+            }
+        });
+
+
+
+
+        buttonOK.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = jTextField.getText();
+                if(choosePerson) {
+                    Main.choosePerson(text);
+                    choosePerson=false;
+                }
+
+            }
+        });
+
+        exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
             }
         });
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
+
     }
+
+    public static JTextArea getTextArea()
+    {
+        return jTextArea;
+    }
+
 }

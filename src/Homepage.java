@@ -29,7 +29,7 @@ public class Homepage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                SwingUtilities.invokeLater(()-> new MainMenu());
+                SwingUtilities.invokeLater(MainMenu::new);
             }
         });
 
