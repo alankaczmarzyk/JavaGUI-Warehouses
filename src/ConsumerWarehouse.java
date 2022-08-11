@@ -63,7 +63,6 @@ public class ConsumerWarehouse extends Warehouse {
 
     @Override
     public void rentWarehouse(Person wl, ParkingSpace ps) {
-
         try {
             owner[counter++] = wl;
             System.out.println(wl + " wynajmuje " + toString());

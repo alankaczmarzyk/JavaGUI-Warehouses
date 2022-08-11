@@ -2,12 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class MainMenu extends JFrame {
+public class MainMenu<T> extends JFrame {
     static JTextArea jTextArea;
     public static boolean choosePerson=false;
-    public static boolean showInfo=false;
+    public static boolean chooseWarehouse=false;
+    public static boolean chooseParking=false;
 
     public MainMenu() {
         JFrame frame = new JFrame("Warehouse.app");
@@ -114,30 +117,33 @@ public class MainMenu extends JFrame {
                 choosePerson=true;
                 jTextField.setEnabled(true);
                 buttonOK.setEnabled(true);
-                jTextArea.setText(""+Main.peopleList);
-            }
-        });
+                Main.displayPeople();
+            }});
 
         showInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showInfo=true;
                 jTextField.setEnabled(false);
                 buttonOK.setEnabled(false);
                 Main.displayPersonDetails2();
-            }
-        });
+            }});
 
         freeWarehouseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showInfo=true;
                 jTextField.setEnabled(false);
                 buttonOK.setEnabled(false);
-                List<Warehouse> freeWarehouseList = Main.displayFreeWarehouse();
-                jTextArea.setText("AAAAAAAAAAA");
-            }
-        });
+                Main.displayFreeWarehouse();
+            }});
+
+        rentWarehouseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTextField.setEnabled(true);
+                buttonOK.setEnabled(true);
+                Main.checkPeople();
+                chooseWarehouse=true;
+            }});
 
 
 
@@ -149,6 +155,10 @@ public class MainMenu extends JFrame {
                 if(choosePerson) {
                     Main.choosePerson(text);
                     choosePerson=false;
+                }
+                if(chooseWarehouse){
+                    Main.chooseFreeWarehouse(text);
+                    chooseWarehouse=false;
                 }
 
             }
@@ -168,5 +178,7 @@ public class MainMenu extends JFrame {
     {
         return jTextArea;
     }
+
+
 
 }

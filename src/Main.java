@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -308,6 +309,25 @@ public class Main extends JFrame{
         else MainMenu.getTextArea().setText("Wybrano: " + person.firstName + " " + person.lastName + "\n");
     }
 
+//NOWA
+public static void checkPeople() {
+    if (person == null) {
+        MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
+        MainMenu.choosePerson=true;
+    }else {
+        displayFreeWarehouse();
+    }
+}
+//NOWA
+    public static void displayPeople() {
+        String listToPrint = peopleList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().setText(listToPrint);
+
+    }
+
+
     public static void chooseWarehouse(Scanner sc) {
         System.out.println(warehouseList);
         number = sc.nextInt();
@@ -317,6 +337,7 @@ public class Main extends JFrame{
                         warehouse = W;
                 });
     }
+
 
     public static void finishRepairOfICSS(Scanner sc) {
         Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
@@ -356,6 +377,7 @@ public class Main extends JFrame{
             System.out.println("Nie ma obecnie zadnych napraw.");
     }
 
+    //stara
     public static void chooseFreeWarehouse(Scanner sc) {
         freeWarehouseList = getFreeWarehouseList();
         System.out.println(freeWarehouseList);
@@ -370,8 +392,21 @@ public class Main extends JFrame{
         );
     }
 
-    public static void rentParking(Scanner sc) {
+    //NOWA
+    public static void chooseFreeWarehouse(String sc) {
+        number = Integer.parseInt(sc);
+        freeWarehouseList.forEach(
+                W -> {
+                    if (W.getId() == number) {
+                        warehouse = W;
+                    }
+                }
 
+        );
+        rentParking(sc);
+    }
+
+    public static void rentParking(Scanner sc) {
         while (!typeRight) {
             System.out.println("Czy chcesz wynajac miejsce parkingowe? Wpisz:  T  jeśli tak, wpisz:  N  jeśli nie:");
             text = sc.next();
@@ -395,6 +430,34 @@ public class Main extends JFrame{
         }
         typeRight =false;
     }
+//NOWA
+    public static void rentParking(String sc) {
+
+            MainMenu.getTextArea().setText("Czy chcesz wynajac miejsce parkingowe? Wpisz:  T  jeśli tak, wpisz:  N  jeśli nie:");
+            /*
+            text = sc;
+            if (text.equals("T") || text.equals("t") || text.equals("tak") || text.equals("TAK") || text.equals("Tak")) {
+                typeRight = true;
+                needParking = true;
+            } else if (text.equals("N") || text.equals("n") || text.equals("nie") || text.equals("NIE")) {
+                typeRight = true;
+                needParking = false;
+            } else {
+                System.out.println("Nie wpisales dobrego znaku.");
+            }
+
+             */
+
+
+        if (needParking) {
+            System.out.println("Wybierz miejsce parkingowe ktore chcesz wynajac.");
+           // chooseParkingSpace(sc);
+            warehouse.rentWarehouse(person, parkingSpace);
+        } else {
+            warehouse.rentWarehouse(person, null);
+        }
+        typeRight =false;
+    }
 
     public static void displayListOfRentedPremises(Scanner sc) {
         number = sc.nextInt();
@@ -410,7 +473,6 @@ public class Main extends JFrame{
     }
 
     public static void addItemToWarehouse(Scanner sc) throws TooManyThingsException {
-
         for (Map.Entry<Warehouse, Person> entry : Warehouse.authorizedPeople.entrySet()) {
             Warehouse key = entry.getKey();
             Person value = entry.getValue();
@@ -447,11 +509,13 @@ public class Main extends JFrame{
                 }
         );
     }
-
-    public static List<Warehouse> displayFreeWarehouse(){
-        System.out.println("Lista wolnych magazynow");
+//NOWA
+    public static void displayFreeWarehouse(){
         freeWarehouseList = getFreeWarehouseList();
-        return freeWarehouseList;
+        String listToPrint = freeWarehouseList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().setText(listToPrint);
     }
 
 
