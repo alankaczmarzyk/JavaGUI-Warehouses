@@ -466,8 +466,7 @@ public static void checkPeople() {
                     if (M.getId() == number) {
                         warehouse = M;
                     }
-                }
-        );
+                });
         System.out.print(warehouse.getWarehouseItems());
 
     }
@@ -506,8 +505,7 @@ public static void checkPeople() {
                 L -> {
                     if (L.getID() == number)
                         parkingSpace = L;
-                }
-        );
+                });
     }
 //NOWA
     public static void displayFreeWarehouse(){
@@ -527,9 +525,7 @@ public static void checkPeople() {
                     if (L.getID() == number)
                         parkingSpace = L;
 
-                }
-
-        );
+                });
     }
 
     public static void chooseItem(Scanner sc) {
@@ -539,8 +535,7 @@ public static void checkPeople() {
                 O -> {
                     if (O.getID() == number)
                         object = O;
-                }
-        );
+                });
     }
 
     public static void chooseVehicle(Scanner sc) {
@@ -550,8 +545,7 @@ public static void checkPeople() {
                 V -> {
                     if (V.getVehicleID() == number)
                         vehicle = V;
-                }
-        );
+                });
         System.out.println("Wybrano: "+ vehicle);
         System.out.println();
     }
@@ -563,8 +557,7 @@ public static void checkPeople() {
                 V -> {
                     if (V.getId() == number)
                         carServiceSpot = V;
-                }
-        );
+                });
     }
 
     public static void chooseServiceSpot(Scanner sc) {
@@ -574,8 +567,7 @@ public static void checkPeople() {
                 V -> {
                     if (V.getId() == number)
                         independentCarServiceSpot = V;
-                }
-        );
+                });
     }
 
     public static void chooseCarService(Scanner sc) {
@@ -586,8 +578,7 @@ public static void checkPeople() {
                 LMP -> {
                     if (LMP.getId() == number)
                         carService = LMP;
-                }
-        );
+                });
     }
 
     public static List<Warehouse> getFreeWarehouseList() {
