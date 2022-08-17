@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class MainMenu<T> extends JFrame {
     static JTextArea jTextArea;
     public static boolean choosePerson=false;
+    public static boolean personIsChoosed=false;
     public static boolean chooseWarehouse=false;
     public static boolean chooseParking=false;
 
@@ -139,10 +140,11 @@ public class MainMenu<T> extends JFrame {
         rentWarehouseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jTextField.setEnabled(true);
-                buttonOK.setEnabled(true);
-                Main.checkPeople();
-                chooseWarehouse=true;
+                if(personIsChoosed) {
+                    jTextField.setEnabled(true);
+                    buttonOK.setEnabled(true);
+                }
+                    Main.checkPeople();
             }});
 
 

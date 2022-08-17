@@ -306,7 +306,11 @@ public class Main extends JFrame{
                     }
                 });
         if(!find.get()) MainMenu.getTextArea().setText("Wybrano bledny identyfikator osoby." + "\n");
-        else MainMenu.getTextArea().setText("Wybrano: " + person.firstName + " " + person.lastName + "\n");
+        else {
+            MainMenu.getTextArea().setText("Wybrano: " + person.firstName + " " + person.lastName + "\n");
+            MainMenu.personIsChoosed=true;
+        }
+
     }
 
 //NOWA
@@ -316,6 +320,7 @@ public static void checkPeople() {
         MainMenu.choosePerson=true;
     }else {
         displayFreeWarehouse();
+        MainMenu.chooseWarehouse=true;
     }
 }
 //NOWA
@@ -432,7 +437,6 @@ public static void checkPeople() {
     }
 //NOWA
     public static void rentParking(String sc) {
-
             MainMenu.getTextArea().setText("Czy chcesz wynajac miejsce parkingowe? Wpisz:  T  jeśli tak, wpisz:  N  jeśli nie:");
             /*
             text = sc;
