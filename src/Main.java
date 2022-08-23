@@ -31,12 +31,12 @@ public class Main extends JFrame{
     public static List<CarService> carServiceList = new LinkedList<>();
     public static List<ParkingSpace> freeParkingSpaceList = new LinkedList<>();
     public static List<Warehouse> authorizedWarehouses = new ArrayList<>();
-    public static int number;
+    public static int number=0;
     public static String text;
     public static CarServiceSpot carServiceSpot;
     public static IndependentCarServiceSpot independentCarServiceSpot;
-    public static boolean typeRight = false;
-    public static boolean needParking;
+    public static boolean typeRight=false;
+    public static boolean needParking=false;
     public static Service service;
     public static boolean exit=false;
 
@@ -308,7 +308,7 @@ public class Main extends JFrame{
         if(!find.get()) MainMenu.getTextArea().setText("Wybrano bledny identyfikator osoby." + "\n");
         else {
             MainMenu.getTextArea().setText("Wybrano: " + person.firstName + " " + person.lastName + "\n");
-            MainMenu.personIsChoosed=true;
+            MainMenu.personIsChosen =true;
         }
 
     }
@@ -375,12 +375,13 @@ public static void checkPeople() {
             for (Map.Entry<CarServiceSpot, Vehicle> entry : lista.entrySet()) {
                 if (entry.getKey().getId() == number)
                     carServiceSpot = entry.getKey();
-
             }
             carServiceSpot.finishRepair();
         } else
             System.out.println("Nie ma obecnie zadnych napraw.");
+
     }
+
 
     //stara
     public static void chooseFreeWarehouse(Scanner sc) {
@@ -392,9 +393,7 @@ public static void checkPeople() {
                     if (W.getId() == number) {
                         warehouse = W;
                     }
-                }
-
-        );
+                });
     }
 
     //NOWA
@@ -405,10 +404,9 @@ public static void checkPeople() {
                     if (W.getId() == number) {
                         warehouse = W;
                     }
-                }
-
-        );
-        rentParking(sc);
+                });
+        MainMenu.jTextField.setText("");
+        ParkingSpaceView parkingSpaceView = new ParkingSpaceView();
     }
 
     public static void rentParking(Scanner sc) {
@@ -437,30 +435,13 @@ public static void checkPeople() {
     }
 //NOWA
     public static void rentParking(String sc) {
-            MainMenu.getTextArea().setText("Czy chcesz wynajac miejsce parkingowe? Wpisz:  T  jeśli tak, wpisz:  N  jeśli nie:");
-            /*
-            text = sc;
-            if (text.equals("T") || text.equals("t") || text.equals("tak") || text.equals("TAK") || text.equals("Tak")) {
-                typeRight = true;
-                needParking = true;
-            } else if (text.equals("N") || text.equals("n") || text.equals("nie") || text.equals("NIE")) {
-                typeRight = true;
-                needParking = false;
-            } else {
-                System.out.println("Nie wpisales dobrego znaku.");
-            }
-
-             */
-
-
         if (needParking) {
-            System.out.println("Wybierz miejsce parkingowe ktore chcesz wynajac.");
-           // chooseParkingSpace(sc);
+            chooseFreeParkingSpace(sc);
             warehouse.rentWarehouse(person, parkingSpace);
         } else {
             warehouse.rentWarehouse(person, null);
         }
-        typeRight =false;
+        typeRight=false;
     }
 
     public static void displayListOfRentedPremises(Scanner sc) {
@@ -505,6 +486,16 @@ public static void checkPeople() {
     public static void chooseParkingSpace(Scanner sc) {
         displayFreeWarehouseList();
         number = sc.nextInt();
+        freeParkingSpaceList.forEach(
+                L -> {
+                    if (L.getID() == number)
+                        parkingSpace = L;
+                });
+    }
+//NOWA
+    public static void chooseFreeParkingSpace(String sc) {
+        updateFreeParkingList();
+        number = Integer.parseInt(sc);
         freeParkingSpaceList.forEach(
                 L -> {
                     if (L.getID() == number)
@@ -606,13 +597,22 @@ public static void checkPeople() {
         System.out.println(freeParkingSpaceList);
     }
 
+    //NOWA
+    public static void updateFreeParkingList() {
+        freeParkingSpaceList = parkingSpaceList.stream()
+                .filter(e -> !e.ifRented)
+                .collect(toList());
+    }
+    //NOWA
+    public static List<ParkingSpace> getFreeParkingSpaceList() {
+        return freeParkingSpaceList;
+    }
+
     //STARA
     public static void displayPersonDetails() {
         System.out.println(person.toString());
         System.out.print("Wynajete miejsca: ");
-        person.getRentedWarehousesList().forEach(info -> {
-            System.out.println(info);
-        });
+        person.getRentedWarehousesList().forEach(System.out::println);
         if (person.getRentedWarehousesList().isEmpty()) {
             System.out.print("brak. ");
         }

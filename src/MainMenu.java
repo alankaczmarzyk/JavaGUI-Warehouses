@@ -2,19 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainMenu<T> extends JFrame {
-    static JTextArea jTextArea;
+    public static JTextArea jTextArea;
+    public static JTextField jTextField;
     public static boolean choosePerson=false;
-    public static boolean personIsChoosed=false;
+    public static boolean personIsChosen =false;
     public static boolean chooseWarehouse=false;
     public static boolean chooseParking=false;
+    public static JFrame frame;
+    public static JButton buttonOK;
 
     public MainMenu() {
-        JFrame frame = new JFrame("Warehouse.app");
+        frame = new JFrame("Warehouse.app");
         frame.setContentPane(new JLabel(new ImageIcon("images\\photo1.jpg")));
         ImageIcon img = new ImageIcon("images\\photo2.png");
         frame.setIconImage(img.getImage());
@@ -53,10 +53,10 @@ public class MainMenu<T> extends JFrame {
         scroll.setBounds(415,100,550,550);
         frame.add(scroll);
 
-        JTextField jTextField = new JTextField();
+        jTextField = new JTextField();
         jTextField.setBounds(415,650,450,50);
         frame.add(jTextField);
-        JButton buttonOK = new JButton("OK");
+        buttonOK = new JButton("OK");
         buttonOK.setBounds(865,650,100,50);
         buttonOK.setFocusPainted(false);
         frame.add(buttonOK);
@@ -140,15 +140,13 @@ public class MainMenu<T> extends JFrame {
         rentWarehouseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(personIsChoosed) {
+                if(personIsChosen) {
                     jTextField.setEnabled(true);
                     buttonOK.setEnabled(true);
+                    jTextField.setText("");
                 }
                     Main.checkPeople();
             }});
-
-
-
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -161,6 +159,10 @@ public class MainMenu<T> extends JFrame {
                 if(chooseWarehouse){
                     Main.chooseFreeWarehouse(text);
                     chooseWarehouse=false;
+                }
+                if(chooseParking){
+                    Main.rentParking(text);
+                    chooseParking=false;
                 }
 
             }
