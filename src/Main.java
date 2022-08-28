@@ -441,7 +441,6 @@ public static void checkPeople() {
         } else {
             warehouse.rentWarehouse(person, null);
         }
-        typeRight=false;
     }
 
     public static void displayListOfRentedPremises(Scanner sc) {
