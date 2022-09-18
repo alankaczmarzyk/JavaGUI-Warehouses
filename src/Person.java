@@ -51,7 +51,6 @@ public class Person {
     }
 
     public String toString(){
-
         return "Osoba: "+this.firstName + " " + this.lastName + " ID: " + this.id;
     }
 

@@ -66,6 +66,7 @@ public class ConsumerWarehouse extends Warehouse {
         try {
             owner[counter++] = wl;
             System.out.println(wl + " wynajmuje " + toString());
+            //MainMenu.getTextArea().append(wl + " wynajmuje " + toString());
             peopleList.add(wl);
             authorizedPeople.put(this, wl);
             tenantsList.computeIfAbsent(wl, k -> new ArrayList<>()).add(this);
@@ -79,6 +80,7 @@ public class ConsumerWarehouse extends Warehouse {
                 parkingCost = ps.getRentalCost();
                 if (parkingCost + warehouseCost > 1250) {
                     System.out.println("Suma kosztow najmu przekracza 1250 zl.");
+                    MainMenu.getTextArea().setText("Suma kosztow najmu przekracza 1250 zl.");
                 } else {
                     ps.rentParkingSpace(wl, this, 14);
                 }
@@ -86,12 +88,12 @@ public class ConsumerWarehouse extends Warehouse {
 
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Ten magazyn jest juz wynajety.");
+            MainMenu.getTextArea().setText("Ten magazyn jest juz wynajety.");
         }
     }
 
     @Override
     public void addPermission(Person p) {
-
         if (peopleList.contains(p)) {
             System.out.println("Ta osoba ma juz uprawnienie!");
         } else {
@@ -107,7 +109,6 @@ public class ConsumerWarehouse extends Warehouse {
 
     @Override
     public void removePermission(Person p) {
-
         if (p == peopleList.get(0)) {
             System.out.println("Nie mozesz zabrac uprawnienia wlascicielowi!");
         } else {
@@ -121,7 +122,6 @@ public class ConsumerWarehouse extends Warehouse {
 
     @Override
     public void addItem(Person p, Object o) throws TooManyThingsException {
-
         volumeSumOfItems += o.getArea();
         if (this.getVolume() >= volumeSumOfItems) {
             if (peopleList.contains(p)) {
@@ -139,7 +139,6 @@ public class ConsumerWarehouse extends Warehouse {
 
     @Override
     public void takeOutItem(Person p, Object o) {
-
         if (peopleList.contains(p)) {
             if (objectsList.contains(o)) {
                 objectsList.remove(o);
@@ -165,7 +164,6 @@ public class ConsumerWarehouse extends Warehouse {
 
     @Override
     public String toString() {
-
         return super.toString() + "Id:" + this.ID + " [Konsumecki]";
 
     }
