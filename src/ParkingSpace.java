@@ -62,6 +62,7 @@ public class ParkingSpace {
                     ifRented = true;
                     owner = p;
                     System.out.println(owner + " wynajal miejsce parkingowe: "+ this.name + this.ID +" w ramach magazynu: " + w.toString() + " na " + iloscDni + " dni");
+                    MainMenu.getTextArea().append(owner + " wynajal miejsce parkingowe: "+ this.name + this.ID +" w ramach magazynu: " + w.toString() + " na " + iloscDni + " dni");
                 } else {
                     System.out.println("To miejsce parkingowe jest juz wynajete.");
                 }

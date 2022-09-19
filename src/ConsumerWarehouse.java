@@ -65,15 +65,14 @@ public class ConsumerWarehouse extends Warehouse {
     public void rentWarehouse(Person wl, ParkingSpace ps) {
         try {
             owner[counter++] = wl;
-            System.out.println(wl + " wynajmuje " + toString());
-            //MainMenu.getTextArea().append(wl + " wynajmuje " + toString());
+            System.out.println(wl + " wynajmuje " + this);
+            MainMenu.getTextArea().setText(wl + " wynajmuje " + this +"\n"+"\n");
             peopleList.add(wl);
             authorizedPeople.put(this, wl);
             tenantsList.computeIfAbsent(wl, k -> new ArrayList<>()).add(this);
             consumerWarehouseTenants.put(this, peopleList);
             ifBusy = true;
             wl.addWarehouse(this);
-
             if (ps == null) {
                 parkingCost = 0;
             } else {
@@ -90,6 +89,7 @@ public class ConsumerWarehouse extends Warehouse {
             System.out.println("Ten magazyn jest juz wynajety.");
             MainMenu.getTextArea().setText("Ten magazyn jest juz wynajety.");
         }
+
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.list;
 import static java.util.stream.Collectors.toList;
 
 public class Main extends JFrame{
@@ -318,9 +319,18 @@ public static void checkPeople() {
     if (person == null) {
         MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
         MainMenu.choosePerson=true;
-    }else {
+    }else if(MainMenu.freeWarehouses){
         displayFreeWarehouse();
-        MainMenu.chooseWarehouse=true;
+        MainMenu.chooseFreeWarehouse =true;
+        MainMenu.freeWarehouses =false;
+    }else if(MainMenu.allWarehouses){
+        if (person.getRentedWarehousesList().isEmpty()) {
+            MainMenu.getTextArea().setText("Osoba nic nie wynajmuje.");
+        }else {
+            displayPersonDetails2();
+            MainMenu.chooseWarehouse=true;
+        }
+        MainMenu.allWarehouses=false;
     }
 }
 //NOWA
@@ -435,6 +445,9 @@ public static void checkPeople() {
     }
 //NOWA
     public static void rentParking(String sc) {
+        MainMenu.jTextField.setText("");
+        MainMenu.jTextField.setEnabled(false);
+        MainMenu.buttonOK.setEnabled(false);
         if (needParking) {
             chooseFreeParkingSpace(sc);
             warehouse.rentWarehouse(person, parkingSpace);
@@ -634,8 +647,10 @@ public static void checkPeople() {
         } else {
             MainMenu.getTextArea().setText(person.toString());
             MainMenu.getTextArea().setText("Wynajete miejsca: ");
-            person.getRentedWarehousesList().forEach(System.out::println);
-            if (person.getRentedWarehousesList().isEmpty()) {
+            List<Warehouse> rentedWarehousesList = person.getRentedWarehousesList();
+            rentedWarehousesList.forEach((s) -> System.out.print(s + "\n"));
+
+            if (rentedWarehousesList.isEmpty()) {
                 MainMenu.getTextArea().append("brak." +"\n");
             }
 
@@ -647,7 +662,7 @@ public static void checkPeople() {
                     magazyny.add(key);
                 }
             }
-            MainMenu.getTextArea().append("Posiadane uprawnienia:" + magazyny);
+            MainMenu.getTextArea().append("Posiadane uprawnienia:" + magazyny+"\n");
         }
     }
 

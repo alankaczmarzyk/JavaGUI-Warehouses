@@ -67,7 +67,8 @@ public class ServiceWarehouse extends Warehouse {
     public void rentWarehouse(Person wl, ParkingSpace ps) {
         try {
                 owner[counter++] = wl;
-                System.out.println(wl + " wynajmuje " + toString());
+                System.out.println(wl + " wynajmuje " + this +"\n"+"\n");
+                MainMenu.getTextArea().setText(wl + " wynajmuje " + toString());
                 peopleSW.add(wl);
                 authorizedPeople.put(this,wl);
                 tenantsList.computeIfAbsent(wl, k -> new ArrayList<>()).add(this);
@@ -82,6 +83,7 @@ public class ServiceWarehouse extends Warehouse {
 
                 if(parkingCost + warehouseCost >1250){
                     System.out.println("Suma kosztow najmu przekracza 1250 zl.");
+                    MainMenu.getTextArea().setText("Suma kosztow najmu przekracza 1250 zl.");
                 }else {
                     ps.rentParkingSpace(wl,this,14);
 
@@ -89,6 +91,7 @@ public class ServiceWarehouse extends Warehouse {
             }
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Ten magazyn jest juz wynajety.");
+            MainMenu.getTextArea().setText("Ten magazyn jest juz wynajety.");
         }
     }
 

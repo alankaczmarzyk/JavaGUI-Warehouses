@@ -80,7 +80,6 @@ abstract class Warehouse {
     }
 
     public String toString(){
-        MainMenu.getTextArea().setText("Magazyn:'"+this.name +"' " + "Powierzchnia: "+this.volume +"m^2"+" ");
         return "Magazyn:'"+this.name +"' " + "Powierzchnia: "+this.volume +"m^2"+" " ;
     }
 

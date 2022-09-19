@@ -8,8 +8,11 @@ public class MainMenu<T> extends JFrame {
     public static JTextField jTextField;
     public static boolean choosePerson=false;
     public static boolean personIsChosen =false;
-    public static boolean chooseWarehouse=false;
+    public static boolean chooseFreeWarehouse =false;
+    public static boolean chooseWarehouse =false;
     public static boolean chooseParking=false;
+    public static boolean freeWarehouses =false;
+    public static boolean allWarehouses =false;
     public static JFrame frame;
     public static JButton buttonOK;
 
@@ -145,8 +148,17 @@ public class MainMenu<T> extends JFrame {
                     buttonOK.setEnabled(true);
                     jTextField.setText("");
                 }
+                    freeWarehouses =true;
                     Main.checkPeople();
             }});
+
+            checkContentButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    allWarehouses=true;
+                    Main.checkPeople();
+                }
+            });
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -156,13 +168,17 @@ public class MainMenu<T> extends JFrame {
                     Main.choosePerson(text);
                     choosePerson=false;
                 }
-                if(chooseWarehouse){
+                if(chooseFreeWarehouse){
                     Main.chooseFreeWarehouse(text);
-                    chooseWarehouse=false;
+                    chooseFreeWarehouse =false;
                 }
                 if(chooseParking){
                     Main.rentParking(text);
                     chooseParking=false;
+                }
+                if(chooseWarehouse){
+
+                    chooseWarehouse=false;
                 }
 
             }
