@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.list;
 import static java.util.stream.Collectors.toList;
 
 public class Main extends JFrame{
@@ -315,7 +314,7 @@ public class Main extends JFrame{
     }
 
 //NOWA
-public static void checkPeople() {
+public static void checkPeopleFunc() {
     if (person == null) {
         MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
         MainMenu.choosePerson=true;
@@ -327,10 +326,18 @@ public static void checkPeople() {
         if (person.getRentedWarehousesList().isEmpty()) {
             MainMenu.getTextArea().setText("Osoba nic nie wynajmuje.");
         }else {
+            MainMenu.jTextField.setEnabled(true);
+            MainMenu.buttonOK.setEnabled(true);
+            MainMenu.getTextArea().setText("Wpisz id magazynu by sprawdzic jego zawartosc:" +"\n\n");
             displayPersonDetails2();
-            MainMenu.chooseWarehouse=true;
+            MainMenu.chooseWarehouse =true;
         }
         MainMenu.allWarehouses=false;
+    }else if(MainMenu.addPermission){
+        MainMenu.getTextArea().setText("Wybierz magazyn do ktorego nadasz uprawnienia:");
+        MainMenu.getTextArea().append("");
+        MainMenu.permissionIsAdded =true;
+        MainMenu.addPermission=false;
     }
 }
 //NOWA
@@ -342,7 +349,7 @@ public static void checkPeople() {
 
     }
 
-
+//STARA
     public static void chooseWarehouse(Scanner sc) {
         System.out.println(warehouseList);
         number = sc.nextInt();
@@ -352,6 +359,17 @@ public static void checkPeople() {
                         warehouse = W;
                 });
     }
+//NOWA
+public static void chooseWarehouse(String sc) {
+    MainMenu.getTextArea().setText(""+person.getRentedWarehousesList());
+    number = Integer.parseInt(sc);
+    person.getRentedWarehousesList().forEach(
+            W -> {
+                if (W.getId() == number)
+                    warehouse = W;
+            });
+    warehouse.addPermission(person);
+}
 
 
     public static void finishRepairOfICSS(Scanner sc) {
@@ -456,6 +474,7 @@ public static void checkPeople() {
         }
     }
 
+    //STARA
     public static void displayListOfRentedPremises(Scanner sc) {
         number = sc.nextInt();
         person.getRentedWarehousesList().forEach(
@@ -466,6 +485,22 @@ public static void checkPeople() {
                 });
         System.out.print(warehouse.getWarehouseItems());
 
+    }
+    //NOWA
+    public static void displayListOfRentedPremises(String sc) {
+        number = Integer.parseInt(sc);
+        person.getRentedWarehousesList().forEach(
+                M -> {
+                    if (M.getId() == number) {
+                        warehouse = M;
+                    }
+                });
+
+        HashMap<Warehouse, List<Object>> map = warehouse.getWarehouseItems();
+        if(map.isEmpty()) MainMenu.getTextArea().setText("Brak przedmiotow w magazynie");
+        else MainMenu.getTextArea().setText(""+map);
+        MainMenu.jTextField.setEnabled(false);
+        MainMenu.buttonOK.setEnabled(false);
     }
 
     public static void addItemToWarehouse(Scanner sc) throws TooManyThingsException {
@@ -645,14 +680,15 @@ public static void checkPeople() {
         if (person == null) {
             MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
         } else {
-            MainMenu.getTextArea().setText(person.toString());
-            MainMenu.getTextArea().setText("Wynajete miejsca: ");
+            MainMenu.getTextArea().append(person.toString());
+            MainMenu.getTextArea().append("Wynajete miejsca: "+"\n");
             List<Warehouse> rentedWarehousesList = person.getRentedWarehousesList();
-            rentedWarehousesList.forEach((s) -> System.out.print(s + "\n"));
+            rentedWarehousesList.forEach((s) -> MainMenu.getTextArea().append(s + "\n"));
 
             if (rentedWarehousesList.isEmpty()) {
                 MainMenu.getTextArea().append("brak." +"\n");
             }
+
 
             List<Warehouse> magazyny = new LinkedList<>();
             for (Map.Entry<Warehouse, Person> os : Warehouse.authorizedPeople.entrySet()) {
@@ -662,7 +698,8 @@ public static void checkPeople() {
                     magazyny.add(key);
                 }
             }
-            MainMenu.getTextArea().append("Posiadane uprawnienia:" + magazyny+"\n");
+
+            MainMenu.getTextArea().append("\n"+"Posiadane uprawnienia:" +"\n"+ magazyny+"\n");
         }
     }
 

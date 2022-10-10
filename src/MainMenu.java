@@ -13,6 +13,8 @@ public class MainMenu<T> extends JFrame {
     public static boolean chooseParking=false;
     public static boolean freeWarehouses =false;
     public static boolean allWarehouses =false;
+    public static boolean addPermission =false;
+    public static boolean permissionIsAdded =false;
     public static JFrame frame;
     public static JButton buttonOK;
 
@@ -149,16 +151,24 @@ public class MainMenu<T> extends JFrame {
                     jTextField.setText("");
                 }
                     freeWarehouses =true;
-                    Main.checkPeople();
+                    Main.checkPeopleFunc();
             }});
 
             checkContentButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     allWarehouses=true;
-                    Main.checkPeople();
+                    Main.checkPeopleFunc();
                 }
             });
+
+            addPermissionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addPermission=true;
+                Main.checkPeopleFunc();
+            }
+        });
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -177,10 +187,13 @@ public class MainMenu<T> extends JFrame {
                     chooseParking=false;
                 }
                 if(chooseWarehouse){
-
-                    chooseWarehouse=false;
+                    Main.displayListOfRentedPremises(text);
+                    chooseWarehouse =false;
                 }
-
+                if(permissionIsAdded){
+                    Main.chooseWarehouse(text);
+                    permissionIsAdded =false;
+                }
             }
         });
 
