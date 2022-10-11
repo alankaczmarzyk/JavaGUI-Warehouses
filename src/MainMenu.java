@@ -15,6 +15,9 @@ public class MainMenu<T> extends JFrame {
     public static boolean allWarehouses =false;
     public static boolean addPermission =false;
     public static boolean permissionIsAdded =false;
+    public static boolean addItem =false;
+    public static boolean warehouseToItem =false;
+    public static boolean itemIsChosen =false;
     public static JFrame frame;
     public static JButton buttonOK;
 
@@ -27,6 +30,7 @@ public class MainMenu<T> extends JFrame {
         frame.setVisible(true);
         frame.setSize(1380,890);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
 
         JButton choosePersonButton = new JButton("Wybierz osobe");
         JButton showInfoButton = new JButton("Wyświetl informacje");
@@ -154,7 +158,7 @@ public class MainMenu<T> extends JFrame {
                     Main.checkPeopleFunc();
             }});
 
-            checkContentButton.addActionListener(new ActionListener() {
+        checkContentButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     allWarehouses=true;
@@ -162,13 +166,32 @@ public class MainMenu<T> extends JFrame {
                 }
             });
 
-            addPermissionButton.addActionListener(new ActionListener() {
+        addPermissionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addPermission=true;
                 Main.checkPeopleFunc();
+                }
+            });
+
+        addItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(personIsChosen){
+                    try {
+                        Main.checkPermissionToAddItem();
+                    } catch (TooManyThingsException ex) {
+                        ex.printStackTrace();
+                    }
+                }else {
+                    addItem = true;
+                    Main.checkPeopleFunc();
+                }
             }
         });
+
+
+
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -194,6 +217,18 @@ public class MainMenu<T> extends JFrame {
                     Main.chooseWarehouse(text);
                     permissionIsAdded =false;
                 }
+                if(warehouseToItem){
+                    Main.selectWarehouseToAddItem(text);
+                    warehouseToItem =false;
+                }
+                if(itemIsChosen){
+                    try {
+                        Main.selectItem(text);
+                    } catch (TooManyThingsException ex) {
+                        ex.printStackTrace();
+                    }
+                    itemIsChosen=false;
+                }
             }
         });
 
@@ -212,6 +247,15 @@ public class MainMenu<T> extends JFrame {
         return jTextArea;
     }
 
-
+    public static void blockViev(){
+        MainMenu.jTextField.setText("");
+        MainMenu.jTextField.setEnabled(false);
+        MainMenu.buttonOK.setEnabled(false);
+    }
+    public static void unlockViev(){
+        MainMenu.jTextField.setText("");
+        MainMenu.jTextField.setEnabled(true);
+        MainMenu.buttonOK.setEnabled(true);
+    }
 
 }

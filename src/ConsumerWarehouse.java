@@ -9,11 +9,11 @@ public class ConsumerWarehouse extends Warehouse {
     private static int counter2 = 0;
     private Person[] owner = new Person[1];
     public List<Person> peopleList = new ArrayList<>();
-    public List<Object> objectsList = new ArrayList<>();
+    public List<Objects> objectsList = new ArrayList<>();
     private double warehouseCost;
     private double parkingCost;
     public HashMap<Warehouse, List<Person>> consumerWarehouseTenants = new HashMap<>();
-    private HashMap<Warehouse, List<Object>> objectsInWarehouses = new HashMap<>();
+    private HashMap<Warehouse, List<Objects>> objectsInWarehouses = new HashMap<>();
     private static double volumeSumOfItems = 0;
     private static ConsumerWarehouse[] consumerWarehouseList;
 
@@ -95,12 +95,14 @@ public class ConsumerWarehouse extends Warehouse {
     @Override
     public void addPermission(Person p) {
         if (peopleList.contains(p)) {
-            System.out.println("Ta osoba ma juz uprawnienie!");
+            MainMenu.getTextArea().setText("Ta osoba ma juz uprawnienie!");
+            MainMenu.blockViev();
         } else {
             peopleList.add(p);
             consumerWarehouseTenants.put(this, peopleList);
             authorizedPeople.put(this, p);
-            System.out.println("Dodano uprawnienie.");
+            MainMenu.getTextArea().setText("Dodano uprawnienie do magazynu: "+Main.warehouse);
+            MainMenu.blockViev();
         }
 
 
@@ -121,15 +123,15 @@ public class ConsumerWarehouse extends Warehouse {
 
 
     @Override
-    public void addItem(Person p, Object o) throws TooManyThingsException {
+    public void addItem(Person p, Objects o) throws TooManyThingsException {
         volumeSumOfItems += o.getArea();
         if (this.getVolume() >= volumeSumOfItems) {
             if (peopleList.contains(p)) {
                 objectsList.add(o);
                 objectsInWarehouses.put(this, objectsList);
-                System.out.println("Dodales przedmiot do magazynu.");
+                MainMenu.getTextArea().setText("Dodales przedmiot do magazynu.");
             } else {
-                System.out.println("Nie masz uprawnien do wlozenia przedmiotu.");
+                MainMenu.getTextArea().setText("Nie masz uprawnien do wlozenia przedmiotu.");
             }
         } else {
             throw new TooManyThingsException("Remove some old items to insert a new item.");
@@ -138,7 +140,7 @@ public class ConsumerWarehouse extends Warehouse {
     }
 
     @Override
-    public void takeOutItem(Person p, Object o) {
+    public void takeOutItem(Person p, Objects o) {
         if (peopleList.contains(p)) {
             if (objectsList.contains(o)) {
                 objectsList.remove(o);
@@ -153,7 +155,7 @@ public class ConsumerWarehouse extends Warehouse {
     }
 
     @Override
-    public HashMap<Warehouse, List<Object>> getWarehouseItems() {
+    public HashMap<Warehouse, List<Objects>> getWarehouseItems() {
         return objectsInWarehouses;
     }
 

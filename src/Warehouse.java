@@ -33,9 +33,9 @@ abstract class Warehouse {
 
     }
 
-    public abstract void addItem(Person p, Object o) throws TooManyThingsException;
+    public abstract void addItem(Person p, Objects o) throws TooManyThingsException;
 
-    public abstract void takeOutItem(Person p, Object o);
+    public abstract void takeOutItem(Person p, Objects o);
 
     public static List<Warehouse> getWarehousesList() {
         return warehousesList;
@@ -59,7 +59,7 @@ abstract class Warehouse {
         return finishDateOfLease;
     }
 
-    public abstract HashMap<Warehouse, List<Object>> getWarehouseItems();
+    public abstract HashMap<Warehouse, List<Objects>> getWarehouseItems();
 
     public abstract HashMap<Warehouse, Person> getTenants();
 

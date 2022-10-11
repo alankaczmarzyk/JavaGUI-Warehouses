@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-public class Main extends JFrame{
+public class Main extends JFrame {
     public static List<ConsumerWarehouse> warehousePremises;
     public static List<ServiceWarehouse> servicePremises;
     public static List<CarServiceSpot> repairPlaces;
     public static List<IndependentCarServiceSpot> serviceSpots;
     public static Person person;
-    public static Object object;
+    public static Objects objects;
     public static Vehicle vehicle;
     public static CarService carService;
     public static ParkingSpace parkingSpace;
@@ -25,20 +25,20 @@ public class Main extends JFrame{
     public static List<Warehouse> warehouseList = new ArrayList<>();
     public static List<Warehouse> freeWarehouseList = new ArrayList<>();
     public static List<Warehouse> occupiedWarehouseList = new ArrayList<>();
-    public static Set<Object> objectsList = new HashSet<>();
+    public static Set<Objects> objectsList = new HashSet<>();
     public static Set<Vehicle> vehiclesList = new HashSet<>();
     public static List<ParkingSpace> parkingSpaceList = new LinkedList<>();
     public static List<CarService> carServiceList = new LinkedList<>();
     public static List<ParkingSpace> freeParkingSpaceList = new LinkedList<>();
     public static List<Warehouse> authorizedWarehouses = new ArrayList<>();
-    public static int number=0;
+    public static int number = 0;
     public static String text;
     public static CarServiceSpot carServiceSpot;
     public static IndependentCarServiceSpot independentCarServiceSpot;
-    public static boolean typeRight=false;
-    public static boolean needParking=false;
+    public static boolean typeRight = false;
+    public static boolean needParking = false;
     public static Service service;
-    public static boolean exit=false;
+    public static boolean exit = false;
 
     public static void main(String[] args) throws Exception {
         int select;
@@ -64,11 +64,11 @@ public class Main extends JFrame{
         ParkingSpace ps1 = new ParkingSpace("Miejsce A", 10, 200);
         ParkingSpace ps2 = new ParkingSpace("Miejsce B", 10, 200);
         ParkingSpace ps3 = new ParkingSpace("Miejsce C", 7, 150);
-        Object o1 = new Object("rower", 20);
-        Object o2 = new Object("pralka", 10, 5, 3);
-        Object o3 = new Object("telewizor", 179);
-        Object o4 = new Object("obraz", 2);
-        Object o5 = new Object("wiadro", 2, 2, 2);
+        Objects o1 = new Objects("rower", 20);
+        Objects o2 = new Objects("pralka", 10, 5, 3);
+        Objects o3 = new Objects("telewizor", 179);
+        Objects o4 = new Objects("obraz", 2);
+        Objects o5 = new Objects("wiadro", 2, 2, 2);
         CarServiceSpot Ics1 = new CarServiceSpot("XYZ", 100);
         CarServiceSpot Ics2 = new CarServiceSpot("ZYX", 20);
         CarServiceSpot Ics3 = new CarServiceSpot("YZX", 100);
@@ -86,11 +86,10 @@ public class Main extends JFrame{
         serviceSpots = List.of(IndependentCarServiceSpot.getIndependentCarServiceSpots());
         peopleList = Person.getPersonList();
         warehouseList = Warehouse.getWarehousesList();
-        objectsList = Object.getObjectList();
+        objectsList = Objects.getObjectList();
         vehiclesList = Vehicle.getVehiclesList();
         parkingSpaceList = ParkingSpace.getParkingSpaceList();
         carServiceList = CarService.getCarServiceList();
-
 
 
         // MENU
@@ -205,11 +204,11 @@ public class Main extends JFrame{
                     objectsList.forEach(
                             O -> {
                                 if (O.getID() == number)
-                                    object = O;
+                                    objects = O;
 
                             }
                     );
-                    warehouse.takeOutItem(person, object);
+                    warehouse.takeOutItem(person, objects);
                     break;
                 case 11:
                     if (person == null) {
@@ -277,8 +276,8 @@ public class Main extends JFrame{
     }
 
     //Functions
-    public static void exit(){
-        exit=true;
+    public static void exit() {
+        exit = true;
     }
 
     //STARA
@@ -294,7 +293,7 @@ public class Main extends JFrame{
         System.out.println();
     }
 
-//NOWA
+    //NOWA
     public static void choosePerson(String sc) {
         AtomicBoolean find = new AtomicBoolean(false);
         number = Integer.parseInt(sc);
@@ -305,42 +304,51 @@ public class Main extends JFrame{
                         find.set(true);
                     }
                 });
-        if(!find.get()) MainMenu.getTextArea().setText("Wybrano bledny identyfikator osoby." + "\n");
+        if (!find.get()) MainMenu.getTextArea().setText("Wybrano bledny identyfikator osoby." + "\n");
         else {
             MainMenu.getTextArea().setText("Wybrano: " + person.firstName + " " + person.lastName + "\n");
-            MainMenu.personIsChosen =true;
+            MainMenu.personIsChosen = true;
+            MainMenu.jTextField.setEnabled(false);
+            MainMenu.buttonOK.setEnabled(false);
+            MainMenu.jTextField.setText("");
         }
 
     }
 
-//NOWA
-public static void checkPeopleFunc() {
-    if (person == null) {
-        MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
-        MainMenu.choosePerson=true;
-    }else if(MainMenu.freeWarehouses){
-        displayFreeWarehouse();
-        MainMenu.chooseFreeWarehouse =true;
-        MainMenu.freeWarehouses =false;
-    }else if(MainMenu.allWarehouses){
-        if (person.getRentedWarehousesList().isEmpty()) {
-            MainMenu.getTextArea().setText("Osoba nic nie wynajmuje.");
-        }else {
+    //NOWA
+    public static void checkPeopleFunc() {
+        if (person == null) {
+            MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
+            MainMenu.choosePerson = true;
+        } else if (MainMenu.freeWarehouses) {
+            displayFreeWarehouse();
+            MainMenu.chooseFreeWarehouse = true;
+            MainMenu.freeWarehouses = false;
+        } else if (MainMenu.allWarehouses) {
+            if (person.getRentedWarehousesList().isEmpty()) {
+                MainMenu.getTextArea().setText("Osoba nic nie wynajmuje.");
+            } else {
+                MainMenu.jTextField.setEnabled(true);
+                MainMenu.buttonOK.setEnabled(true);
+                MainMenu.getTextArea().setText("Wpisz id magazynu by sprawdzic jego zawartosc:" + "\n\n");
+                displayPersonDetails2();
+                MainMenu.chooseWarehouse = true;
+            }
+            MainMenu.allWarehouses = false;
+        } else if (MainMenu.addPermission) {
+            MainMenu.getTextArea().setText("Wybierz magazyn do ktorego nadasz uprawnienia:" + "\n\n");
+            String listToPrint = warehouseList.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining("\n"));
+            MainMenu.getTextArea().append(listToPrint);
+            MainMenu.permissionIsAdded = true;
+            MainMenu.addPermission = false;
             MainMenu.jTextField.setEnabled(true);
             MainMenu.buttonOK.setEnabled(true);
-            MainMenu.getTextArea().setText("Wpisz id magazynu by sprawdzic jego zawartosc:" +"\n\n");
-            displayPersonDetails2();
-            MainMenu.chooseWarehouse =true;
         }
-        MainMenu.allWarehouses=false;
-    }else if(MainMenu.addPermission){
-        MainMenu.getTextArea().setText("Wybierz magazyn do ktorego nadasz uprawnienia:");
-        MainMenu.getTextArea().append("");
-        MainMenu.permissionIsAdded =true;
-        MainMenu.addPermission=false;
     }
-}
-//NOWA
+
+    //NOWA
     public static void displayPeople() {
         String listToPrint = peopleList.stream()
                 .map(String::valueOf)
@@ -349,7 +357,7 @@ public static void checkPeopleFunc() {
 
     }
 
-//STARA
+    //STARA
     public static void chooseWarehouse(Scanner sc) {
         System.out.println(warehouseList);
         number = sc.nextInt();
@@ -359,23 +367,24 @@ public static void checkPeopleFunc() {
                         warehouse = W;
                 });
     }
-//NOWA
-public static void chooseWarehouse(String sc) {
-    MainMenu.getTextArea().setText(""+person.getRentedWarehousesList());
-    number = Integer.parseInt(sc);
-    person.getRentedWarehousesList().forEach(
-            W -> {
-                if (W.getId() == number)
-                    warehouse = W;
-            });
-    warehouse.addPermission(person);
-}
+
+    //NOWA
+    public static void chooseWarehouse(String sc) {
+        number = Integer.parseInt(sc);
+        warehouseList.forEach(
+                W -> {
+                    if (W.getId() == number)
+                        warehouse = W;
+                });
+
+        warehouse.addPermission(person);
+    }
 
 
     public static void finishRepairOfICSS(Scanner sc) {
         Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
         if (!lista.isEmpty()) {
-            if(person ==null) {
+            if (person == null) {
                 System.out.println("Wybierz osobe:");
                 choosePerson(sc);
             }
@@ -459,9 +468,10 @@ public static void chooseWarehouse(String sc) {
         } else {
             warehouse.rentWarehouse(person, null);
         }
-        typeRight =false;
+        typeRight = false;
     }
-//NOWA
+
+    //NOWA
     public static void rentParking(String sc) {
         MainMenu.jTextField.setText("");
         MainMenu.jTextField.setEnabled(false);
@@ -486,6 +496,7 @@ public static void chooseWarehouse(String sc) {
         System.out.print(warehouse.getWarehouseItems());
 
     }
+
     //NOWA
     public static void displayListOfRentedPremises(String sc) {
         number = Integer.parseInt(sc);
@@ -496,9 +507,9 @@ public static void chooseWarehouse(String sc) {
                     }
                 });
 
-        HashMap<Warehouse, List<Object>> map = warehouse.getWarehouseItems();
-        if(map.isEmpty()) MainMenu.getTextArea().setText("Brak przedmiotow w magazynie");
-        else MainMenu.getTextArea().setText(""+map);
+        HashMap<Warehouse, List<Objects>> map = warehouse.getWarehouseItems();
+        if (map.isEmpty()) MainMenu.getTextArea().setText("Brak przedmiotow w magazynie");
+        else MainMenu.getTextArea().setText("" + map);
         MainMenu.jTextField.setEnabled(false);
         MainMenu.buttonOK.setEnabled(false);
     }
@@ -524,10 +535,51 @@ public static void chooseWarehouse(String sc) {
             System.out.println("Wybierz przedmiot:");
             warehouse.getWarehouseItems();
             chooseItem(sc);
-            warehouse.addItem(person, object);
+            warehouse.addItem(person, objects);
         } else {
             System.out.println("Nie masz uprawnien do zadnego magazynu.");
         }
+    }
+
+    //NOWA
+    public static void checkPermissionToAddItem() throws TooManyThingsException {
+        for (Map.Entry<Warehouse, Person> entry : Warehouse.authorizedPeople.entrySet()) {
+            Warehouse key = entry.getKey();
+            Person value = entry.getValue();
+            if (value.equals(person) && !authorizedWarehouses.contains(key)) {
+                authorizedWarehouses.add(key);
+            }
+        }
+        if (!authorizedWarehouses.isEmpty()) {
+            MainMenu.unlockViev();
+            MainMenu.getTextArea().setText("Wybierz magazyn do ktorego chcesz wlozyc przedmiot:" + "\n\n");
+            MainMenu.getTextArea().append("" + authorizedWarehouses);
+            MainMenu.addItem = false;
+            MainMenu.warehouseToItem = true;
+
+        } else {
+            MainMenu.getTextArea().setText("Nie masz uprawnien do zadnego magazynu.");
+        }
+    }
+    //NOWA
+    public static void selectWarehouseToAddItem(String sc) {
+            number=Integer.parseInt(sc);
+            authorizedWarehouses.forEach(W -> {
+                if (W.getId() == number) {
+                    warehouse = W;
+            }});
+            MainMenu.getTextArea().setText("Wybierz przedmiot ktory chcesz wlozyc:"+"\n\n");
+            String listToPrint = Objects.getObjectList().stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+             MainMenu.getTextArea().append(listToPrint);
+             MainMenu.itemIsChosen=true;
+
+    }
+    //NOWA
+    public static void selectItem(String sc) throws TooManyThingsException {
+        chooseItem(sc);
+        warehouse.addItem(person, objects);
     }
 
     public static void chooseParkingSpace(Scanner sc) {
@@ -576,9 +628,21 @@ public static void chooseWarehouse(String sc) {
         objectsList.forEach(
                 O -> {
                     if (O.getID() == number)
-                        object = O;
+                        objects = O;
                 });
     }
+
+    //NOWA
+    public static void chooseItem(String sc) {
+        System.out.println(objectsList);
+        number = Integer.parseInt(sc);
+        objectsList.forEach(
+                O -> {
+                    if (O.getID() == number)
+                        objects = O;
+                });
+    }
+
 
     public static void chooseVehicle(Scanner sc) {
         System.out.println(vehiclesList);
