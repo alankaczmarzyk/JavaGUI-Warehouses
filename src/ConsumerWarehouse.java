@@ -129,14 +129,13 @@ public class ConsumerWarehouse extends Warehouse {
             if (peopleList.contains(p)) {
                 objectsList.add(o);
                 objectsInWarehouses.put(this, objectsList);
-                MainMenu.getTextArea().setText("Dodales przedmiot do magazynu.");
+                MainMenu.getTextArea().setText("Dodales przedmiot: \n"+o+"\n do magazynu \n"+ Main.warehouse);
             } else {
                 MainMenu.getTextArea().setText("Nie masz uprawnien do wlozenia przedmiotu.");
             }
         } else {
             throw new TooManyThingsException("Remove some old items to insert a new item.");
         }
-
     }
 
     @Override

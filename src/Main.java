@@ -348,6 +348,35 @@ public class Main extends JFrame {
         }
     }
 
+
+    public static void displayParkingList() {
+        MainMenu.unlockViev();
+        MainMenu.getTextArea().setText("Wybierz Miejsce parkingowe:\n\n");
+        String listToPrint = parkingSpaceList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().append(listToPrint);
+        MainMenu.parkingChosen=true;
+    }
+
+    //NOWA
+    public static void selectParkingSpace(String sc) {
+        number = Integer.parseInt(sc);
+        parkingSpaceList.forEach(
+                L -> {
+                    if (L.getID() == number)
+                        parkingSpace = L;
+
+                });
+        MainMenu.jTextField.setText("");
+        MainMenu.getTextArea().setText("Wybierz pojazd:\n\n");
+        String listToPrint = vehiclesList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().append(""+listToPrint);
+        MainMenu.carChosen=true;
+    }
+
     //NOWA
     public static void displayPeople() {
         String listToPrint = peopleList.stream()
@@ -562,25 +591,18 @@ public class Main extends JFrame {
         }
     }
     //NOWA
-    public static void selectWarehouseToAddItem(String sc) {
-            number=Integer.parseInt(sc);
+    public static void selectWarehouseToAddItem(String sc) throws TooManyThingsException {
+            number = Integer.parseInt(sc);
             authorizedWarehouses.forEach(W -> {
                 if (W.getId() == number) {
                     warehouse = W;
-            }});
-            MainMenu.getTextArea().setText("Wybierz przedmiot ktory chcesz wlozyc:"+"\n\n");
-            String listToPrint = Objects.getObjectList().stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining("\n"));
-             MainMenu.getTextArea().append(listToPrint);
-             MainMenu.itemIsChosen=true;
+                }
+            });
+            SelectWarehouseView s1 = new SelectWarehouseView();
+    }
 
-    }
-    //NOWA
-    public static void selectItem(String sc) throws TooManyThingsException {
-        chooseItem(sc);
-        warehouse.addItem(person, objects);
-    }
+
+
 
     public static void chooseParkingSpace(Scanner sc) {
         displayFreeWarehouseList();
@@ -633,14 +655,14 @@ public class Main extends JFrame {
     }
 
     //NOWA
-    public static void chooseItem(String sc) {
-        System.out.println(objectsList);
+    public static void chooseItem(String sc) throws TooManyThingsException {
         number = Integer.parseInt(sc);
         objectsList.forEach(
                 O -> {
                     if (O.getID() == number)
                         objects = O;
                 });
+        warehouse.addItem(person, objects);
     }
 
 
@@ -653,6 +675,17 @@ public class Main extends JFrame {
                         vehicle = V;
                 });
         System.out.println("Wybrano: "+ vehicle);
+        System.out.println();
+    }
+    //NOWA
+    public static void chooseVehicle(String sc) {
+        number = Integer.parseInt(sc);
+        vehiclesList.forEach(
+                V -> {
+                    if (V.getVehicleID() == number)
+                        vehicle = V;
+                });
+        Main.parkingSpace.addVehicle(person, vehicle);
         System.out.println();
     }
 
@@ -686,6 +719,7 @@ public class Main extends JFrame {
                         carService = LMP;
                 });
     }
+
 
     public static List<Warehouse> getFreeWarehouseList() {
         freeWarehouseList = warehouseList.stream()

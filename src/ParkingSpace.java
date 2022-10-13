@@ -83,12 +83,12 @@ public class ParkingSpace {
                 try {
                     vehicle[whichVehicle++] = v;
                     isThereVehicle = true;
-                    System.out.println("Pojazd zostal dodany na miejsce parkingowe.");
+                    MainMenu.getTextArea().setText("Pojazd "+Main.vehicle+"\n zostal dodany na miejsce parkingowe: \n" +Main.parkingSpace);
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Moze byc tylko jeden pojazd na miejscu parkingowym");
+                    MainMenu.getTextArea().setText("Moze byc tylko jeden pojazd na miejscu parkingowym");
                 }
             }else {
-                System.out.println("Tylko wlasciciel moze dodac pojazd na miejsce parkingowe.");
+                MainMenu.getTextArea().setText("Tylko wlasciciel moze dodac pojazd na miejsce parkingowe.");
             }
         }
 

@@ -17,7 +17,8 @@ public class MainMenu<T> extends JFrame {
     public static boolean permissionIsAdded =false;
     public static boolean addItem =false;
     public static boolean warehouseToItem =false;
-    public static boolean itemIsChosen =false;
+    public static boolean parkingChosen =false;
+    public static boolean carChosen =false;
     public static JFrame frame;
     public static JButton buttonOK;
 
@@ -177,19 +178,27 @@ public class MainMenu<T> extends JFrame {
         addItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(personIsChosen){
-                    try {
-                        Main.checkPermissionToAddItem();
-                    } catch (TooManyThingsException ex) {
-                        ex.printStackTrace();
-                    }
-                }else {
+                if (!personIsChosen) {
                     addItem = true;
                     Main.checkPeopleFunc();
                 }
+                try {
+                    Main.checkPermissionToAddItem();
+                } catch (TooManyThingsException ex) {
+                    ex.printStackTrace();
+                }
             }
-        });
+            });
 
+            parkTheCarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!personIsChosen) {
+                        Main.checkPeopleFunc();
+                    }
+                    Main.displayParkingList();
+                }
+            });
 
 
 
@@ -201,33 +210,37 @@ public class MainMenu<T> extends JFrame {
                     Main.choosePerson(text);
                     choosePerson=false;
                 }
-                if(chooseFreeWarehouse){
+                else if(chooseFreeWarehouse){
                     Main.chooseFreeWarehouse(text);
                     chooseFreeWarehouse =false;
                 }
-                if(chooseParking){
+                else if(chooseParking){
                     Main.rentParking(text);
                     chooseParking=false;
                 }
-                if(chooseWarehouse){
+                else if(chooseWarehouse){
                     Main.displayListOfRentedPremises(text);
                     chooseWarehouse =false;
                 }
-                if(permissionIsAdded){
+                else if(permissionIsAdded){
                     Main.chooseWarehouse(text);
                     permissionIsAdded =false;
                 }
-                if(warehouseToItem){
-                    Main.selectWarehouseToAddItem(text);
-                    warehouseToItem =false;
-                }
-                if(itemIsChosen){
+                else if(warehouseToItem){
                     try {
-                        Main.selectItem(text);
+                        Main.selectWarehouseToAddItem(text);
                     } catch (TooManyThingsException ex) {
                         ex.printStackTrace();
                     }
-                    itemIsChosen=false;
+                    warehouseToItem =false;
+                }
+                else if(parkingChosen){
+                   Main.selectParkingSpace(text);
+                   parkingChosen=false;
+                }
+                else if(carChosen){
+                    Main.chooseVehicle(text);
+                    carChosen=false;
                 }
             }
         });
@@ -248,12 +261,12 @@ public class MainMenu<T> extends JFrame {
     }
 
     public static void blockViev(){
-        MainMenu.jTextField.setText("");
+        MainMenu.getTextArea().setText("");
         MainMenu.jTextField.setEnabled(false);
         MainMenu.buttonOK.setEnabled(false);
     }
     public static void unlockViev(){
-        MainMenu.jTextField.setText("");
+        MainMenu.getTextArea().setText("");
         MainMenu.jTextField.setEnabled(true);
         MainMenu.buttonOK.setEnabled(true);
     }
