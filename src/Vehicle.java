@@ -1,4 +1,6 @@
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 abstract public class Vehicle {
@@ -6,7 +8,7 @@ abstract public class Vehicle {
     private String type;
     private double engine;
     public static int vehicleID =1;
-    public static Set<Vehicle> vehiclesList = new HashSet<>();
+    public static List<Vehicle> vehiclesList = new LinkedList<>();
 
     public Vehicle(String brand, String type, double engine){
         this.brand = brand;
@@ -18,7 +20,7 @@ abstract public class Vehicle {
 
     abstract int getVehicleID();
 
-    public static Set<Vehicle> getVehiclesList() {
+    public static List<Vehicle> getVehiclesList() {
         return vehiclesList;
     }
 

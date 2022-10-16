@@ -18,7 +18,18 @@ public class MainMenu<T> extends JFrame {
     public static boolean addItem =false;
     public static boolean warehouseToItem =false;
     public static boolean parkingChosen =false;
+    public static boolean carToPark =false;
     public static boolean carChosen =false;
+    public static boolean carService =false;
+    public static boolean carToRemove =false;
+    public static boolean makeCarService=false;
+    public static boolean warehouseChosen=false;
+    public static boolean needService=false;
+    public static boolean itemIsChosen=false;
+    public static boolean serviceSpotChosen=false;
+    public static boolean repairPlace=false;
+    public static boolean finishICSS=false;
+    public static boolean finishCSS=false;
     public static JFrame frame;
     public static JButton buttonOK;
 
@@ -195,12 +206,80 @@ public class MainMenu<T> extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     if (!personIsChosen) {
                         Main.checkPeopleFunc();
+                    } else {
+                        Main.displayParkingList();
                     }
-                    Main.displayParkingList();
                 }
             });
 
+        removeItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!personIsChosen) {
+                    Main.checkPeopleFunc();
+                } else {
+                    Main.displayWarehouseList();
+                }
+            }
+        });
 
+        takeOutTheCarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!personIsChosen) {
+                    Main.checkPeopleFunc();
+                } else {
+                    Main.displayParkingSpace();
+                }
+            }
+        });
+
+        rentCarServiceSpotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!personIsChosen) {
+                    Main.checkPeopleFunc();
+                } else {
+                    Main.displayVehicles();
+                }
+            }
+        });
+
+        needServiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!personIsChosen) {
+                    Main.checkPeopleFunc();
+                } else {
+                    makeCarService=true;
+                    Main.displayVehicles();
+                }
+            }
+        });
+
+        stopServiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               StopRepairView stopRepairView = new StopRepairView();
+            }
+        });
+
+        writeToFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.writeToFile();
+            }
+        });
+
+        startThreadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TimeLapseThread t1 = new TimeLapseThread();
+                LeaseCheckingThread t2 = new LeaseCheckingThread();
+                t1.start();
+                t2.start();
+            }
+        });
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -223,7 +302,7 @@ public class MainMenu<T> extends JFrame {
                     chooseWarehouse =false;
                 }
                 else if(permissionIsAdded){
-                    Main.chooseWarehouse(text);
+                    Main.chooseWarehouseToAddPermission(text);
                     permissionIsAdded =false;
                 }
                 else if(warehouseToItem){
@@ -238,9 +317,52 @@ public class MainMenu<T> extends JFrame {
                    Main.selectParkingSpace(text);
                    parkingChosen=false;
                 }
+                else if(carToPark){
+                    Main.chooseVehicleAndParkIt(text);
+                    carToPark =false;
+                }
+                else if(warehouseChosen){
+                    Main.chooseWarehouse(text);
+                    warehouseChosen=false;
+                    Main.displayItems();
+                }
+                else if(itemIsChosen){
+                    Main.getItemOut(text);
+                    itemIsChosen=false;
+                }
+                else if(carToRemove){
+                    Main.selectParkingSpaceToRemove(text);
+                    carToRemove=false;
+                }
                 else if(carChosen){
                     Main.chooseVehicle(text);
                     carChosen=false;
+                    Main.displayCarService();
+                }
+                else if(carService){
+                    Main.chooseCarService(text);
+                    carService=false;
+                }
+                else if(needService){
+                    Main.chooseVehicle(text);
+                    ServiceRepairView serviceRepairView = new ServiceRepairView();
+                    needService=false;
+                }
+                else if(serviceSpotChosen){
+                    Main.chooseServiceSpot(text);
+                    Main.independentCarServiceSpot.startSelfRepair(Main.person, Main.vehicle);
+                    serviceSpotChosen=false;
+                }
+                else if(repairPlace){
+                    Main.chooseRepairPlace(text);
+                    Main.carServiceSpot.startRepair(Main.vehicle);
+                    repairPlace=false;
+                }
+                else if(repairPlace){
+                    Main.finishRepairOfICSS(text);
+                }
+                else if(repairPlace){
+                    Main.finishRepairOfCSS(text);
                 }
             }
         });
@@ -262,11 +384,13 @@ public class MainMenu<T> extends JFrame {
 
     public static void blockViev(){
         MainMenu.getTextArea().setText("");
+        MainMenu.jTextField.setText("");
         MainMenu.jTextField.setEnabled(false);
         MainMenu.buttonOK.setEnabled(false);
     }
     public static void unlockViev(){
         MainMenu.getTextArea().setText("");
+        MainMenu.jTextField.setText("");
         MainMenu.jTextField.setEnabled(true);
         MainMenu.buttonOK.setEnabled(true);
     }

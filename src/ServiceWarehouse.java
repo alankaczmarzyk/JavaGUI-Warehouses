@@ -99,14 +99,14 @@ public class ServiceWarehouse extends Warehouse {
     public void addPermission(Person p) {
 
         if(peopleSW.contains(p)){
-            MainMenu.getTextArea().setText("Ta osoba ma juz uprawnienie!");
             MainMenu.blockViev();
+            MainMenu.getTextArea().setText("Ta osoba ma juz uprawnienie!");
         }else {
             peopleSW.add(p);
             authorizedPeople.put(this,p);
             serviceWarehouseTenants.put(this, peopleSW);
-            MainMenu.getTextArea().setText("Dodano uprawnienie do magazynu: "+Main.warehouse);
             MainMenu.blockViev();
+            MainMenu.getTextArea().setText("Dodano uprawnienie do magazynu: "+Main.warehouse);
         }
     }
 
@@ -140,16 +140,17 @@ public class ServiceWarehouse extends Warehouse {
 
     @Override
     public void takeOutItem(Person p, Objects o) {
+        MainMenu.blockViev();
         if(peopleSW.contains(p)){
             if(objectsSW.contains(o)) {
                 objectsSW.remove(o);
                 objectsList.put(this, objectsSW);
-                System.out.println("Wyjales przedmiot z magazynu.");
+                MainMenu.getTextArea().setText("Wyjales przedmiot z magazynu.");
             }else {
-                System.out.println("Nie ma takiego obiektu w magazynie.");
+                MainMenu.getTextArea().setText("Nie ma takiego obiektu w magazynie.");
             }
         }else {
-            System.out.println("Nie masz uprawnien do wyjmowania przedmiotu.");
+            MainMenu.getTextArea().setText("Nie masz uprawnien do wyjmowania przedmiotu.");
         }
     }
 

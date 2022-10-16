@@ -83,7 +83,8 @@ public class ParkingSpace {
                 try {
                     vehicle[whichVehicle++] = v;
                     isThereVehicle = true;
-                    MainMenu.getTextArea().setText("Pojazd "+Main.vehicle+"\n zostal dodany na miejsce parkingowe: \n" +Main.parkingSpace);
+                    MainMenu.blockViev();
+                    MainMenu.getTextArea().setText(Main.vehicle+"\n zostal dodany na miejsce parkingowe: \n" +Main.parkingSpace);
                 } catch (IndexOutOfBoundsException e) {
                     MainMenu.getTextArea().setText("Moze byc tylko jeden pojazd na miejscu parkingowym");
                 }
@@ -95,16 +96,16 @@ public class ParkingSpace {
     }
 
     public void removeVehicle(Person p){
-
+        MainMenu.blockViev();
         if(vehicle[0]==null){
-            System.out.println("Nic nie ma na tym miejscu.");
+            MainMenu.getTextArea().setText("Nic nie ma na tym miejscu.");
         }else {
             if (owner == p) {
                 isThereVehicle = false;
-                System.out.println("Pojazd " + vehicle[0] +" zostal usuniety.");
+                MainMenu.getTextArea().setText("Pojazd " + vehicle[0] +" zostal usuniety.");
                 vehicle[0] = null;
             }else {
-                System.out.println("Tylko wlasciciel moze usunac pojazd ze swojego miejsca parkingowego.");
+                MainMenu.getTextArea().setText("Tylko wlasciciel moze usunac pojazd ze swojego miejsca parkingowego.");
             }
         }
     }
@@ -126,7 +127,7 @@ public class ParkingSpace {
     public String toString() {
         return "Miejsce Parkingowe{" +
                 "nazwa='" + name + '\'' +
-                ",Stan=" +(IfOwnerOfWarehouse(Main.getPerson())? "wynajety przez Ciebie ": (!ifRented ? "dostepny do wynajecia, ":"zajety, "))+
+                ",Stan=" +(IfOwnerOfWarehouse(Main.getPerson())? "wynajety przez Ciebie, ": (!ifRented ? "dostepny do wynajecia, ":"zajety, "))+
                 (isThereVehicle ?"zaparkowano: "+ vehicle[0] : "puste miejsce ")+
                 ", Parking ID:=" + ID +
                 '}';

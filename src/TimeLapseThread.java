@@ -10,16 +10,16 @@ public class TimeLapseThread extends Thread {
             if (day.isEqual(LocalDate.of(2022, 12, 31))) {
                 this.interrupt();
                 try {
-                    throw new TenantAlert("Koniec roku. Watek zatrzymany.");
+                    throw new TenantAlert("Koniec roku.\n");
                 } catch (TenantAlert t) {
-                    System.out.println(t.getMessage());
+                    MainMenu.getTextArea().append(t.getMessage());
                 }
                 break;
             }
 
             try {
                 day = day.plusDays(1);
-                System.out.println(day);
+                MainMenu.getTextArea().append(""+day+"\n");
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

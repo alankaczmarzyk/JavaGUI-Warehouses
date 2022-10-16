@@ -34,7 +34,7 @@ public class CarServiceSpot extends CarService {
                 thatVehicle = v;
                 int iloscDni = (int) (Math.random() * 5) + 1;
                 int cena = (int) (Math.random() * 2000) + 250;
-                System.out.println("Naprawa rozpoczeta. Czas trwania: " + iloscDni + " dni, " + "koszt " + cena);
+                MainMenu.getTextArea().setText("Naprawa rozpoczeta. Czas trwania: " + iloscDni + " dni, " + "koszt " + cena);
                 repairTime = iloscDni;
                 currentlyRepairedVehicles.add(v);
                 allRepairedVehicles.put(this,v);
@@ -42,13 +42,13 @@ public class CarServiceSpot extends CarService {
                 ifCurrentlyRepairs = true;
             } else {
                 if (vehicleQueue.contains(v)) {
-                    System.out.println("Ten pojazd znajduje sie w kolejce oczekujacych na naprawe.");
+                    MainMenu.getTextArea().setText("Ten pojazd znajduje sie w kolejce oczekujacych na naprawe.");
                 } else if (thatVehicle == v) {
-                    System.out.println("Ten pojazd jest juz w naprawie.");
+                    MainMenu.getTextArea().setText("Ten pojazd jest juz w naprawie.");
                 }
             }
         } else {
-            System.out.println("Najpierw wynajmij miejsce dla tego pojazdu.");
+            MainMenu.getTextArea().setText("Najpierw wynajmij miejsce dla tego pojazdu.");
         }
 
     }
@@ -63,17 +63,17 @@ public class CarServiceSpot extends CarService {
             currentlyRepairedVehicles.remove(thatVehicle);
             allRepairedVehicles.remove(this);
             if (!vehicleQueue.isEmpty()) {
-                System.out.println("Zakonczono naprawe: " + thatVehicle + " oraz rozpoczeto naprawe: " + vehicleQueue.element());
+                MainMenu.getTextArea().setText("Zakonczono naprawe: " + thatVehicle + " oraz rozpoczeto naprawe: " + vehicleQueue.element());
                 Vehicle thisVehicle = vehicleQueue.poll();
                 currentlyRepairedVehicles.add(thisVehicle);
                 allRepairedVehicles.put(this,thisVehicle);
             } else {
-                System.out.println("Zakonczono naprawe.");
+                MainMenu.getTextArea().setText("Zakonczono naprawe.");
                 czyZajete = false;
                 ifCurrentlyRepairs = false;
             }
         } else {
-            System.out.println("Nie ma takiego pojazdu w naprawie");
+            MainMenu.getTextArea().setText("Nie ma takiego pojazdu w naprawie");
         }
 
     }
@@ -107,9 +107,9 @@ public class CarServiceSpot extends CarService {
             owner[0] = p;
             tenantsList.put(p, vec);
             czyZajete = true;
-            System.out.println("Miejsce naprawcze " + newName + " zostalo wynajete.");
+            MainMenu.getTextArea().setText("Miejsce naprawcze " + newName + " zostalo wynajete.");
         } else {
-            System.out.println("Miejsce naprawcze jest juz zarezerwowane. Zostales dodany do kolejki.");
+            MainMenu.getTextArea().setText("Miejsce naprawcze jest juz zarezerwowane. Zostales dodany do kolejki.");
             vehicleQueue.add(vec);
             tenantsList.put(p, vec);
         }

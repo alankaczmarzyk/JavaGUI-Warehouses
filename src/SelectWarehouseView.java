@@ -25,7 +25,9 @@ public class SelectWarehouseView {
                     } catch (TooManyThingsException ex) {
                         ex.printStackTrace();
                     }
-                    MainMenu.blockViev();
+                    MainMenu.jTextField.setEnabled(false);
+                    MainMenu.buttonOK.setEnabled(false);
+                    MainMenu.jTextField.setText("");
                     choosen=false;
                 }
             }

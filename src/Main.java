@@ -26,7 +26,7 @@ public class Main extends JFrame {
     public static List<Warehouse> freeWarehouseList = new ArrayList<>();
     public static List<Warehouse> occupiedWarehouseList = new ArrayList<>();
     public static Set<Objects> objectsList = new HashSet<>();
-    public static Set<Vehicle> vehiclesList = new HashSet<>();
+    public static List<Vehicle> vehiclesList = new LinkedList<>();
     public static List<ParkingSpace> parkingSpaceList = new LinkedList<>();
     public static List<CarService> carServiceList = new LinkedList<>();
     public static List<ParkingSpace> freeParkingSpaceList = new LinkedList<>();
@@ -46,16 +46,16 @@ public class Main extends JFrame {
 
         //Objects
         service = new Service("U Zbycha", 1, 10, 50, 3, 1);
-        ConsumerWarehouse cw1 = new ConsumerWarehouse("ABC", 2000, 500, LocalDate.of(2021, 2, 26), LocalDate.of(2022, 6, 24));
-        ConsumerWarehouse cw2 = new ConsumerWarehouse("BCD", 300, 200, LocalDate.of(2021, 11, 28), LocalDate.of(2022, 6, 24));
-        ConsumerWarehouse cw3 = new ConsumerWarehouse("DEF", 300, 10, LocalDate.of(2021, 7, 11), LocalDate.of(2022, 7, 1));
-        ConsumerWarehouse cw4 = new ConsumerWarehouse("DGC", 300, 10, LocalDate.of(2021, 9, 11), LocalDate.of(2022, 7, 12));
-        ConsumerWarehouse cw5 = new ConsumerWarehouse("EGS", 300, 10, LocalDate.of(2021, 4, 11), LocalDate.of(2022, 7, 4));
-        ServiceWarehouse sw1 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 2, 26), LocalDate.of(2022, 7, 30));
-        ServiceWarehouse sw2 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 8, 8), LocalDate.of(2022, 7, 9));
-        ServiceWarehouse sw3 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 3, 26), LocalDate.of(2022, 7, 17));
-        ServiceWarehouse sw4 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 9, 8), LocalDate.of(2022, 7, 15));
-        ServiceWarehouse sw5 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 12, 26), LocalDate.of(2022, 7, 7));
+        ConsumerWarehouse cw1 = new ConsumerWarehouse("ABC", 2000, 500, LocalDate.of(2021, 2, 26), LocalDate.of(2022, 10, 27));
+        ConsumerWarehouse cw2 = new ConsumerWarehouse("BCD", 300, 200, LocalDate.of(2021, 11, 28), LocalDate.of(2022, 11, 24));
+        ConsumerWarehouse cw3 = new ConsumerWarehouse("DEF", 300, 10, LocalDate.of(2021, 7, 11), LocalDate.of(2023, 7, 1));
+        ConsumerWarehouse cw4 = new ConsumerWarehouse("DGC", 300, 10, LocalDate.of(2021, 9, 11), LocalDate.of(2023, 7, 12));
+        ConsumerWarehouse cw5 = new ConsumerWarehouse("EGS", 300, 10, LocalDate.of(2021, 4, 11), LocalDate.of(2023, 7, 4));
+        ServiceWarehouse sw1 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 2, 26), LocalDate.of(2023, 7, 30));
+        ServiceWarehouse sw2 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 8, 8), LocalDate.of(2023, 7, 9));
+        ServiceWarehouse sw3 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 3, 26), LocalDate.of(2023, 7, 17));
+        ServiceWarehouse sw4 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 9, 8), LocalDate.of(2023, 7, 15));
+        ServiceWarehouse sw5 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 12, 26), LocalDate.of(2023, 7, 7));
         Person p1 = new Person("Adam", "Kowalski", 132323222, "Warszawa, Gorecka 5", LocalDate.of(2020, 6, 28));
         Person p2 = new Person("Paweł", "Jarosz", 232321232, "Czestochowa, Warynskiego 5", LocalDate.of(2019, 4, 6));
         Person p3 = new Person("Marek", "Wilusz", 023021202, "Warszawa, Mokotowska 5", LocalDate.of(2020, 11, 11));
@@ -219,6 +219,7 @@ public class Main extends JFrame {
                     displayParkingSpace(sc);
 
                     parkingSpace.removeVehicle(person);
+
                     break;
                 case 12:
                     if (person == null) {
@@ -278,6 +279,11 @@ public class Main extends JFrame {
     //Functions
     public static void exit() {
         exit = true;
+    }
+
+    //NOWA
+    public static void startThread(){
+
     }
 
     //STARA
@@ -374,7 +380,7 @@ public class Main extends JFrame {
                 .map(String::valueOf)
                 .collect(Collectors.joining("\n"));
         MainMenu.getTextArea().append(""+listToPrint);
-        MainMenu.carChosen=true;
+        MainMenu.carToPark =true;
     }
 
     //NOWA
@@ -398,7 +404,7 @@ public class Main extends JFrame {
     }
 
     //NOWA
-    public static void chooseWarehouse(String sc) {
+    public static void chooseWarehouseToAddPermission(String sc) {
         number = Integer.parseInt(sc);
         warehouseList.forEach(
                 W -> {
@@ -407,6 +413,16 @@ public class Main extends JFrame {
                 });
 
         warehouse.addPermission(person);
+    }
+
+    //NOWA
+    public static void chooseWarehouse(String sc){
+        number = Integer.parseInt(sc);
+        warehouseList.forEach(
+                W -> {
+                    if (W.getId() == number)
+                        warehouse = W;
+                });
     }
 
 
@@ -428,9 +444,28 @@ public class Main extends JFrame {
             independentCarServiceSpot.finishSelfRepair(person);
         } else
             System.out.println("Nie ma obecnie zadnych napraw.");
-
-
     }
+    //NOWA
+    public static void finishRepairOfICSS(String sc) {
+        Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
+        if (!lista.isEmpty()) {
+            if (person == null) {
+                MainMenu.getTextArea().setText("Wybierz osobe:");
+                choosePerson(sc);
+            }
+            MainMenu.getTextArea().setText("Wybierz miejsce serwisowe:");
+            MainMenu.getTextArea().append(""+lista);
+            number = Integer.parseInt(sc);
+            for (Map.Entry<IndependentCarServiceSpot, Vehicle> entry : lista.entrySet()) {
+                if (entry.getKey().getId() == number)
+                    independentCarServiceSpot = entry.getKey();
+
+            }
+            independentCarServiceSpot.finishSelfRepair(person);
+        } else
+            MainMenu.getTextArea().setText("Nie ma obecnie zadnych napraw.");
+    }
+
 
     public static void finishRepairOfCSS(Scanner sc) {
         Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getAllRepairedVehicles();
@@ -447,7 +482,22 @@ public class Main extends JFrame {
             System.out.println("Nie ma obecnie zadnych napraw.");
 
     }
+    //NOWA
+    public static void finishRepairOfCSS(String sc) {
+        Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getAllRepairedVehicles();
+        if (!lista.isEmpty()) {
+            MainMenu.getTextArea().setText("Wybierz miejsce Naprawcze:");
+            MainMenu.getTextArea().append(""+lista);
+            number = Integer.parseInt(sc);
+            for (Map.Entry<CarServiceSpot, Vehicle> entry : lista.entrySet()) {
+                if (entry.getKey().getId() == number)
+                    carServiceSpot = entry.getKey();
+            }
+            carServiceSpot.finishRepair();
+        } else
+            MainMenu.getTextArea().setText("Nie ma obecnie zadnych napraw.");
 
+    }
 
     //stara
     public static void chooseFreeWarehouse(Scanner sc) {
@@ -512,6 +562,9 @@ public class Main extends JFrame {
             warehouse.rentWarehouse(person, null);
         }
     }
+
+    //NOWA
+
 
     //STARA
     public static void displayListOfRentedPremises(Scanner sc) {
@@ -601,7 +654,30 @@ public class Main extends JFrame {
             SelectWarehouseView s1 = new SelectWarehouseView();
     }
 
+    //NOWA
+    public static void displayItems(){
+        MainMenu.getTextArea().setText("Wybierz przedmiot:\n\n");
+        MainMenu.getTextArea().append(""+warehouse.getWarehouseItems());
+        if (warehouse.getWarehouseItems().isEmpty()) {
+            MainMenu.getTextArea().setText("Brak przedmiotow w magazynie.");
+        }else {
+            MainMenu.itemIsChosen=true;
+        }
+    }
 
+    //NOWA
+    public static void getItemOut(String sc){
+        number = Integer.parseInt(sc);
+        objectsList.forEach(
+                O -> {
+                    if (O.getID() == number)
+                        objects = O;
+
+                }
+        );
+        warehouse.takeOutItem(person, objects);
+
+    }
 
 
     public static void chooseParkingSpace(Scanner sc) {
@@ -632,6 +708,15 @@ public class Main extends JFrame {
         MainMenu.getTextArea().setText(listToPrint);
     }
 
+    //NOWA
+    public static void displayWarehouseList(){
+        MainMenu.unlockViev();
+        String listToPrint = warehouseList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().setText(listToPrint);
+        MainMenu.warehouseChosen=true;
+    }
 
     public static void displayParkingSpace(Scanner sc) {
         System.out.println(parkingSpaceList);
@@ -642,6 +727,30 @@ public class Main extends JFrame {
                         parkingSpace = L;
 
                 });
+    }
+
+    //NOWA
+    public static void displayParkingSpace() {
+        String listToPrint = parkingSpaceList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.unlockViev();
+        MainMenu.getTextArea().setText("Wybierz miejsce parkingowe z pojazdem:\n\n");
+        MainMenu.getTextArea().append(listToPrint);
+        MainMenu.carToRemove=true;
+
+    }
+    //NOWA
+
+    public static void selectParkingSpaceToRemove(String sc){
+        number = Integer.parseInt(sc);
+        parkingSpaceList.forEach(
+                L -> {
+                    if (L.getID() == number)
+                        parkingSpace = L;
+
+                });
+        parkingSpace.removeVehicle(person);
     }
 
     public static void chooseItem(Scanner sc) {
@@ -678,7 +787,7 @@ public class Main extends JFrame {
         System.out.println();
     }
     //NOWA
-    public static void chooseVehicle(String sc) {
+    public static void chooseVehicleAndParkIt(String sc) {
         number = Integer.parseInt(sc);
         vehiclesList.forEach(
                 V -> {
@@ -689,9 +798,44 @@ public class Main extends JFrame {
         System.out.println();
     }
 
+    //NOWA
+    public static void displayVehicles(){
+        MainMenu.unlockViev();
+        MainMenu.getTextArea().setText("Wybierz pojazd:\n\n");
+        String listToPrint = vehiclesList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().append(listToPrint);
+        if(MainMenu.makeCarService) {
+            MainMenu.makeCarService=false;
+            MainMenu.needService=true;
+
+        } else MainMenu.carChosen=true;
+    }
+
+
+    //NOWA
+    public static void chooseVehicle(String sc) {
+        number = Integer.parseInt(sc);
+        vehiclesList.forEach(
+                V -> {
+                    if (V.getVehicleID() == number)
+                        vehicle = V;
+                });
+    }
+
     public static void chooseRepairPlace(Scanner sc) {
         System.out.println(repairPlaces);
         number = sc.nextInt();
+        repairPlaces.forEach(
+                V -> {
+                    if (V.getId() == number)
+                        carServiceSpot = V;
+                });
+    }
+    //NOWA
+    public static void chooseRepairPlace(String sc) {
+        number = Integer.parseInt(sc);
         repairPlaces.forEach(
                 V -> {
                     if (V.getId() == number)
@@ -708,6 +852,15 @@ public class Main extends JFrame {
                         independentCarServiceSpot = V;
                 });
     }
+    public static void chooseServiceSpot(String sc) {
+        System.out.println(serviceSpots);
+        number = Integer.parseInt(sc);
+        serviceSpots.forEach(
+                V -> {
+                    if (V.getId() == number)
+                        independentCarServiceSpot = V;
+                });
+    }
 
     public static void chooseCarService(Scanner sc) {
         System.out.println("Wybierz miejsce ktore chcesz wynajac");
@@ -718,6 +871,25 @@ public class Main extends JFrame {
                     if (LMP.getId() == number)
                         carService = LMP;
                 });
+    }
+    //NOWA
+    public static void displayCarService() {
+        MainMenu.getTextArea().setText("Wybierz miejsce ktore chcesz wynajac\n\n");
+        String listToPrint = carServiceList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("\n"));
+        MainMenu.getTextArea().append(""+listToPrint);
+        MainMenu.carService=true;
+    }
+
+    //NOWA
+    public static void chooseCarService(String sc){
+        carServiceList.forEach(
+                LMP -> {
+                    if (LMP.getId() == number)
+                        carService = LMP;
+                });
+        carService.rentSpot(person, vehicle);
     }
 
 

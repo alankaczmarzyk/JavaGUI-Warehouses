@@ -38,22 +38,22 @@ public class IndependentCarServiceSpot extends CarService{
                     }
                 }
                 if(!ifOwner){
-                    System.out.println("Tylko wlasciciel moze rozpoczac prace serwisowa przy pojezdzie.");
+                    MainMenu.getTextArea().setText("Tylko wlasciciel moze rozpoczac prace serwisowa przy pojezdzie.");
                 }else {
                     if (!ifCurrentlyServiced) {
                         thatVehicle = v;
                         servicedVehiclesList.add(v);
                         allServicedVehiclesList.put(this, v);
                         repairHistory.put(this, servicedVehiclesList);
-                        System.out.println("Wlasciciel pojazdu rozpoczal serwisowanie.");
+                        MainMenu.getTextArea().setText("Wlasciciel pojazdu rozpoczal serwisowanie.");
                         ifCurrentlyServiced = true;
                     } else {
                         if (queueOfWaitingVehicles.contains(v)) {
                             canStartService =true;
-                            System.out.println("Ten pojazd znajduje sie w kolejce oczekujacych na serwis.");
+                            MainMenu.getTextArea().setText("Ten pojazd znajduje sie w kolejce oczekujacych na serwis.");
 
                         } else if (thatVehicle == v) {
-                            System.out.println("Ten pojazd jest juz w serwisie.");
+                            MainMenu.getTextArea().setText("Ten pojazd jest juz w serwisie.");
                         } else {
                         }
 
@@ -72,19 +72,19 @@ public class IndependentCarServiceSpot extends CarService{
                 servicedVehiclesList.remove(thatVehicle);
                allServicedVehiclesList.remove(this);
                 if(canStartService) {
-                    System.out.println("Wlasciciel zakonczyl naprawe serwisowa: " + thatVehicle + " Jego miejsce zastapil: " + queueOfWaitingVehicles.element());
+                    MainMenu.getTextArea().setText("Wlasciciel zakonczyl naprawe serwisowa: " + thatVehicle + " Jego miejsce zastapil: " + queueOfWaitingVehicles.element());
                     Vehicle thisVehicle = queueOfWaitingVehicles.poll();
                     servicedVehiclesList.add(thisVehicle);
                     allServicedVehiclesList.put(this,thisVehicle);
                     owner[0] = ownersQueue.poll();
                 }else {
-                    System.out.println("Wlasciciel zakonczyl naprawe serwisowa.");
+                    MainMenu.getTextArea().setText("Wlasciciel zakonczyl naprawe serwisowa.");
                     czyZajete=false;
                     ifCurrentlyServiced =false;
                 }
             }
         }else {
-            System.out.println("Tylko wlasciciel moze zakonczyc swoja prace.");
+            MainMenu.getTextArea().setText("Tylko wlasciciel moze zakonczyc swoja prace.");
         }
     }
 
@@ -92,9 +92,7 @@ public class IndependentCarServiceSpot extends CarService{
 
     @Override
     public void addSpot() {
-
         int count = Service.getServiceLocationsNumber();
-
         if (independentCarServiceSpots == null) {
             independentCarServiceSpots = new IndependentCarServiceSpot[count];
             independentCarServiceSpots[counter++] = this;
@@ -117,14 +115,13 @@ public class IndependentCarServiceSpot extends CarService{
 
     @Override
     void rentSpot(Person p, Vehicle vec) {
-
         if(!czyZajete){
             owner[0] = p;
             peopleAndVehicles.put(p, vec);
             czyZajete = true;
-            System.out.println("Miejsce serwisowe "+ newName +" zostalo wynajete.");
+            MainMenu.getTextArea().setText("Miejsce serwisowe "+ newName +" zostalo wynajete.");
         } else{
-            System.out.println("Miejsce serwisowe jest juz zarezerwowane. Czekasz w kolejce.");
+            MainMenu.getTextArea().setText("Miejsce serwisowe jest juz zarezerwowane. Czekasz w kolejce.");
             queueOfWaitingVehicles.add(vec);
             peopleAndVehicles.put(p,vec);
         }

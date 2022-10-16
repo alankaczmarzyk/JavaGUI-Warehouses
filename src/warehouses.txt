@@ -13,9 +13,6 @@ Magazyn:'IJK' Powierzchnia: 30.0m^2 Id:9 [Serwisowy]
 Magazyn:'FGH' Powierzchnia: 45.0m^2 Id:10 [Serwisowy]
 
 Wolne magazyny: 
-Magazyn:'ABC' Powierzchnia: 2000.0m^2 Id:1 [Konsumecki]
-Magazyn:'BCD' Powierzchnia: 300.0m^2 Id:2 [Konsumecki]
-Magazyn:'DEF' Powierzchnia: 300.0m^2 Id:3 [Konsumecki]
 Magazyn:'DGC' Powierzchnia: 300.0m^2 Id:4 [Konsumecki]
 Magazyn:'EGS' Powierzchnia: 300.0m^2 Id:5 [Konsumecki]
 Magazyn:'FGH' Powierzchnia: 45.0m^2 Id:6 [Serwisowy]
@@ -25,6 +22,9 @@ Magazyn:'IJK' Powierzchnia: 30.0m^2 Id:9 [Serwisowy]
 Magazyn:'FGH' Powierzchnia: 45.0m^2 Id:10 [Serwisowy]
 
 Zajete magazyny: 
+Magazyn:'ABC' Powierzchnia: 2000.0m^2 Id:1 [Konsumecki]
+Magazyn:'BCD' Powierzchnia: 300.0m^2 Id:2 [Konsumecki]
+Magazyn:'DEF' Powierzchnia: 300.0m^2 Id:3 [Konsumecki]
 
 Lista osob: 
 Osoba: Adam Kowalski ID: 1
@@ -34,13 +34,14 @@ Osoba: Adam Ozga ID: 4
 Osoba: Michał Browar ID: 5
 
 Lista przedmiotow: 
+[Obiekt: rower, ID:1, rozmiar: 20.0] 
 [Obiekt: pralka, ID:2, rozmiar: 190.0] 
 [Obiekt: obraz, ID:4, rozmiar: 2.0] 
-[Obiekt: wiadro, ID:5, rozmiar: 24.0] 
-[Obiekt: rower, ID:1, rozmiar: 20.0] 
 [Obiekt: telewizor, ID:3, rozmiar: 179.0] 
+[Obiekt: wiadro, ID:5, rozmiar: 24.0] 
 
 Lista osob wynajmujacych: 
+Osoba: Adam Kowalski ID: 1 [Magazyn:'ABC' Powierzchnia: 2000.0m^2 Id:1 [Konsumecki], Magazyn:'BCD' Powierzchnia: 300.0m^2 Id:2 [Konsumecki], Magazyn:'DEF' Powierzchnia: 300.0m^2 Id:3 [Konsumecki]]
 
 
 Przedmioty w magazynach: 

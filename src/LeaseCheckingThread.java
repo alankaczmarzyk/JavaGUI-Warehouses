@@ -10,16 +10,16 @@ public class LeaseCheckingThread extends Thread{
 
     @Override
     public void run() {
-
+        MainMenu.blockViev();
         while (!isInterrupted()) {
             day = TimeLapseThread.getDay();
 
             if (finalList()) {
                 this.interrupt();
                 try {
-                    throw new TenantAlert("Nie ma juz wiecej najmow. Watek zatrzymany.");
+                    throw new TenantAlert("Nie ma juz wiecej najmow.\n");
                 } catch (TenantAlert t) {
-                    System.out.println(t.getMessage());
+                    MainMenu.getTextArea().setText(t.getMessage());
                 }
                 break;
             }
@@ -31,18 +31,18 @@ public class LeaseCheckingThread extends Thread{
                                 found =true;
                                 expiredWarehouses.add(L);
                                 try {
-                                    throw new TenantAlert(L + ": Najem tego magazynu sie przedawnil.");
+                                    throw new TenantAlert(L + ": Najem tego magazynu sie przedawnil.\n");
                                 } catch (TenantAlert t) {
-                                    System.out.println(t.getMessage());
+                                    MainMenu.getTextArea().setText(t.getMessage());
                                 }
                             }
                         });
                 if(!found && !expiredWarehouses.isEmpty())
-                    System.out.println("Brak przedawnionych magazynow w tym czasie.");
+                    MainMenu.getTextArea().append("Brak przedawnionych magazynow w tym czasie.\n");
                 else {
                     if (!expiredWarehouses.isEmpty()) {
-                        System.out.println("Lista magazynow przedawnionych:");
-                        System.out.println(expiredWarehouses);
+                        MainMenu.getTextArea().append("Lista magazynow przedawnionych:\n");
+                        MainMenu.getTextArea().append(""+expiredWarehouses+"\n");
                     }
                 }
                 Thread.sleep(10000);
