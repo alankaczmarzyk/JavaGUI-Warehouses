@@ -64,20 +64,20 @@ public class ParkingSpace {
                     System.out.println(owner + " wynajal miejsce parkingowe: "+ this.name + this.ID +" w ramach magazynu: " + w.toString() + " na " + iloscDni + " dni");
                     MainMenu.getTextArea().append(owner + " wynajal miejsce parkingowe: "+ this.name + this.ID +" w ramach magazynu: " + w.toString() + " na " + iloscDni + " dni");
                 } else {
-                    System.out.println("To miejsce parkingowe jest juz wynajete.");
+                    MainMenu.getTextArea().setText("To miejsce parkingowe jest juz wynajete.");
                 }
             } else {
-                System.out.println("Maksymalna ilosc dni to 14.");
+                MainMenu.getTextArea().setText("Maksymalna ilosc dni to 14.");
             }
         }else {
-            System.out.println("Miejsce parkingowe mozna wynajac tylko w ramach wynajecia magazynu.");
+            MainMenu.getTextArea().setText("Miejsce parkingowe mozna wynajac tylko w ramach wynajecia magazynu.");
         }
 
     }
 
     public void addVehicle(Person p, Vehicle v){
         if(!ifRented){
-            System.out.println("Najpierw wynajmij miejsce zeby dodac pojazd");
+            MainMenu.getTextArea().setText("Najpierw wynajmij miejsce zeby dodac pojazd.");
         }else {
             if (p == owner) {
                 try {

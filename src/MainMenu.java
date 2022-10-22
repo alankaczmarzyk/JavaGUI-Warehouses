@@ -2,10 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainMenu<T> extends JFrame {
     public static JTextArea jTextArea;
     public static JTextField jTextField;
+    public static JScrollPane scroll;
     public static boolean choosePerson=false;
     public static boolean personIsChosen =false;
     public static boolean chooseFreeWarehouse =false;
@@ -32,6 +35,11 @@ public class MainMenu<T> extends JFrame {
     public static boolean finishCSS=false;
     public static JFrame frame;
     public static JButton buttonOK;
+    public static List<JButton> jButtonList = new LinkedList<>();
+
+    public static List<JButton> getjButtonList() {
+        return jButtonList;
+    }
 
     public MainMenu() {
         frame = new JFrame("Warehouse.app");
@@ -44,22 +52,22 @@ public class MainMenu<T> extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
-        JButton choosePersonButton = new JButton("Wybierz osobe");
-        JButton showInfoButton = new JButton("Wyświetl informacje");
-        JButton freeWarehouseButton = new JButton("Wyświetl wolne pomieszczenia");
-        JButton rentWarehouseButton = new JButton("Wynajmij pomieszczenie");
-        JButton checkContentButton = new JButton("Sprawdz zawartosc pomieszczenia");
-        JButton addPermissionButton = new JButton("Dodaj uprawnienia do magazynu");
-        JButton addItemButton = new JButton("Wloz przedmiot do magazynu");
-        JButton parkTheCarButton = new JButton("Zaparkuj pojazd na miejscu parkingowym");
-        JButton removeItemButton = new JButton("Zabierz przedmiot z magazynu");
-        JButton takeOutTheCarButton = new JButton("Zabierz auto z parkingu");
-        JButton rentCarServiceSpotButton = new JButton("Wynajmij miejsce serwisowe lub naprawcze");
-        JButton needServiceButton = new JButton("Zglos potrzebe naprawy lub rozpocznij serwisowanie");
-        JButton stopServiceButton = new JButton("Zakoncz naprawe pojazdu");
-        JButton writeToFileButton = new JButton("Zapisz aktualny stan");
-        JButton startThreadButton = new JButton("Uruchom upływ czasu");
-        JButton exitButton = new JButton("Wyjście z programu");
+        JButton choosePersonButton = createButton("Wybierz osobe");
+        JButton showInfoButton = createButton("Wyświetl informacje");
+        JButton freeWarehouseButton = createButton("Wyświetl wolne pomieszczenia");
+        JButton rentWarehouseButton = createButton("Wynajmij pomieszczenie");
+        JButton checkContentButton = createButton("Sprawdz zawartosc pomieszczenia");
+        JButton addPermissionButton = createButton("Dodaj uprawnienia do magazynu");
+        JButton addItemButton = createButton("Wloz przedmiot do magazynu");
+        JButton parkTheCarButton = createButton("Zaparkuj pojazd na miejscu parkingowym");
+        JButton removeItemButton = createButton("Zabierz przedmiot z magazynu");
+        JButton takeOutTheCarButton = createButton("Zabierz auto z parkingu");
+        JButton rentCarServiceSpotButton = createButton("Wynajmij miejsce serwisowe lub naprawcze");
+        JButton needServiceButton = createButton("Zglos potrzebe naprawy lub rozpocznij serwisowanie");
+        JButton stopServiceButton = createButton("Zakoncz naprawe pojazdu");
+        JButton writeToFileButton = createButton("Zapisz aktualny stan");
+        JButton startThreadButton = createButton("Uruchom upływ czasu");
+        JButton exitButton = createButton("Wyjście z programu");
 
         jTextArea = new JTextArea();
         jTextArea.setBounds(415,100,550,550);
@@ -70,7 +78,7 @@ public class MainMenu<T> extends JFrame {
         jTextArea.setForeground(Color.BLACK);
         jTextArea.setLineWrap(true);
         jTextArea.setWrapStyleWord(true);
-        JScrollPane scroll = new JScrollPane(jTextArea);
+        scroll = new JScrollPane(jTextArea);
         scroll.setBounds(415,100,550,550);
         frame.add(scroll);
 
@@ -136,6 +144,7 @@ public class MainMenu<T> extends JFrame {
         choosePersonButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
                 choosePerson=true;
                 jTextField.setEnabled(true);
                 buttonOK.setEnabled(true);
@@ -145,6 +154,7 @@ public class MainMenu<T> extends JFrame {
         showInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
                 jTextField.setEnabled(false);
                 buttonOK.setEnabled(false);
                 Main.displayPersonDetails2();
@@ -153,6 +163,7 @@ public class MainMenu<T> extends JFrame {
         freeWarehouseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
                 jTextField.setEnabled(false);
                 buttonOK.setEnabled(false);
                 Main.displayFreeWarehouse();
@@ -161,6 +172,8 @@ public class MainMenu<T> extends JFrame {
         rentWarehouseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 if(personIsChosen) {
                     jTextField.setEnabled(true);
                     buttonOK.setEnabled(true);
@@ -173,6 +186,7 @@ public class MainMenu<T> extends JFrame {
         checkContentButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    clear();
                     allWarehouses=true;
                     Main.checkPeopleFunc();
                 }
@@ -181,6 +195,8 @@ public class MainMenu<T> extends JFrame {
         addPermissionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 addPermission=true;
                 Main.checkPeopleFunc();
                 }
@@ -189,6 +205,8 @@ public class MainMenu<T> extends JFrame {
         addItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 if (!personIsChosen) {
                     addItem = true;
                     Main.checkPeopleFunc();
@@ -204,6 +222,8 @@ public class MainMenu<T> extends JFrame {
             parkTheCarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    clear();
+                    choosePerson=false;
                     if (!personIsChosen) {
                         Main.checkPeopleFunc();
                     } else {
@@ -215,6 +235,8 @@ public class MainMenu<T> extends JFrame {
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 if (!personIsChosen) {
                     Main.checkPeopleFunc();
                 } else {
@@ -226,6 +248,8 @@ public class MainMenu<T> extends JFrame {
         takeOutTheCarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 if (!personIsChosen) {
                     Main.checkPeopleFunc();
                 } else {
@@ -237,6 +261,8 @@ public class MainMenu<T> extends JFrame {
         rentCarServiceSpotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 if (!personIsChosen) {
                     Main.checkPeopleFunc();
                 } else {
@@ -248,6 +274,8 @@ public class MainMenu<T> extends JFrame {
         needServiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 if (!personIsChosen) {
                     Main.checkPeopleFunc();
                 } else {
@@ -260,13 +288,21 @@ public class MainMenu<T> extends JFrame {
         stopServiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               StopRepairView stopRepairView = new StopRepairView();
+                clear();
+                choosePerson = false;
+                if (!personIsChosen) {
+                    Main.checkPeopleFunc();
+                } else {
+                    StopRepairView stopRepairView = new StopRepairView();
+                }
             }
         });
 
         writeToFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clear();
+                choosePerson=false;
                 Main.writeToFile();
             }
         });
@@ -274,6 +310,8 @@ public class MainMenu<T> extends JFrame {
         startThreadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                choosePerson=false;
+                clear();
                 TimeLapseThread t1 = new TimeLapseThread();
                 LeaseCheckingThread t2 = new LeaseCheckingThread();
                 t1.start();
@@ -358,11 +396,11 @@ public class MainMenu<T> extends JFrame {
                     Main.carServiceSpot.startRepair(Main.vehicle);
                     repairPlace=false;
                 }
-                else if(repairPlace){
-                    Main.finishRepairOfICSS(text);
+                else if(finishCSS){
+                   Main.finishRepairOfCSS(text);
                 }
-                else if(repairPlace){
-                    Main.finishRepairOfCSS(text);
+                else if(finishICSS){
+                    Main.finishRepairOfICSS(text);
                 }
             }
         });
@@ -373,8 +411,6 @@ public class MainMenu<T> extends JFrame {
                 frame.dispose();
             }
         });
-
-
     }
 
     public static JTextArea getTextArea()
@@ -393,6 +429,16 @@ public class MainMenu<T> extends JFrame {
         MainMenu.jTextField.setText("");
         MainMenu.jTextField.setEnabled(true);
         MainMenu.buttonOK.setEnabled(true);
+    }
+
+    public static void clear(){
+        MainMenu.jTextField.setText("");
+    }
+
+    public static JButton createButton(String txt){
+        JButton newButton  = new JButton(txt);
+        jButtonList.add(newButton);
+        return newButton;
     }
 
 }

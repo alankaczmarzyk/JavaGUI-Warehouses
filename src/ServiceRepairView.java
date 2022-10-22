@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class ServiceRepairView {
     public ServiceRepairView(){
         MainMenu.getTextArea().setText("Czy chcesz samodzielnie serwisowac pojazd?");
+        ublockAllButons(false);
         MainMenu.jTextField.setBounds(415,650,0,0);
         MainMenu.buttonOK.setBounds(415,650,0,0);
 
@@ -23,6 +24,8 @@ public class ServiceRepairView {
         buttonNO.setOpaque(true);
 
         newOkButton.addActionListener(e -> {
+            MainMenu.unlockViev();
+            ublockAllButons(true);
             MainMenu.getTextArea().setText("Wybrano samodzielna naprawe.\n\n");
             MainMenu.getTextArea().append("Wybierz miejsce serwisowe:\n\n");
 
@@ -39,6 +42,8 @@ public class ServiceRepairView {
         });
 
         buttonNO.addActionListener(e -> {
+            MainMenu.unlockViev();
+            ublockAllButons(true);
             MainMenu.getTextArea().setText("Wybrano naprawe przez mechaników.\n\n");
             MainMenu.getTextArea().append("Wybierz miejsce naprawcze:\n\n");
 
@@ -51,12 +56,19 @@ public class ServiceRepairView {
             buttonNO.setBounds(690,650,0,0);
             MainMenu.buttonOK.setBounds(865,650,100,50);
             MainMenu.buttonOK.setFocusPainted(false);
+            MainMenu.buttonOK.setText("OK");
             MainMenu.jTextField.setBounds(415,650,450,50);
             MainMenu.jTextField.setEnabled(true);
             MainMenu.repairPlace=true;
         });
 
 
+    }
+    public static void ublockAllButons(boolean b){
+        for (JButton jx:
+                MainMenu.getjButtonList()) {
+            jx.setEnabled(b);
+        }
     }
 
 }

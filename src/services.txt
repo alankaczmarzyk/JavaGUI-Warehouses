@@ -1,7 +1,7 @@
 Serwis:'U Zbycha', ID: 1, Liczba powierzchni: 10, Magazyn stanowi: 50% serwisu
 
 Miejsca parkingowe: 
-Miejsce Parkingowe{nazwa='Miejsce A',Stan=wynajety przez Ciebie, puste miejsce , Parking ID:=100}
+Miejsce Parkingowe{nazwa='Miejsce A',Stan=dostepny do wynajecia, puste miejsce , Parking ID:=100}
 Miejsce Parkingowe{nazwa='Miejsce B',Stan=dostepny do wynajecia, puste miejsce , Parking ID:=101}
 Miejsce Parkingowe{nazwa='Miejsce C',Stan=dostepny do wynajecia, puste miejsce , Parking ID:=102}
 

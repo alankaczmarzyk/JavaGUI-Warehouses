@@ -29,6 +29,7 @@ public class IndependentCarServiceSpot extends CarService{
     }
 
     public void startSelfRepair(Person p, Vehicle v) {
+            MainMenu.blockViev();
             if(peopleAndVehicles.containsValue(v)) {
                 Person osoba = p;
                 Vehicle pojazd = v;
@@ -41,6 +42,7 @@ public class IndependentCarServiceSpot extends CarService{
                     MainMenu.getTextArea().setText("Tylko wlasciciel moze rozpoczac prace serwisowa przy pojezdzie.");
                 }else {
                     if (!ifCurrentlyServiced) {
+                        MainMenu.blockViev();
                         thatVehicle = v;
                         servicedVehiclesList.add(v);
                         allServicedVehiclesList.put(this, v);
@@ -61,12 +63,12 @@ public class IndependentCarServiceSpot extends CarService{
                     ifOwner =false;
                 }
             }else {
-                System.out.println("Najpierw wynajmij miejsce dla tego pojazdu.");
+                MainMenu.getTextArea().setText("Najpierw wynajmij miejsce dla tego pojazdu.");
             }
     }
 
     public void finishSelfRepair(Person p) {
-
+        MainMenu.blockViev();
         if(p== owner[0]) {
             if (servicedVehiclesList.contains(thatVehicle)) {
                 servicedVehiclesList.remove(thatVehicle);
@@ -115,6 +117,7 @@ public class IndependentCarServiceSpot extends CarService{
 
     @Override
     void rentSpot(Person p, Vehicle vec) {
+        MainMenu.blockViev();
         if(!czyZajete){
             owner[0] = p;
             peopleAndVehicles.put(p, vec);

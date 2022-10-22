@@ -389,7 +389,6 @@ public class Main extends JFrame {
                 .map(String::valueOf)
                 .collect(Collectors.joining("\n"));
         MainMenu.getTextArea().setText(listToPrint);
-
     }
 
     //STARA
@@ -446,24 +445,16 @@ public class Main extends JFrame {
             System.out.println("Nie ma obecnie zadnych napraw.");
     }
     //NOWA
-    public static void finishRepairOfICSS(String sc) {
-        Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
-        if (!lista.isEmpty()) {
-            if (person == null) {
-                MainMenu.getTextArea().setText("Wybierz osobe:");
-                choosePerson(sc);
-            }
-            MainMenu.getTextArea().setText("Wybierz miejsce serwisowe:");
-            MainMenu.getTextArea().append(""+lista);
-            number = Integer.parseInt(sc);
-            for (Map.Entry<IndependentCarServiceSpot, Vehicle> entry : lista.entrySet()) {
-                if (entry.getKey().getId() == number)
-                    independentCarServiceSpot = entry.getKey();
-
-            }
-            independentCarServiceSpot.finishSelfRepair(person);
-        } else
-            MainMenu.getTextArea().setText("Nie ma obecnie zadnych napraw.");
+    public static void finishRepairOfCSS(String sc) {
+        Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getAllRepairedVehicles();
+        MainMenu.getTextArea().setText("NR :"+sc+"\n\n");
+        MainMenu.getTextArea().append(""+lista);
+        number = Integer.parseInt(sc);
+        for (Map.Entry<CarServiceSpot, Vehicle> entry : lista.entrySet()) {
+            if (entry.getKey().getId() == number)
+                carServiceSpot = entry.getKey();
+        }
+        carServiceSpot.finishRepair();
     }
 
 
@@ -483,17 +474,17 @@ public class Main extends JFrame {
 
     }
     //NOWA
-    public static void finishRepairOfCSS(String sc) {
-        Map<CarServiceSpot, Vehicle> lista = CarServiceSpot.getAllRepairedVehicles();
+    public static void finishRepairOfICSS(String sc) {
+        Map<IndependentCarServiceSpot, Vehicle> lista = IndependentCarServiceSpot.getAllServicedVehiclesList();
         if (!lista.isEmpty()) {
             MainMenu.getTextArea().setText("Wybierz miejsce Naprawcze:");
             MainMenu.getTextArea().append(""+lista);
             number = Integer.parseInt(sc);
-            for (Map.Entry<CarServiceSpot, Vehicle> entry : lista.entrySet()) {
+            for (Map.Entry<IndependentCarServiceSpot, Vehicle> entry : lista.entrySet()) {
                 if (entry.getKey().getId() == number)
-                    carServiceSpot = entry.getKey();
+                    independentCarServiceSpot = entry.getKey();
             }
-            carServiceSpot.finishRepair();
+            independentCarServiceSpot.finishSelfRepair(person);
         } else
             MainMenu.getTextArea().setText("Nie ma obecnie zadnych napraw.");
 
@@ -656,6 +647,7 @@ public class Main extends JFrame {
 
     //NOWA
     public static void displayItems(){
+        MainMenu.clear();
         MainMenu.getTextArea().setText("Wybierz przedmiot:\n\n");
         MainMenu.getTextArea().append(""+warehouse.getWarehouseItems());
         if (warehouse.getWarehouseItems().isEmpty()) {
@@ -801,16 +793,19 @@ public class Main extends JFrame {
     //NOWA
     public static void displayVehicles(){
         MainMenu.unlockViev();
-        MainMenu.getTextArea().setText("Wybierz pojazd:\n\n");
         String listToPrint = vehiclesList.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining("\n"));
-        MainMenu.getTextArea().append(listToPrint);
         if(MainMenu.makeCarService) {
+            MainMenu.getTextArea().setText("Wybierz pojazd ktory chcesz naprawic lub serwisowac:\n\n");
+            MainMenu.getTextArea().append(listToPrint);
             MainMenu.makeCarService=false;
             MainMenu.needService=true;
-
-        } else MainMenu.carChosen=true;
+        } else{
+            MainMenu.getTextArea().setText("Wybierz pojazd dla ktorego chcesz wynajac miejsce:\n\n");
+            MainMenu.getTextArea().append(listToPrint);
+            MainMenu.carChosen=true;
+        }
     }
 
 
@@ -874,7 +869,8 @@ public class Main extends JFrame {
     }
     //NOWA
     public static void displayCarService() {
-        MainMenu.getTextArea().setText("Wybierz miejsce ktore chcesz wynajac\n\n");
+        MainMenu.unlockViev();
+        MainMenu.getTextArea().setText("Wybierz miejsce ktore chcesz wynajac:\n\n");
         String listToPrint = carServiceList.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining("\n"));
@@ -884,6 +880,7 @@ public class Main extends JFrame {
 
     //NOWA
     public static void chooseCarService(String sc){
+        number = Integer.parseInt(sc);
         carServiceList.forEach(
                 LMP -> {
                     if (LMP.getId() == number)
@@ -950,7 +947,8 @@ public class Main extends JFrame {
         if (person == null) {
             MainMenu.getTextArea().setText("Aby kontynuowac wybierz osobe.");
         } else {
-            MainMenu.getTextArea().append(person.toString());
+            MainMenu.blockViev();
+            MainMenu.getTextArea().append(person.toString()+"\n");
             MainMenu.getTextArea().append("Wynajete miejsca: "+"\n");
             List<Warehouse> rentedWarehousesList = person.getRentedWarehousesList();
             rentedWarehousesList.forEach((s) -> MainMenu.getTextArea().append(s + "\n"));

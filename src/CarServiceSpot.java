@@ -5,7 +5,7 @@ public class CarServiceSpot extends CarService {
     private static int counter = 0;
     private Person[] owner = new Person[1];
     private HashMap<Person, Vehicle> tenantsList = new HashMap<>();
-    private Set<Vehicle> currentlyRepairedVehicles = new HashSet<>();
+    public Set<Vehicle> currentlyRepairedVehicles = new HashSet<>();
     private static Map<CarServiceSpot, Vehicle> allRepairedVehicles = new HashMap<>();
     private int repairTime;
     private boolean ifCurrentlyRepairs = false;
@@ -28,13 +28,13 @@ public class CarServiceSpot extends CarService {
     }
 
     public void startRepair(Vehicle v) {
-
+        MainMenu.blockViev();
         if (tenantsList.containsValue(v)) {
             if (!ifCurrentlyRepairs) {
                 thatVehicle = v;
                 int iloscDni = (int) (Math.random() * 5) + 1;
                 int cena = (int) (Math.random() * 2000) + 250;
-                MainMenu.getTextArea().setText("Naprawa rozpoczeta. Czas trwania: " + iloscDni + " dni, " + "koszt " + cena);
+                MainMenu.getTextArea().setText("Naprawa rozpoczeta.\nCzas trwania: " + iloscDni + " dni.\nKoszt " + cena+".00 PLN.");
                 repairTime = iloscDni;
                 currentlyRepairedVehicles.add(v);
                 allRepairedVehicles.put(this,v);
@@ -53,12 +53,12 @@ public class CarServiceSpot extends CarService {
 
     }
 
-
     public static Map<CarServiceSpot, Vehicle> getAllRepairedVehicles() {
         return allRepairedVehicles;
     }
 
     public void finishRepair() {
+        MainMenu.blockViev();
         if (currentlyRepairedVehicles.contains(thatVehicle)) {
             currentlyRepairedVehicles.remove(thatVehicle);
             allRepairedVehicles.remove(this);
@@ -68,7 +68,7 @@ public class CarServiceSpot extends CarService {
                 currentlyRepairedVehicles.add(thisVehicle);
                 allRepairedVehicles.put(this,thisVehicle);
             } else {
-                MainMenu.getTextArea().setText("Zakonczono naprawe.");
+                MainMenu.getTextArea().setText("Zakonczono naprawe pojazdu:\n "+thatVehicle+".");
                 czyZajete = false;
                 ifCurrentlyRepairs = false;
             }
@@ -80,7 +80,6 @@ public class CarServiceSpot extends CarService {
 
     @Override
     public void addSpot() {
-
         if (carServiceSpots == null) {
             carServiceSpots = new CarServiceSpot[count];
             carServiceSpots[counter++] = this;
@@ -102,7 +101,7 @@ public class CarServiceSpot extends CarService {
 
     @Override
     void rentSpot(Person p, Vehicle vec) {
-
+        MainMenu.blockViev();
         if (!czyZajete) {
             owner[0] = p;
             tenantsList.put(p, vec);
@@ -115,6 +114,11 @@ public class CarServiceSpot extends CarService {
         }
 
     }
+
+    public Set<Vehicle> getCurrently(){
+        return currentlyRepairedVehicles;
+    }
+
 
     @Override
     public int getId() {
