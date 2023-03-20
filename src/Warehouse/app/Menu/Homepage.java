@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class Homepage extends JFrame {
     public Homepage(){
-        JFrame frame = new JFrame("Warhouse.app.Warehouse.Warhouse.app.Warehouse.app");
+        JFrame frame = new JFrame("Warehouse.app");
         frame.setContentPane(new JLabel(new ImageIcon("images\\photo.jpg")));
         ImageIcon img = new ImageIcon("images\\photo2.png");
         frame.setIconImage(img.getImage());
