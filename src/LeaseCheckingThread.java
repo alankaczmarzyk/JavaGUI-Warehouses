@@ -14,6 +14,11 @@ public class LeaseCheckingThread extends Thread{
         while (!isInterrupted()) {
             day = TimeLapseThread.getDay();
 
+            if(occupiedWarehouses.isEmpty()){
+                MainMenu.getTextArea().setText("Brak wynajetych magazynow.\n");
+                return;
+            }
+
             if (finalList()) {
                 this.interrupt();
                 try {
@@ -24,6 +29,7 @@ public class LeaseCheckingThread extends Thread{
                 break;
             }
 
+
             try {
                 occupiedWarehouses.forEach(
                         L -> {
@@ -31,18 +37,20 @@ public class LeaseCheckingThread extends Thread{
                                 found =true;
                                 expiredWarehouses.add(L);
                                 try {
-                                    throw new TenantAlert(L + ": Najem tego magazynu sie przedawnil.\n");
+                                    throw new TenantAlert(L + ": Najem tego magazynu sie przedawnil.\n\n");
                                 } catch (TenantAlert t) {
                                     MainMenu.getTextArea().setText(t.getMessage());
                                 }
                             }
                         });
                 if(!found && !expiredWarehouses.isEmpty())
-                    MainMenu.getTextArea().append("Brak przedawnionych magazynow w tym czasie.\n");
+                {
+                    MainMenu.getTextArea().append("Sprawdzam daty zakonczenia najmów..\n");
+                }
                 else {
                     if (!expiredWarehouses.isEmpty()) {
                         MainMenu.getTextArea().append("Lista magazynow przedawnionych:\n");
-                        MainMenu.getTextArea().append(""+expiredWarehouses+"\n");
+                        MainMenu.getTextArea().append(""+expiredWarehouses+"\n\n");
                     }
                 }
                 Thread.sleep(10000);

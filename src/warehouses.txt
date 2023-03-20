@@ -34,11 +34,11 @@ Osoba: Adam Ozga ID: 4
 Osoba: Michał Browar ID: 5
 
 Lista przedmiotow: 
-[Obiekt: obraz, ID:4, rozmiar: 2.0] 
-[Obiekt: wiadro, ID:5, rozmiar: 24.0] 
-[Obiekt: pralka, ID:2, rozmiar: 190.0] 
 [Obiekt: rower, ID:1, rozmiar: 20.0] 
+[Obiekt: pralka, ID:2, rozmiar: 190.0] 
 [Obiekt: telewizor, ID:3, rozmiar: 179.0] 
+[Obiekt: wiadro, ID:5, rozmiar: 24.0] 
+[Obiekt: obraz, ID:4, rozmiar: 2.0] 
 
 Lista osob wynajmujacych: 
 

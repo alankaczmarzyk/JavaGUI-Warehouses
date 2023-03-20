@@ -46,16 +46,16 @@ public class Main extends JFrame {
 
         //Objects
         service = new Service("U Zbycha", 1, 10, 50, 3, 1);
-        ConsumerWarehouse cw1 = new ConsumerWarehouse("ABC", 2000, 500, LocalDate.of(2021, 2, 26), LocalDate.of(2022, 10, 27));
-        ConsumerWarehouse cw2 = new ConsumerWarehouse("BCD", 300, 200, LocalDate.of(2021, 11, 28), LocalDate.of(2022, 11, 24));
-        ConsumerWarehouse cw3 = new ConsumerWarehouse("DEF", 300, 10, LocalDate.of(2021, 7, 11), LocalDate.of(2023, 7, 1));
-        ConsumerWarehouse cw4 = new ConsumerWarehouse("DGC", 300, 10, LocalDate.of(2021, 9, 11), LocalDate.of(2023, 7, 12));
-        ConsumerWarehouse cw5 = new ConsumerWarehouse("EGS", 300, 10, LocalDate.of(2021, 4, 11), LocalDate.of(2023, 7, 4));
-        ServiceWarehouse sw1 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 2, 26), LocalDate.of(2023, 7, 30));
-        ServiceWarehouse sw2 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 8, 8), LocalDate.of(2023, 7, 9));
-        ServiceWarehouse sw3 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 3, 26), LocalDate.of(2023, 7, 17));
-        ServiceWarehouse sw4 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2021, 9, 8), LocalDate.of(2023, 7, 15));
-        ServiceWarehouse sw5 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2021, 12, 26), LocalDate.of(2023, 7, 7));
+        ConsumerWarehouse cw1 = new ConsumerWarehouse("ABC", 2000, 500, LocalDate.of(2022, 2, 26), LocalDate.of(2023, 3, 27));
+        ConsumerWarehouse cw2 = new ConsumerWarehouse("BCD", 300, 200, LocalDate.of(2022, 11, 28), LocalDate.of(2023, 4, 11));
+        ConsumerWarehouse cw3 = new ConsumerWarehouse("DEF", 300, 10, LocalDate.of(2022, 7, 11), LocalDate.of(2023, 4, 1));
+        ConsumerWarehouse cw4 = new ConsumerWarehouse("DGC", 300, 10, LocalDate.of(2022, 9, 11), LocalDate.of(2023, 5, 12));
+        ConsumerWarehouse cw5 = new ConsumerWarehouse("EGS", 300, 10, LocalDate.of(2022, 4, 11), LocalDate.of(2023, 8, 4));
+        ServiceWarehouse sw1 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2022, 2, 26), LocalDate.of(2023, 9, 30));
+        ServiceWarehouse sw2 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2022, 8, 8), LocalDate.of(2023, 9, 9));
+        ServiceWarehouse sw3 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2022, 3, 26), LocalDate.of(2023, 9, 17));
+        ServiceWarehouse sw4 = new ServiceWarehouse("IJK", 30, 1250, LocalDate.of(2022, 9, 8), LocalDate.of(2023, 9, 15));
+        ServiceWarehouse sw5 = new ServiceWarehouse("FGH", 45, 400, LocalDate.of(2022, 12, 26), LocalDate.of(2023, 9, 7));
         Person p1 = new Person("Adam", "Kowalski", 132323222, "Warszawa, Gorecka 5", LocalDate.of(2020, 6, 28));
         Person p2 = new Person("Paweł", "Jarosz", 232321232, "Czestochowa, Warynskiego 5", LocalDate.of(2019, 4, 6));
         Person p3 = new Person("Marek", "Wilusz", 023021202, "Warszawa, Mokotowska 5", LocalDate.of(2020, 11, 11));
@@ -80,10 +80,10 @@ public class Main extends JFrame {
 
 
         //Premises
-        warehousePremises = List.of(ConsumerWarehouse.getConsumerWarehouseList());
-        servicePremises = List.of(ServiceWarehouse.getServicePremisesList());
-        repairPlaces = List.of(CarServiceSpot.getCarServiceSpots());
-        serviceSpots = List.of(IndependentCarServiceSpot.getIndependentCarServiceSpots());
+        warehousePremises = Arrays.asList(ConsumerWarehouse.getConsumerWarehouseList());
+        servicePremises = Arrays.asList(ServiceWarehouse.getServicePremisesList());
+        repairPlaces = Arrays.asList(CarServiceSpot.getCarServiceSpots());
+        serviceSpots = Arrays.asList(IndependentCarServiceSpot.getIndependentCarServiceSpots());
         peopleList = Person.getPersonList();
         warehouseList = Warehouse.getWarehousesList();
         objectsList = Objects.getObjectList();
@@ -1009,7 +1009,7 @@ public class Main extends JFrame {
     public static void writeToFile() {
         PrintWriter writer = null;
         try {
-            File file = new File("warehouses.txt");
+            File file = new File("JavaGUI-Warehouses/src/warehouses.txt");
             file.createNewFile();
             writer = new PrintWriter(file);
         } catch (IOException e) {
@@ -1030,7 +1030,7 @@ public class Main extends JFrame {
 
         PrintWriter writer2 = null;
         try {
-            File file2 = new File("services.txt");
+            File file2 = new File("JavaGUI-Warehouses/src/services.txt");
             file2.createNewFile();
             writer2 = new PrintWriter(file2);
         } catch (IOException e) {

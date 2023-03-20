@@ -1,17 +1,17 @@
 Serwis:'U Zbycha', ID: 1, Liczba powierzchni: 10, Magazyn stanowi: 50% serwisu
 
 Miejsca parkingowe: 
-Miejsce Parkingowe{nazwa='Miejsce A',Stan=dostepny do wynajecia, puste miejsce , Parking ID:=100}
-Miejsce Parkingowe{nazwa='Miejsce B',Stan=dostepny do wynajecia, puste miejsce , Parking ID:=101}
-Miejsce Parkingowe{nazwa='Miejsce C',Stan=dostepny do wynajecia, puste miejsce , Parking ID:=102}
+Miejsce Parkingowe{nazwa='Miejsce A',Stan=wynajety przez Ciebie, puste miejsce , Parking ID:=100}
+Miejsce Parkingowe{nazwa='Miejsce B',Stan=wynajety przez Ciebie, puste miejsce , Parking ID:=101}
+Miejsce Parkingowe{nazwa='Miejsce C',Stan=wynajety przez Ciebie, puste miejsce , Parking ID:=102}
 
 Miejsca serwisowe: 
-nazwa='ZZZ' powierzchnia= 30.0 [Miejsce Serwisowe] ID:4 stan: Wolne
+nazwa='ZZZ' powierzchnia= 30.0 [Miejsce Serwisowe] ID:4 stan: Wynajety przez Ciebie
 
 Miejsca naprawcze:
-nazwa='XYZ' powierzchnia= 100.0 ID:1 [Miejsce Naprawcze] stan: Wolne
-nazwa='ZYX' powierzchnia= 20.0 ID:2 [Miejsce Naprawcze] stan: Wolne
-nazwa='YZX' powierzchnia= 100.0 ID:3 [Miejsce Naprawcze] stan: Wolne
+nazwa='XYZ' powierzchnia= 100.0 ID:1 [Miejsce Naprawcze] stan: Zajety przez Ciebie
+nazwa='ZYX' powierzchnia= 20.0 ID:2 [Miejsce Naprawcze] stan: Zajety przez Ciebie
+nazwa='YZX' powierzchnia= 100.0 ID:3 [Miejsce Naprawcze] stan: Zajety przez Ciebie
 
 Lista pojazdow: 
 Pojazd: marka='Ducati', ID=1
