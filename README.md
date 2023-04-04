@@ -5,7 +5,8 @@ Project content:
  https://github.com/alankaczmarzyk/Pjatk-JavaGUI_Warehouses-Project/blob/191ebecf0043d93f4b8ae62680af3b98022c6fa4/2021l_GUI_DZ_PRO1.pdf
  --------------
  
- <a href="[2021l_GUI_DZ_PRO1.pdf](https://github.com/alankaczmarzyk/Pjatk-JavaGUI_Warehouses-Project/blob/191ebecf0043d93f4b8ae62680af3b98022c6fa4/2021l_GUI_DZ_PRO1.pdf)" class="image fit"><img src="images/marr_pic.jpg" alt=""></a>
+<a href="/pdfs/2021l_GUI_DZ_PRO1.pdf" class="image fit"><img src="images/marr_pic.jpg" alt=""></a>
+
 
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
