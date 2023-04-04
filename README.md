@@ -1,6 +1,6 @@
 # GUI Project - Object Oriented Programming
 Project content:                                                                                                                                                                        
- <object data="{{ 2021l_GUI_DZ_PRO1.pdf }}" width="1000" height="1000" type='application/pdf'/>
+ <object data="{{ [2021l_GUI_DZ_PRO1.pdf](https://github.com/alankaczmarzyk/Pjatk-JavaGUI_Warehouses-Project/blob/191ebecf0043d93f4b8ae62680af3b98022c6fa4/2021l_GUI_DZ_PRO1.pdf) }}" width="1000" height="1000" type='application/pdf'/>
  2021l_GUI_DZ_PRO1.pdf
  https://github.com/alankaczmarzyk/Pjatk-JavaGUI_Warehouses-Project/blob/191ebecf0043d93f4b8ae62680af3b98022c6fa4/2021l_GUI_DZ_PRO1.pdf
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
