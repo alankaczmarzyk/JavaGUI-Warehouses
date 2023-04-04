@@ -6,7 +6,7 @@ Project content:
 alt=""></a>
 
 
-
+https://docs.google.com/viewer?url=${pdfs/2021l_GUI_DZ_PRO1.pdf}
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ![Przechwytywanie2](https://user-images.githubusercontent.com/76729568/226459129-ab5114b1-de02-447e-8ae4-3d61f7bdb038.PNG)
